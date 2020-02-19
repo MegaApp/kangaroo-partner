@@ -14,6 +14,10 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     _onLoginButtonPressed() {
+      FocusScopeNode currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus) {
+        currentFocus.unfocus();
+      }
       BlocProvider.of<LoginBloc>(context).add(
         LoginButtonPressed(
           username: _usernameController.text,
@@ -35,28 +39,75 @@ class _LoginFormState extends State<LoginForm> {
       },
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
-          return Form(
-            child: Column(
+          return SafeArea(
+            child: Stack(
               children: [
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'username'),
-                  controller: _usernameController,
+                Align(
+                  alignment: FractionalOffset.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0, right: 8),
+                    child: FlatButton(
+                      onPressed: _onLoginButtonPressed,
+                      child: Text(
+                        "Далее",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
                 ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'password'),
-                  controller: _passwordController,
-                  obscureText: true,
+                Align(
+                  alignment: FractionalOffset.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 100.0),
+                    child: Image(
+                      image: AssetImage('assets/logo.png'),
+                      width: 140,
+                    ),
+                  ),
                 ),
-                RaisedButton(
-                  onPressed:
-                  state is! LoginLoading ? _onLoginButtonPressed : null,
-                  child: Text('Login'),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Введите ваш логин',
+                            hintStyle: TextStyle(color: Colors.white30)),
+                        controller: _usernameController,
+                        style: TextStyle(color: Colors.white, fontSize: 29),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Введите ваш пароль',
+                            hintStyle: TextStyle(color: Colors.white30)),
+                        controller: _passwordController,
+                        style: TextStyle(color: Colors.white, fontSize: 29),
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  child: state is LoginLoading
-                      ? CircularProgressIndicator()
-                      : null,
-                ),
+                Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: state is LoginLoading
+                        ? Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 60),
+                            child: SizedBox(
+                                width: double.infinity,
+                                height: 4,
+                                child: LinearProgressIndicator(
+                                  backgroundColor:
+                                      Color.fromRGBO(242, 242, 242, 1),
+                                )),
+                          )
+                        : null)
               ],
             ),
           );
