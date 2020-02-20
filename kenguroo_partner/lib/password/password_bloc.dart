@@ -5,35 +5,34 @@ import 'package:bloc/bloc.dart';
 import 'package:kenguroo_partner/repositories/api_repository.dart';
 
 import 'package:kenguroo_partner/authentication/authentication.dart';
-import 'package:kenguroo_partner/login/login.dart';
+import 'package:kenguroo_partner/password/password.dart';
 
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
+class PasswordBloc extends Bloc<PasswordEvent, PasswordState> {
   final ApiRepository apiRepository;
   final AuthenticationBloc authenticationBloc;
 
-  LoginBloc({
+  PasswordBloc({
     @required this.apiRepository,
     @required this.authenticationBloc,
   })  : assert(apiRepository != null),
         assert(authenticationBloc != null);
 
-  LoginState get initialState => LoginInitial();
+  PasswordState get initialState => PasswordInitial();
 
   @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is LoginButtonPressed) {
-      yield LoginLoading();
+  Stream<PasswordState> mapEventToState(PasswordEvent event) async* {
+    if (event is PasswordButtonPressed) {
+      yield PasswordLoading();
 
       try {
-        final userAuth = await apiRepository.authenticate(
-          username: event.username,
+        final result = await apiRepository.changePassword(
           password: event.password,
         );
 
-        authenticationBloc.add(LoggedIn(userAuth: userAuth));
-        yield LoginInitial();
+        authenticationBloc.add(ChangedPassword(result: result));
+        yield PasswordInitial();
       } catch (error) {
-        yield LoginFailure(error: error.toString());
+        yield PasswordFailure(error: error.toString());
       }
     }
   }

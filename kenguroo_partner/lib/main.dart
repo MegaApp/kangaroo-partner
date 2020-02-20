@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kenguroo_partner/repositories/api_repository.dart';
+import 'package:kenguroo_partner/password/password.dart';
+import 'package:kenguroo_partner/repositories/repositories.dart';
 
 import 'package:kenguroo_partner/authentication/authentication.dart';
 import 'package:kenguroo_partner/splash/splash.dart';
 import 'package:kenguroo_partner/login/login.dart';
 import 'package:kenguroo_partner/home/home.dart';
 import 'package:kenguroo_partner/common/common.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -32,7 +35,9 @@ class SimpleBlocDelegate extends BlocDelegate {
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  final userRepository = ApiRepository();
+  final userRepository = ApiRepository(
+      client: ApiClient(
+          httpClient: http.Client(), secureStorage: FlutterSecureStorage()));
   runApp(
     BlocProvider<AuthenticationBloc>(
       create: (context) {
@@ -60,7 +65,8 @@ class App extends StatelessWidget {
           if (state is AuthenticationUninitialized) {
             return SplashPage();
           }
-          if (state is AuthenticationAuthenticated) {
+          if (state is AuthenticationAuthenticated ||
+              state is AuthenticationPasswordChanged) {
             return HomePage();
           }
           if (state is AuthenticationUnauthenticated) {
@@ -68,6 +74,9 @@ class App extends StatelessWidget {
           }
           if (state is AuthenticationLoading) {
             return LoadingIndicator();
+          }
+          if (state is AuthenticationNeedChangePassword) {
+            return PasswordPage(apiRepository: apiRepository);
           }
           return null;
         },
