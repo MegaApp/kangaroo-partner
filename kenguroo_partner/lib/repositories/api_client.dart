@@ -76,7 +76,7 @@ class ApiClient {
     final token = await secureStorage.read(key: 'access');
     final response = await this.httpClient.post(loginUrl,
         headers: {'Authorization': token},
-        body: jsonEncode({'new_password': password, 'old_password': password}));
+        body: jsonEncode({'new_password': password}));
 
     final json = jsonDecode(response.body);
     if (response.statusCode != 200) {
