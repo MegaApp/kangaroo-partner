@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kenguroo_partner/authentication/authentication.dart';
-import 'package:kenguroo_partner/repositories/repositories.dart';
-import 'home.dart';
 
-class HomePage extends StatelessWidget {
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kenguroo_partner/repositories/api_repository.dart';
+
+import 'package:kenguroo_partner/store/store.dart';
+
+import '../extentions.dart';
+
+class StorePage extends StatelessWidget {
   final ApiRepository userRepository;
 
-  HomePage({Key key, @required this.userRepository})
+  StorePage({Key key, @required this.userRepository})
       : assert(userRepository != null),
         super(key: key);
 
@@ -16,12 +19,11 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: BlocProvider(
         create: (context) {
-          return HomeBloc(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+          return StoreBloc(
             apiRepository: userRepository,
           );
         },
-        child: HomeForm(),
+        child: StoreForm(),
       ),
     );
   }
