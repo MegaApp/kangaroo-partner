@@ -1,3 +1,4 @@
+import 'package:kenguroo_partner/models/models.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
@@ -28,11 +29,11 @@ class StoreFailure extends StoreState {
 
 class StoreOrderLoaded extends StoreState {
   final int index;
-//  final List<Object> orders;
+  final List<Order> orders;
 
   const StoreOrderLoaded({
     @required this.index,
-//    @required this.orders
+    @required this.orders
   });
 
   @override

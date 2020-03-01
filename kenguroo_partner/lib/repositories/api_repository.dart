@@ -44,4 +44,8 @@ class ApiRepository {
   Future<void> passwordChanged(bool result) async {
     return client.passwordChanged(result);
   }
+
+  Future<List<Order>> orders() async {
+    return await client.orders();
+  }
 }

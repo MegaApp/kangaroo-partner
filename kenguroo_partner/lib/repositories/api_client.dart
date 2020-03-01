@@ -1,3 +1,4 @@
+import 'package:kenguroo_partner/models/order.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -88,5 +89,19 @@ class ApiClient {
   Future<void> passwordChanged(bool result) async {
     await secureStorage.write(key: 'is_first_login', value: result.toString());
     return;
+  }
+
+  Future<List<Order>> orders() async {
+    final loginUrl = '$baseUrl/store/orders';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+        await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'] != null
+        ? (json['data'] as List).map((i) => Order.fromJson(i)).toList()
+        : List<Order>();
   }
 }

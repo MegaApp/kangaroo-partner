@@ -11,7 +11,7 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
 
   StoreBloc({
     @required this.apiRepository,
-  })  : assert(apiRepository != null);
+  }) : assert(apiRepository != null);
 
   StoreState get initialState => StoreInitial();
 
@@ -19,7 +19,15 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
   Stream<StoreState> mapEventToState(StoreEvent event) async* {
     if (event is StoreSegmentedCtrPressed) {
       yield StoreLoading();
-      yield StoreOrderLoaded(index: event.index);
+      try {
+        final result = await apiRepository.orders();
+        if (result.length > 0)
+          yield StoreOrderLoaded(index: event.index, orders: result);
+        else
+          yield StoreOrderEmpty();
+      } catch (error) {
+        yield StoreFailure(error: error.toString());
+      }
     }
   }
 }

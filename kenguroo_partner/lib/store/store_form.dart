@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/store/store.dart';
+import 'package:kenguroo_partner/models/models.dart';
 
 import '../extentions.dart';
 
@@ -33,12 +34,14 @@ class _StoreFormState extends State<StoreForm> {
           .add(StoreSegmentedCtrPressed(index: newValue));
     }
 
-    _listViewWidget(int _index) {
-      return ListView(
+    _listViewWidget(int _index, List<Order> orders) {
+      return ListView.builder(
         shrinkWrap: true,
+        itemCount: orders.length,
         padding: const EdgeInsets.all(16.0),
-        children: <Widget>[
-          Stack(
+        itemBuilder: (context, position) {
+          Order _order = orders[position];
+          return Stack(
             children: <Widget>[
               Card(
                 shape: RoundedRectangleBorder(
@@ -78,7 +81,7 @@ class _StoreFormState extends State<StoreForm> {
                                       color: HexColor.fromHex('#869FB1'),
                                       fontSize: 13)),
                               const Padding(padding: EdgeInsets.all(8)),
-                              Text('10',
+                              Text('${_order.stores.first.items.first.count}',
                                   style: TextStyle(
                                       color: HexColor.fromHex('#0C270F'),
                                       fontSize: 21,
@@ -146,15 +149,16 @@ class _StoreFormState extends State<StoreForm> {
                 child: Image(image: AssetImage(iconCorners[_index]), width: 21),
               ),
             ],
-          ),
-        ],
+          );
+        },
       );
     }
 
     _rootWidget(StoreState state) {
       if (state is StoreLoading)
         return Center(child: CircularProgressIndicator());
-      if (state is StoreOrderLoaded) return _listViewWidget(state.index);
+      if (state is StoreOrderLoaded)
+        return _listViewWidget(state.index, state.orders);
       if (state is StoreInitial) _onValueChanged(_selectedIndex);
       return Center(
           child: Text(
@@ -177,10 +181,10 @@ class _StoreFormState extends State<StoreForm> {
       child: BlocBuilder<StoreBloc, StoreState>(
         builder: (context, state) {
           return SafeArea(
-            child: Column(
+            child: Stack(
               children: <Widget>[
                 SizedBox(
-                  width: 500,
+                  width: double.infinity,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: CupertinoSlidingSegmentedControl<int>(
@@ -191,8 +195,11 @@ class _StoreFormState extends State<StoreForm> {
                     ),
                   ),
                 ),
-                Container(
-                  child: _rootWidget(state),
+                Align(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: _rootWidget(state),
+                  ),
                 )
               ],
             ),
