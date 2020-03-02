@@ -17,6 +17,7 @@ class StorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: HexColor.fromHex('#F3F6F9'),
       body: BlocProvider(
         create: (context) {
           return StoreBloc(

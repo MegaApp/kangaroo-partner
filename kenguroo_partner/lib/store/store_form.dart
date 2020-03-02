@@ -162,7 +162,7 @@ class _StoreFormState extends State<StoreForm> {
       if (state is StoreInitial) _onValueChanged(_selectedIndex);
       return Center(
           child: Text(
-        'No accounts',
+        'Пусто',
         style: TextStyle(fontSize: 25, color: Colors.grey),
       ));
     }
