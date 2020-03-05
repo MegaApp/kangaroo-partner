@@ -17,6 +17,81 @@ class OrderForm extends StatefulWidget {
 }
 
 class _OrderFormState extends State<OrderForm> {
+  _acceptBtnClicked() => () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0)),
+                child: Stack(
+                  alignment: Alignment.topRight,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(32.0),
+                      height: 315,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.room_service,
+                            color: Theme.of(context).accentColor,
+                            size: 56,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: Text(
+                              'Вы приняли заказ',
+                              style: TextStyle(
+                                  color: HexColor.fromHex('#222831'),
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16, bottom: 40),
+                            child: Text(
+                              'Заказ перемещен во вкладку “готовится”. Отслеживайте заказ!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: HexColor.fromHex('#CCCCCC'),
+                                  fontSize: 16),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 56,
+                            width: double.infinity,
+                            child: FlatButton(
+                              shape: new RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(40.0),
+                                  side: BorderSide(
+                                      color: HexColor.fromHex('#3FC64F'))),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              color: HexColor.fromHex('#3FC64F'),
+                              textColor: Colors.white,
+                              child: Text("Готово",
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
+            });
+      };
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<OrderBloc, OrderState>(
@@ -228,7 +303,7 @@ class _OrderFormState extends State<OrderForm> {
                                 BorderSide(color: HexColor.fromHex('#3FC64F'))),
                         padding: EdgeInsets.only(
                             top: 16, bottom: 16, right: 48, left: 48),
-                        onPressed: () {},
+                        onPressed: _acceptBtnClicked(),
                         color: HexColor.fromHex('#3FC64F'),
                         textColor: Colors.white,
                         child: Text("Принять",
