@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kenguroo_partner/cancelOrder/cancel_order.dart';
 import 'package:kenguroo_partner/extentions.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/order/order.dart';
+import 'package:kenguroo_partner/repositories/repositories.dart';
 
 class OrderForm extends StatefulWidget {
   final Order order;
@@ -20,6 +22,14 @@ class _OrderFormState extends State<OrderForm> {
   _acceptBtnClicked() => () {
         BlocProvider.of<OrderBloc>(context)
             .add(OrderConfirmBtnPressed(id: widget.order.id));
+      };
+
+  _cancelBtnClicked() => () {
+    ApiRepository repository =
+        BlocProvider.of<OrderBloc>(context).apiRepository;
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) =>
+                CancelOrderPage(apiRepository: repository,id: widget.order.id)));
       };
 
   _showAcceptDialog() {
@@ -337,7 +347,7 @@ class _OrderFormState extends State<OrderForm> {
                             textColor: Colors.red,
                             padding: EdgeInsets.only(
                                 top: 16, bottom: 16, right: 48, left: 48),
-                            onPressed: () {},
+                            onPressed: _cancelBtnClicked(),
                             child: Text(
                               "Отменить",
                               style: TextStyle(
