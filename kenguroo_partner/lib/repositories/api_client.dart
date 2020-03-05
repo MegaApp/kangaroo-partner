@@ -91,8 +91,8 @@ class ApiClient {
     return;
   }
 
-  Future<List<Order>> orders() async {
-    final loginUrl = '$baseUrl/store/orders';
+  Future<List<Order>> orders(String path) async {
+    final loginUrl = '$baseUrl/store/orders/$path';
     final token = await secureStorage.read(key: 'access');
     final response =
         await this.httpClient.get(loginUrl, headers: {'Authorization': token});

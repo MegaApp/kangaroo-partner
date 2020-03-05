@@ -1,44 +1,38 @@
 import 'models.dart';
 
 class Order {
-    String deliveryDate;
-    String deliveryPrice;
-    String discount;
-    String foodPrice;
+    String driver;
     String id;
+    List<Item> items;
+    int number;
+    String ordered_at;
+    String price;
     String status;
-    List<StoreSection> stores;
-    String totalPrice;
-    String totalPriceWithDiscount;
 
-    Order({this.deliveryDate, this.deliveryPrice, this.discount, this.foodPrice, this.id, this.status, this.stores, this.totalPrice, this.totalPriceWithDiscount});
+    Order({this.driver, this.id, this.items, this.number, this.ordered_at, this.price, this.status});
 
     factory Order.fromJson(Map<String, dynamic> json) {
         return Order(
-            deliveryDate: json['deliveryDate'], 
-            deliveryPrice: json['deliveryPrice'], 
-            discount: json['discount'], 
-            foodPrice: json['foodPrice'], 
+            driver: json['driver'], 
             id: json['id'], 
+            items: json['items'] != null ? (json['items'] as List).map((i) => Item.fromJson(i)).toList() : null, 
+            number: json['number'], 
+            ordered_at: json['ordered_at'], 
+            price: json['price'], 
             status: json['status'], 
-            stores: json['stores'] != null ? (json['stores'] as List).map((i) => StoreSection.fromJson(i)).toList() : null,
-            totalPrice: json['totalPrice'], 
-            totalPriceWithDiscount: json['totalPriceWithDiscount'], 
         );
     }
 
     Map<String, dynamic> toJson() {
         final Map<String, dynamic> data = new Map<String, dynamic>();
-        data['deliveryDate'] = this.deliveryDate;
-        data['deliveryPrice'] = this.deliveryPrice;
-        data['discount'] = this.discount;
-        data['foodPrice'] = this.foodPrice;
+        data['driver'] = this.driver;
         data['id'] = this.id;
+        data['number'] = this.number;
+        data['ordered_at'] = this.ordered_at;
+        data['price'] = this.price;
         data['status'] = this.status;
-        data['totalPrice'] = this.totalPrice;
-        data['totalPriceWithDiscount'] = this.totalPriceWithDiscount;
-        if (this.stores != null) {
-            data['stores'] = this.stores.map((v) => v.toJson()).toList();
+        if (this.items != null) {
+            data['items'] = this.items.map((v) => v.toJson()).toList();
         }
         return data;
     }

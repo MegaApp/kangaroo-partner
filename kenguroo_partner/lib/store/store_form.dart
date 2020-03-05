@@ -43,10 +43,11 @@ class _StoreFormState extends State<StoreForm> {
           Order _order = orders[position];
           return Stack(
             children: <Widget>[
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                ),
+              Container(
+                margin: EdgeInsets.all(4),
+                decoration: new BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: new BorderRadius.all(Radius.circular(18.0))),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -65,7 +66,7 @@ class _StoreFormState extends State<StoreForm> {
                               ),
                               const Padding(padding: EdgeInsets.all(8)),
                               Text(
-                                '67266',
+                                '${_order.number}',
                                 style: TextStyle(
                                     color: HexColor.fromHex('#0C270F'),
                                     fontSize: 21,
@@ -81,7 +82,8 @@ class _StoreFormState extends State<StoreForm> {
                                       color: HexColor.fromHex('#869FB1'),
                                       fontSize: 13)),
                               const Padding(padding: EdgeInsets.all(8)),
-                              Text('${_order.stores.first.items.first.count}',
+                              Text(
+                                  '${_order.items.map((item) => item.count).toList().reduce((a, b) => a + b)}',
                                   style: TextStyle(
                                       color: HexColor.fromHex('#0C270F'),
                                       fontSize: 21,
@@ -96,7 +98,7 @@ class _StoreFormState extends State<StoreForm> {
                                       color: HexColor.fromHex('#869FB1'),
                                       fontSize: 13)),
                               const Padding(padding: EdgeInsets.all(8)),
-                              Text('12:44',
+                              Text(_order.ordered_at,
                                   style: TextStyle(
                                       color: HexColor.fromHex('#0C270F'),
                                       fontSize: 21,

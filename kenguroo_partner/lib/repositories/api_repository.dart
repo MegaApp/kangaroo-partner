@@ -45,7 +45,7 @@ class ApiRepository {
     return client.passwordChanged(result);
   }
 
-  Future<List<Order>> orders() async {
-    return await client.orders();
+  Future<List<Order>> orders(String path) async {
+    return await client.orders(path);
   }
 }

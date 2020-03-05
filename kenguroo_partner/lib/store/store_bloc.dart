@@ -20,7 +20,18 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
     if (event is StoreSegmentedCtrPressed) {
       yield StoreLoading();
       try {
-        final result = await apiRepository.orders();
+        String path = "";
+        switch (event.index) {
+          case 0:
+            path = "new";
+            break;
+          case 1:
+            path = "progress";
+            break;
+          case 2:
+            path = "finished";
+        }
+        final result = await apiRepository.orders(path);
         if (result.length > 0)
           yield StoreOrderLoaded(index: event.index, orders: result);
         else
