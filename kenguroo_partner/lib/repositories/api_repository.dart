@@ -48,4 +48,8 @@ class ApiRepository {
   Future<List<Order>> orders(String path) async {
     return await client.orders(path);
   }
+
+  Future<bool> acceptOrder(String id) async {
+    return await client.acceptOrders(id);
+  }
 }

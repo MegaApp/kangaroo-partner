@@ -214,6 +214,7 @@ class _StoreFormState extends State<StoreForm> {
                   ),
                 ),
                 Align(
+                  alignment: Alignment.topCenter,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 50),
                     child: _rootWidget(state),

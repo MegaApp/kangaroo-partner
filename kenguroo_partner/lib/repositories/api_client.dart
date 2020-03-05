@@ -104,4 +104,16 @@ class ApiClient {
         ? (json['data'] as List).map((i) => Order.fromJson(i)).toList()
         : List<Order>();
   }
+
+  Future<bool> acceptOrders(String id) async {
+    final loginUrl = '$baseUrl/store/orders/accept/$id';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+        await this.httpClient.post(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'];
+  }
 }

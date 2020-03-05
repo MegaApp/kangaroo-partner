@@ -12,7 +12,7 @@ class OrderInitial extends OrderState {}
 
 class OrderLoading extends OrderState {}
 
-class OrderEmpty extends OrderState {}
+class OrderShowDialog extends OrderState {}
 
 class OrderFailure extends OrderState {
   final String error;

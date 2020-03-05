@@ -17,6 +17,14 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   @override
   Stream<OrderState> mapEventToState(OrderEvent event) async* {
-
+    if (event is OrderConfirmBtnPressed) {
+      yield OrderLoading();
+      try {
+        await apiRepository.acceptOrder(event.id);
+        yield OrderShowDialog();
+      } catch (error) {
+        yield OrderFailure(error: error.toString());
+      }
+    }
   }
 }

@@ -6,7 +6,7 @@ abstract class OrderEvent extends Equatable {
 }
 
 class OrderConfirmBtnPressed extends OrderEvent {
-  final int id;
+  final String id;
 
   const OrderConfirmBtnPressed({
     @required this.id,
@@ -17,5 +17,5 @@ class OrderConfirmBtnPressed extends OrderEvent {
 
   @override
   String toString() =>
-      'StoreSegmentedCtrPressed { index: $id}';
+      'OrderConfirmBtnPressed { id: $id}';
 }
