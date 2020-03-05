@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/password/password.dart';
 import 'package:kenguroo_partner/repositories/repositories.dart';
-
 import 'package:kenguroo_partner/authentication/authentication.dart';
 import 'package:kenguroo_partner/splash/splash.dart';
 import 'package:kenguroo_partner/login/login.dart';

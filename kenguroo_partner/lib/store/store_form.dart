@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kenguroo_partner/order/order.dart';
+import 'package:kenguroo_partner/repositories/api_repository.dart';
 import 'package:kenguroo_partner/store/store.dart';
 import 'package:kenguroo_partner/models/models.dart';
 
@@ -34,6 +36,16 @@ class _StoreFormState extends State<StoreForm> {
           .add(StoreSegmentedCtrPressed(index: newValue));
     }
 
+    void _onTapItem(BuildContext context, Order order) {
+      ApiRepository repository =
+          BlocProvider.of<StoreBloc>(context).apiRepository;
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => OrderPage(
+                apiRepository: repository,
+                order: order,
+              )));
+    }
+
     _listViewWidget(int _index, List<Order> orders) {
       return ListView.builder(
         shrinkWrap: true,
@@ -41,117 +53,121 @@ class _StoreFormState extends State<StoreForm> {
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, position) {
           Order _order = orders[position];
-          return Stack(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(4),
-                decoration: new BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: new BorderRadius.all(Radius.circular(18.0))),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          return GestureDetector(
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(4),
+                    decoration: new BoxDecoration(
+                        color: Colors.white,
+                        borderRadius:
+                            new BorderRadius.all(Radius.circular(18.0))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
                         children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              Text(
-                                '№ заказа',
-                                style: TextStyle(
-                                    color: HexColor.fromHex('#869FB1'),
-                                    fontSize: 13),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    '№ заказа',
+                                    style: TextStyle(
+                                        color: HexColor.fromHex('#869FB1'),
+                                        fontSize: 13),
+                                  ),
+                                  const Padding(padding: EdgeInsets.all(8)),
+                                  Text(
+                                    '${_order.number}',
+                                    style: TextStyle(
+                                        color: HexColor.fromHex('#0C270F'),
+                                        fontSize: 21,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                               ),
-                              const Padding(padding: EdgeInsets.all(8)),
-                              Text(
-                                '${_order.number}',
-                                style: TextStyle(
-                                    color: HexColor.fromHex('#0C270F'),
-                                    fontSize: 21,
-                                    fontWeight: FontWeight.bold),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text('Блюда',
+                                      style: TextStyle(
+                                          color: HexColor.fromHex('#869FB1'),
+                                          fontSize: 13)),
+                                  const Padding(padding: EdgeInsets.all(8)),
+                                  Text(
+                                      '${_order.items.map((item) => item.count).toList().reduce((a, b) => a + b)}',
+                                      style: TextStyle(
+                                          color: HexColor.fromHex('#0C270F'),
+                                          fontSize: 21,
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text('Время выдачи',
+                                      style: TextStyle(
+                                          color: HexColor.fromHex('#869FB1'),
+                                          fontSize: 13)),
+                                  const Padding(padding: EdgeInsets.all(8)),
+                                  Text(_order.ordered_at,
+                                      style: TextStyle(
+                                          color: HexColor.fromHex('#0C270F'),
+                                          fontSize: 21,
+                                          fontWeight: FontWeight.bold)),
+                                ],
                               ),
                             ],
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text('Блюда',
-                                  style: TextStyle(
-                                      color: HexColor.fromHex('#869FB1'),
-                                      fontSize: 13)),
-                              const Padding(padding: EdgeInsets.all(8)),
-                              Text(
-                                  '${_order.items.map((item) => item.count).toList().reduce((a, b) => a + b)}',
-                                  style: TextStyle(
-                                      color: HexColor.fromHex('#0C270F'),
-                                      fontSize: 21,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text('Время выдачи',
-                                  style: TextStyle(
-                                      color: HexColor.fromHex('#869FB1'),
-                                      fontSize: 13)),
-                              const Padding(padding: EdgeInsets.all(8)),
-                              Text(_order.ordered_at,
-                                  style: TextStyle(
-                                      color: HexColor.fromHex('#0C270F'),
-                                      fontSize: 21,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: 24, right: 16, left: 16),
-                        child: Stack(
-                          alignment: AlignmentDirectional.centerEnd,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(right: 40),
-                              child: Container(
-                                width: double.infinity,
-                                height: 1,
-                                color: HexColor.fromHex('#EEEEEE'),
-                              ),
-                            ),
-                            Stack(
-                              alignment: AlignmentDirectional.center,
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 24, right: 16, left: 16),
+                            child: Stack(
+                              alignment: AlignmentDirectional.centerEnd,
                               children: <Widget>[
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 2.0),
-                                  child: Icon(
-                                    Icons.navigate_next,
-                                    size: 24,
+                                  padding: const EdgeInsets.only(right: 40),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 1,
                                     color: HexColor.fromHex('#EEEEEE'),
                                   ),
                                 ),
-                                Icon(
-                                  Icons.panorama_fish_eye,
-                                  size: 30,
-                                  color: HexColor.fromHex('#EEEEEE'),
+                                Stack(
+                                  alignment: AlignmentDirectional.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 2.0),
+                                      child: Icon(
+                                        Icons.navigate_next,
+                                        size: 24,
+                                        color: HexColor.fromHex('#EEEEEE'),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.panorama_fish_eye,
+                                      size: 30,
+                                      color: HexColor.fromHex('#EEEEEE'),
+                                    )
+                                  ],
                                 )
                               ],
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Image(
+                        image: AssetImage(iconCorners[_index]), width: 21),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Image(image: AssetImage(iconCorners[_index]), width: 21),
-              ),
-            ],
-          );
+              onTap: () => _onTapItem(context, _order));
         },
       );
     }

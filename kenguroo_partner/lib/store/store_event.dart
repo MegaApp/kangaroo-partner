@@ -1,3 +1,4 @@
+import 'package:kenguroo_partner/models/models.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
