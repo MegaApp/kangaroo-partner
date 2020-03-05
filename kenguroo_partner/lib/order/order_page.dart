@@ -23,7 +23,7 @@ class OrderPage extends StatelessWidget {
             apiRepository: apiRepository,
           );
         },
-        child: OrderForm(),
+        child: OrderForm(order: order),
       ),
     );
   }

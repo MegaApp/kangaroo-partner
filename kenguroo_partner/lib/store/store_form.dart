@@ -97,7 +97,7 @@ class _StoreFormState extends State<StoreForm> {
                                           fontSize: 13)),
                                   const Padding(padding: EdgeInsets.all(8)),
                                   Text(
-                                      '${_order.items.map((item) => item.count).toList().reduce((a, b) => a + b)}',
+                                      '${_order.itemsCount}',
                                       style: TextStyle(
                                           color: HexColor.fromHex('#0C270F'),
                                           fontSize: 21,
@@ -112,7 +112,7 @@ class _StoreFormState extends State<StoreForm> {
                                           color: HexColor.fromHex('#869FB1'),
                                           fontSize: 13)),
                                   const Padding(padding: EdgeInsets.all(8)),
-                                  Text(_order.ordered_at,
+                                  Text(_order.orderedAt,
                                       style: TextStyle(
                                           color: HexColor.fromHex('#0C270F'),
                                           fontSize: 21,
