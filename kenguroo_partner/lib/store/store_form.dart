@@ -14,10 +14,10 @@ class StoreForm extends StatefulWidget {
 }
 
 class _StoreFormState extends State<StoreForm> {
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    int _selectedIndex = 0;
-
     final children = const <int, Widget>{
       0: Text('Новые'),
       1: Text('Готовится'),
@@ -96,8 +96,7 @@ class _StoreFormState extends State<StoreForm> {
                                           color: HexColor.fromHex('#869FB1'),
                                           fontSize: 13)),
                                   const Padding(padding: EdgeInsets.all(8)),
-                                  Text(
-                                      '${_order.itemsCount}',
+                                  Text('${_order.itemsCount}',
                                       style: TextStyle(
                                           color: HexColor.fromHex('#0C270F'),
                                           fontSize: 21,

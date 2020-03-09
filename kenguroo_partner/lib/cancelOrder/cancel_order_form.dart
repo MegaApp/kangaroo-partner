@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/extentions.dart';
-import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/cancelOrder/cancel_order.dart';
 
 class CancelOrderForm extends StatefulWidget {
@@ -17,9 +16,16 @@ class CancelOrderForm extends StatefulWidget {
 }
 
 class _CancelOrderFormState extends State<CancelOrderForm> {
-  _acceptBtnClicked() => () {
-        BlocProvider.of<CancelOrderBloc>(context)
-            .add(CancelOrderBtnPressed(id: widget.id));
+  List array = ['', '', '', ''];
+  final _messageController = TextEditingController();
+
+  _cancelBtnClicked() => () {
+        String _message = '';
+        array.forEach((s) {
+          if (s != '') _message += '$s, ';
+        });
+        BlocProvider.of<CancelOrderBloc>(context).add(CancelOrderBtnPressed(
+            id: widget.id, message: '$_message: ${_messageController.text}'));
       };
 
   @override
@@ -61,93 +67,126 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                             fontWeight: FontWeight.bold),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 40)),
-                      Container(
-                        height: 56,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Нет в наличии',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w300),
+                      GestureDetector(
+                          child: Container(
+                            height: 56,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  'Нет в наличии',
+                                  style: TextStyle(
+                                      color: HexColor.fromHex('#0C270F'),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w300),
+                                ),
+                                Icon(
+                                  Icons.check,
+                                  color: array[0] != ''
+                                      ? Theme.of(context).accentColor
+                                      : Colors.transparent,
+                                ),
+                              ],
                             ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.check,
-                                color: Theme.of(context).accentColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                          ),
+                          onTap: () => {
+                                setState(() {
+                                  array[0] == ''
+                                      ? array[0] = 'Нет в наличии'
+                                      : array[0] = '';
+                                })
+                              }),
                       const Divider(height: 1),
-                      Container(
-                        height: 56,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Кухня не успеет выполнить заказ',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w300),
+                      GestureDetector(
+                          child: Container(
+                            height: 56,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  'Кухня не успеет выполнить заказ',
+                                  style: TextStyle(
+                                      color: HexColor.fromHex('#0C270F'),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w300),
+                                ),
+                                Icon(
+                                  Icons.check,
+                                  color: array[1] != ''
+                                      ? Theme.of(context).accentColor
+                                      : Colors.transparent,
+                                ),
+                              ],
                             ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.check,
-                                color: Theme.of(context).accentColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                          ),
+                          onTap: () => {
+                                setState(() {
+                                  array[1] == ''
+                                      ? array[1] =
+                                          'Кухня не успеет выполнить заказ'
+                                      : array[1] = '';
+                                })
+                              }),
                       const Divider(height: 1),
-                      Container(
-                        height: 56,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Нет свободных курьеров',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w300),
+                      GestureDetector(
+                          child: Container(
+                            height: 56,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  'Нет свободных курьеров',
+                                  style: TextStyle(
+                                      color: HexColor.fromHex('#0C270F'),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w300),
+                                ),
+                                Icon(
+                                  Icons.check,
+                                  color: array[2] != ''
+                                      ? Theme.of(context).accentColor
+                                      : Colors.transparent,
+                                ),
+                              ],
                             ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.check,
-                                color: Theme.of(context).accentColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                          ),
+                          onTap: () => {
+                                setState(() {
+                                  array[2] == ''
+                                      ? array[2] = 'Нет свободных курьеров'
+                                      : array[2] = '';
+                                })
+                              }),
                       const Divider(height: 1),
-                      Container(
-                        height: 56,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Другое',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w300),
+                      GestureDetector(
+                          child: Container(
+                            height: 56,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  'Другое',
+                                  style: TextStyle(
+                                      color: HexColor.fromHex('#0C270F'),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w300),
+                                ),
+                                Icon(
+                                  Icons.check,
+                                  color: array[3] != ''
+                                      ? Theme.of(context).accentColor
+                                      : Colors.transparent,
+                                ),
+                              ],
                             ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.check,
-                                color: Theme.of(context).accentColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                          ),
+                          onTap: () => {
+                                setState(() {
+                                  array[3] == ''
+                                      ? array[3] = 'Другое'
+                                      : array[3] = '';
+                                })
+                              }),
                       const Divider(height: 1),
                       const Padding(padding: EdgeInsets.only(top: 32)),
                       Text(
@@ -156,6 +195,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                             fontSize: 13, color: HexColor.fromHex('#CCCCCC')),
                       ),
                       TextField(
+                        controller: _messageController,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Введите ваш комментарий...',
@@ -176,7 +216,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                                 side: BorderSide(color: Colors.red)),
                             color: Colors.white,
                             textColor: Colors.red,
-                            onPressed: () {},
+                            onPressed: _cancelBtnClicked(),
                             child: Text(
                               "Отменить",
                               style: TextStyle(

@@ -7,9 +7,11 @@ abstract class CancelOrderEvent extends Equatable {
 
 class CancelOrderBtnPressed extends CancelOrderEvent {
   final String id;
+  final String message;
 
   const CancelOrderBtnPressed({
     @required this.id,
+    @required this.message
   });
 
   @override
@@ -17,5 +19,5 @@ class CancelOrderBtnPressed extends CancelOrderEvent {
 
   @override
   String toString() =>
-      'CancelOrderBtnPressed { id: $id}';
+      'CancelOrderBtnPressed { id: $id, message: $message}';
 }

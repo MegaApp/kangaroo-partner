@@ -52,4 +52,8 @@ class ApiRepository {
   Future<bool> acceptOrder(String id) async {
     return await client.acceptOrders(id);
   }
+
+  Future<bool> cancelOrder(String id, String message) async {
+    return await client.cancelOrders(id, message);
+  }
 }

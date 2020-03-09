@@ -116,4 +116,16 @@ class ApiClient {
     }
     return json['data'];
   }
+
+  Future<bool> cancelOrders(String id, String message) async {
+    final loginUrl = '$baseUrl/store/orders/cancel/$id';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.post(loginUrl, body: jsonEncode({'message': message}), headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'];
+  }
 }
