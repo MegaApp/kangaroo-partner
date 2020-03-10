@@ -10,17 +10,51 @@ class HomeForm extends StatefulWidget {
 }
 
 class _HomeFormState extends State<HomeForm> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: HexColor.fromHex('#F3F6F9'),
-      body: StorePage(
-          userRepository: BlocProvider.of<HomeBloc>(context).apiRepository),
-      bottomNavigationBar: _bottomNavigationBar(0),
-    );
+  int _selectedIndex = 0;
+
+  _onItemTapped(int index) {
+    _selectedIndex = index;
+    BlocProvider.of<HomeBloc>(context)
+        .add(HomeNavBottomItemClicked(index: index));
   }
 
-  Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<HomeBloc, HomeState>(listener: (context, state) {
+      if (state is HomeFailure) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${state.error}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }, child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+      return Scaffold(
+        backgroundColor: HexColor.fromHex('#F3F6F9'),
+        body: rootWidget(context, state),
+        bottomNavigationBar: _bottomNavigationBar(),
+      );
+    }));
+  }
+
+  Widget rootWidget(BuildContext context, HomeState state) {
+    if (state is HomeShowSearch) {
+      return Center(child: Text('HomeShowSearch'));
+    }
+
+    if (state is HomeShowStatistic) {
+      return Center(child: Text('HomeShowStatistic'));
+    }
+
+    if (state is HomeShowProfile) {
+      return Center(child: Text('HomeShowProfile'));
+    }
+    return StorePage(
+        userRepository: BlocProvider.of<HomeBloc>(context).apiRepository);
+  }
+
+  Widget _bottomNavigationBar() => BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
@@ -42,7 +76,8 @@ class _HomeFormState extends State<HomeForm> {
             title: Text('Ads'),
           )
         ],
-        currentIndex: selectedIndex,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
         selectedItemColor: Theme.of(context).accentColor,
       );
 }

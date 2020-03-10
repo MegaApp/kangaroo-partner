@@ -17,5 +17,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeState get initialState => HomeInitial();
 
   @override
-  Stream<HomeState> mapEventToState(HomeEvent event) async* {}
+  Stream<HomeState> mapEventToState(HomeEvent event) async* {
+    if (event is HomeNavBottomItemClicked)
+      switch (event.index) {
+        case 0:
+          yield HomeShowStore();
+          break;
+        case 1:
+          yield HomeShowSearch();
+          break;
+        case 2:
+          yield HomeShowStatistic();
+          break;
+        case 3:
+          yield HomeShowProfile();
+          break;
+      }
+  }
 }

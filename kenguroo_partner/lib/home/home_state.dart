@@ -12,6 +12,14 @@ class HomeInitial extends HomeState {}
 
 class HomeLoading extends HomeState {}
 
+class HomeShowStore extends HomeState {}
+
+class HomeShowSearch extends HomeState {}
+
+class HomeShowStatistic extends HomeState {}
+
+class HomeShowProfile extends HomeState {}
+
 class HomeFailure extends HomeState {
   final String error;
 
