@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/extentions.dart';
 import 'package:flutter/material.dart';
 import 'package:kenguroo_partner/home/home.dart';
+import 'package:kenguroo_partner/profile/profile.dart';
 import 'package:kenguroo_partner/store/store.dart';
 
 class HomeForm extends StatefulWidget {
@@ -48,7 +49,11 @@ class _HomeFormState extends State<HomeForm> {
     }
 
     if (state is HomeShowProfile) {
-      return Center(child: Text('HomeShowProfile'));
+      return ProfilePage(
+        apiRepository: BlocProvider.of<HomeBloc>(context).apiRepository,
+        authenticationBloc:
+            BlocProvider.of<HomeBloc>(context).authenticationBloc,
+      );
     }
     return StorePage(
         userRepository: BlocProvider.of<HomeBloc>(context).apiRepository);

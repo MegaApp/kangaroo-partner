@@ -56,4 +56,14 @@ class ApiRepository {
   Future<bool> cancelOrder(String id, String message) async {
     return await client.cancelOrders(id, message);
   }
+
+  Future<bool> menuChanged() async {
+    await Future.delayed(Duration(seconds: 1));
+    return true;
+  }
+
+  Future<Profile> getProfile() async {
+    await Future.delayed(Duration(seconds: 1));
+    return Profile(name: 'Navat', image: 'http://navat.kg/wp-content/uploads/2017/12/navat-logo.png');
+  }
 }
