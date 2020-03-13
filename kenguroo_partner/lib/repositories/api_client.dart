@@ -128,4 +128,28 @@ class ApiClient {
     }
     return json['data'];
   }
+
+  Future<bool> finishOrders(String id) async {
+    final loginUrl = '$baseUrl/store/orders/finish/$id';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.post(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'];
+  }
+
+  Future<bool> updateMenu() async {
+    final loginUrl = '$baseUrl/store/profile/update';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.post(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'];
+  }
 }

@@ -19,3 +19,18 @@ class OrderConfirmBtnPressed extends OrderEvent {
   String toString() =>
       'OrderConfirmBtnPressed { id: $id}';
 }
+
+class OrderFinishBtnPressed extends OrderEvent {
+  final String id;
+
+  const OrderFinishBtnPressed({
+    @required this.id,
+  });
+
+  @override
+  List<Object> get props => [id];
+
+  @override
+  String toString() =>
+      'OrderFinishBtnPressed { id: $id}';
+}

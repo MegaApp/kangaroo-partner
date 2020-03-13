@@ -24,12 +24,17 @@ class _OrderFormState extends State<OrderForm> {
             .add(OrderConfirmBtnPressed(id: widget.order.id));
       };
 
+  _readyBtnClicked() => () {
+        BlocProvider.of<OrderBloc>(context)
+            .add(OrderFinishBtnPressed(id: widget.order.id));
+      };
+
   _cancelBtnClicked() => () {
-    ApiRepository repository =
-        BlocProvider.of<OrderBloc>(context).apiRepository;
+        ApiRepository repository =
+            BlocProvider.of<OrderBloc>(context).apiRepository;
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) =>
-                CancelOrderPage(apiRepository: repository,id: widget.order.id)));
+            builder: (BuildContext context) => CancelOrderPage(
+                apiRepository: repository, id: widget.order.id)));
       };
 
   _showAcceptDialog() {
@@ -121,6 +126,10 @@ class _OrderFormState extends State<OrderForm> {
 
         if (state is OrderShowDialog) {
           _showAcceptDialog();
+        }
+
+        if (state is OrderFinished) {
+          Navigator.of(context).pop();
         }
       },
       child: BlocBuilder<OrderBloc, OrderState>(
@@ -321,41 +330,61 @@ class _OrderFormState extends State<OrderForm> {
                       ),
                       const Divider(height: 1),
                       const Padding(padding: EdgeInsets.only(top: 40)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          FlatButton(
-                            shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(40.0),
-                                side: BorderSide(
-                                    color: HexColor.fromHex('#3FC64F'))),
-                            padding: EdgeInsets.only(
-                                top: 16, bottom: 16, right: 48, left: 48),
-                            onPressed: _acceptBtnClicked(),
-                            color: HexColor.fromHex('#3FC64F'),
-                            textColor: Colors.white,
-                            child: Text("Принять",
-                                style: TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.bold)),
-                          ),
-                          SizedBox(width: 10),
-                          FlatButton(
-                            shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(40.0),
-                                side: BorderSide(color: Colors.red)),
-                            color: Colors.white,
-                            textColor: Colors.red,
-                            padding: EdgeInsets.only(
-                                top: 16, bottom: 16, right: 48, left: 48),
-                            onPressed: _cancelBtnClicked(),
-                            child: Text(
-                              "Отменить",
-                              style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold),
+                      (widget.order.status == 'Ожидает')
+                          ? Container()
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                FlatButton(
+                                  shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(40.0),
+                                      side: BorderSide(
+                                          color: HexColor.fromHex('#3FC64F'))),
+                                  padding: EdgeInsets.only(
+                                      top: 16, bottom: 16, right: 48, left: 48),
+                                  onPressed:
+                                      (widget.order.status == 'Готовится')
+                                          ? _readyBtnClicked()
+                                          : _acceptBtnClicked(),
+                                  color: HexColor.fromHex('#3FC64F'),
+                                  textColor: Colors.white,
+                                  child: Text(
+                                      (widget.order.status == 'Готовится')
+                                          ? 'Готово'
+                                          : 'Принять',
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                                (widget.order.status == 'Готовится')
+                                    ? Container()
+                                    : SizedBox(width: 16),
+                                (widget.order.status == 'Готовится')
+                                    ? Container()
+                                    : FlatButton(
+                                        shape: new RoundedRectangleBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(40.0),
+                                            side:
+                                                BorderSide(color: Colors.red)),
+                                        color: Colors.white,
+                                        textColor: Colors.red,
+                                        padding: EdgeInsets.only(
+                                            top: 16,
+                                            bottom: 16,
+                                            right: 48,
+                                            left: 48),
+                                        onPressed: _cancelBtnClicked(),
+                                        child: Text(
+                                          'Отменить',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                       const Padding(padding: EdgeInsets.only(top: 40)),
                     ],
                   )

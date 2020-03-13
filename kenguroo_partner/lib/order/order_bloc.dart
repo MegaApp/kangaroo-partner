@@ -26,5 +26,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         yield OrderFailure(error: error.toString());
       }
     }
+
+    if (event is OrderFinishBtnPressed) {
+      yield OrderLoading();
+      try {
+        await apiRepository.finishOrder(event.id);
+        yield OrderFinished();
+      } catch (error) {
+        yield OrderFailure(error: error.toString());
+      }
+    }
   }
 }
