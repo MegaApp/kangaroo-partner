@@ -174,7 +174,7 @@ class _StoreFormState extends State<StoreForm> {
     _rootWidget(StoreState state) {
       if (state is StoreLoading)
         return Center(child: CircularProgressIndicator());
-      if (state is StoreOrderLoaded)
+      if (state is StoreOrderLoaded) if (state.orders.length > 0)
         return _listViewWidget(state.index, state.orders);
       if (state is StoreInitial) _onValueChanged(_selectedIndex);
       return Center(

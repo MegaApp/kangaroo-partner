@@ -152,4 +152,18 @@ class ApiClient {
     }
     return json['data'];
   }
+
+  Future<List<Question>> questions() async {
+    final loginUrl = '$baseUrl/store/profile/questions';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'] != null
+        ? (json['data'] as List).map((i) => Question.fromJson(i)).toList()
+        : List<Question>();
+  }
 }

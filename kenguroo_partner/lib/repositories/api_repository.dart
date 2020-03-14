@@ -71,4 +71,8 @@ class ApiRepository {
         name: 'Navat',
         image: 'http://navat.kg/wp-content/uploads/2017/12/navat-logo.png');
   }
+
+  Future<List<Question>> getQuestions() async {
+    return await client.questions();
+  }
 }

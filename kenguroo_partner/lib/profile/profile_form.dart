@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/extentions.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/profile/profile.dart';
+import 'package:kenguroo_partner/repositories/repositories.dart';
+import 'package:kenguroo_partner/support/support.dart';
 
 class ProfileForm extends StatefulWidget {
   ProfileForm({Key key}) : super(key: key);
@@ -22,6 +24,15 @@ class _ProfileFormState extends State<ProfileForm> {
 
   _logOutAction() => () {
         BlocProvider.of<ProfileBloc>(context).add(ProfileLoggedOut());
+      };
+
+  _navigateToSupport() => () {
+        ApiRepository repository =
+            BlocProvider.of<ProfileBloc>(context).apiRepository;
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => SupportPage(
+                  apiRepository: repository,
+                )));
       };
 
   void showMenuChangedDialog() {
@@ -287,24 +298,27 @@ class _ProfileFormState extends State<ProfileForm> {
                         padding: const EdgeInsets.only(left: 40),
                         child: Divider(),
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Image(
-                              image: AssetImage('assets/ic_alert_triangle.png'),
-                              width: 24),
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              'Служба поддержки',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: HexColor.fromHex('#0C270F')),
-                            ),
-                          )
-                        ],
-                      ),
+                      GestureDetector(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Image(
+                                  image: AssetImage(
+                                      'assets/ic_alert_triangle.png'),
+                                  width: 24),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  'Служба поддержки',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: HexColor.fromHex('#0C270F')),
+                                ),
+                              )
+                            ],
+                          ),
+                          onTap: _navigateToSupport()),
                       Padding(
                         padding: const EdgeInsets.only(left: 40),
                         child: Divider(),
