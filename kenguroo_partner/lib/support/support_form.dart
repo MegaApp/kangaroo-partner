@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kenguroo_partner/create_questions/create_questions.dart';
 import 'package:kenguroo_partner/extentions.dart';
 import 'package:kenguroo_partner/models/models.dart';
+import 'package:kenguroo_partner/repositories/repositories.dart';
 import 'package:kenguroo_partner/support/support.dart';
 
 class SupportForm extends StatefulWidget {
@@ -36,7 +38,7 @@ class _SupportFormState extends State<SupportForm> {
                 ),
                 const Padding(padding: const EdgeInsets.only(top: 8)),
                 Text(
-                  question.answer,
+                  question.question,
                   style: TextStyle(
                       fontSize: 15, color: HexColor.fromHex('#D7D7D7')),
                 )
@@ -104,13 +106,18 @@ class _SupportFormState extends State<SupportForm> {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                // Add your onPressed code here!
+                ApiRepository repository =
+                    BlocProvider.of<SupportBloc>(context).apiRepository;
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => CreateQuestionsPage(
+                          apiRepository: repository,
+                        )));
               },
               child: Icon(
                 Icons.edit,
                 color: Colors.white,
               ),
-              backgroundColor: Colors.green,
+              backgroundColor: Theme.of(context).accentColor,
             ),
           );
         },

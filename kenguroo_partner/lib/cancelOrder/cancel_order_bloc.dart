@@ -18,7 +18,7 @@ class CancelOrderBloc extends Bloc<CancelOrderEvent, CancelOrderState> {
     if (event is CancelOrderBtnPressed) {
       yield CancelOrderLoading();
       try {
-        await apiRepository.acceptOrder(event.id);
+        await apiRepository.cancelOrder(event.id, event.message);
         yield CancelOrderApproved();
       } catch (error) {
         yield CancelOrderFailure(error: error.toString());

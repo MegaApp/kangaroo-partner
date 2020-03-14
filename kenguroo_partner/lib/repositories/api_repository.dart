@@ -75,4 +75,8 @@ class ApiRepository {
   Future<List<Question>> getQuestions() async {
     return await client.questions();
   }
+
+  Future<bool> createQuestion(String title, String question) async {
+    return await client.createQuestion(title, question);
+  }
 }
