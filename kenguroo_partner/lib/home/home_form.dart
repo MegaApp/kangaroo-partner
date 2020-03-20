@@ -41,11 +41,11 @@ class _HomeFormState extends State<HomeForm> {
 
   Widget rootWidget(BuildContext context, HomeState state) {
     if (state is HomeShowSearch) {
-      return Center(child: Text('HomeShowSearch'));
+      return Center(child: Text('Search'));
     }
 
     if (state is HomeShowStatistic) {
-      return Center(child: Text('HomeShowStatistic'));
+      return Center(child: Text('Statistic'));
     }
 
     if (state is HomeShowProfile) {

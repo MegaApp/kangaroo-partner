@@ -66,10 +66,7 @@ class ApiRepository {
   }
 
   Future<Profile> getProfile() async {
-    await Future.delayed(Duration(seconds: 1));
-    return Profile(
-        name: 'Navat',
-        image: 'http://navat.kg/wp-content/uploads/2017/12/navat-logo.png');
+    return await client.getProfile();
   }
 
   Future<List<Question>> getQuestions() async {

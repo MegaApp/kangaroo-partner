@@ -180,4 +180,16 @@ class ApiClient {
     }
     return true;
   }
+
+  Future<Profile> getProfile() async {
+    final loginUrl = '$baseUrl/store/profile';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+        await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return Profile.fromJson(json['data']);
+  }
 }

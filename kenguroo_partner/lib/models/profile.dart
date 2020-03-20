@@ -7,7 +7,7 @@ class Profile {
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(
       name: json['name'],
-      image: json['image'],
+      image: json['logo'],
     );
   }
 
@@ -15,7 +15,7 @@ class Profile {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    data['image'] = this.image;
+    data['logo'] = this.image;
     return data;
   }
 }

@@ -65,7 +65,7 @@ class _CreateQuestionsFormState extends State<CreateQuestionsForm> {
                             controller: _titleController,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: 'Безназвания',
+                                hintText: 'Без названия',
                                 hintStyle: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w300,
