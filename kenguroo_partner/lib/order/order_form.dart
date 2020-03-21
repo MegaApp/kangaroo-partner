@@ -50,7 +50,7 @@ class _OrderFormState extends State<OrderForm> {
                 IconButton(
                   icon: Icon(Icons.close),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop({'needUpdate':true});
                   },
                 ),
                 Container(
@@ -93,7 +93,7 @@ class _OrderFormState extends State<OrderForm> {
                                   color: HexColor.fromHex('#3FC64F'))),
                           onPressed: () {
                             Navigator.of(context).pop();
-                            Navigator.of(context).pop();
+                            Navigator.of(context).pop({'needUpdate':true});
                           },
                           color: HexColor.fromHex('#3FC64F'),
                           textColor: Colors.white,
@@ -129,7 +129,7 @@ class _OrderFormState extends State<OrderForm> {
         }
 
         if (state is OrderFinished) {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop({'needUpdate':true});
         }
       },
       child: BlocBuilder<OrderBloc, OrderState>(

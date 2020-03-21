@@ -5,7 +5,6 @@ import 'package:kenguroo_partner/order/order.dart';
 import 'package:kenguroo_partner/repositories/api_repository.dart';
 import 'package:kenguroo_partner/store/store.dart';
 import 'package:kenguroo_partner/models/models.dart';
-
 import '../extentions.dart';
 
 class StoreForm extends StatefulWidget {
@@ -36,14 +35,18 @@ class _StoreFormState extends State<StoreForm> {
           .add(StoreSegmentedCtrPressed(index: newValue));
     }
 
-    void _onTapItem(BuildContext context, Order order) {
+    Future<void> _onTapItem(BuildContext context, Order order) async {
       ApiRepository repository =
           BlocProvider.of<StoreBloc>(context).apiRepository;
-      Navigator.of(context).push(MaterialPageRoute(
+      Map result = await Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => OrderPage(
                 apiRepository: repository,
                 order: order,
               )));
+      if (result != null && result['needUpdate']) {
+        BlocProvider.of<StoreBloc>(context)
+            .add(StoreSegmentedCtrPressed(index: _selectedIndex));
+      }
     }
 
     _listViewWidget(int _index, List<Order> orders) {
