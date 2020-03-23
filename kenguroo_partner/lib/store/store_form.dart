@@ -180,11 +180,27 @@ class _StoreFormState extends State<StoreForm> {
       if (state is StoreOrderLoaded) if (state.orders.length > 0)
         return _listViewWidget(state.index, state.orders);
       if (state is StoreInitial) _onValueChanged(_selectedIndex);
-      return Center(
-          child: Text(
-        'Пусто',
-        style: TextStyle(fontSize: 25, color: Colors.grey),
-      ));
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image(
+            image: AssetImage('assets/ic-plh.png'),
+            width: 120,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 80, left: 80, top: 66),
+            child: Text(
+              'Пока нет результатов',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 21,
+                  color: HexColor.fromHex('#E0E0E0'),
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      );
     }
 
     return BlocListener<StoreBloc, StoreState>(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kenguroo_partner/home/home.dart';
 import 'package:kenguroo_partner/profile/profile.dart';
 import 'package:kenguroo_partner/store/store.dart';
+import 'package:kenguroo_partner/search/search.dart';
 
 class HomeForm extends StatefulWidget {
   @override
@@ -41,7 +42,8 @@ class _HomeFormState extends State<HomeForm> {
 
   Widget rootWidget(BuildContext context, HomeState state) {
     if (state is HomeShowSearch) {
-      return Center(child: Text('Search'));
+      return SearchPage(
+          userRepository: BlocProvider.of<HomeBloc>(context).apiRepository);
     }
 
     if (state is HomeShowStatistic) {

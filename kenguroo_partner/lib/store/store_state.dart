@@ -37,8 +37,8 @@ class StoreOrderLoaded extends StoreState {
   });
 
   @override
-  List<Object> get props => [index];//, orders];
+  List<Object> get props => [index, orders];
 
   @override
-  String toString() => 'StoreOrderLoaded { index: $index}';//,  orders: $orders}';
+  String toString() => 'StoreOrderLoaded { index: $index},  orders: $orders}';
 }

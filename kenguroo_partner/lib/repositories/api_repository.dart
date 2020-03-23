@@ -76,4 +76,31 @@ class ApiRepository {
   Future<bool> createQuestion(String title, String question) async {
     return await client.createQuestion(title, question);
   }
+
+  Future<List<OrderSection>> getOrderHistory() async {
+    await Future.delayed(Duration(seconds: 1));
+    Order order = Order(driver: 'Damir', number: 2434);
+    Order order1 = Order(driver: 'Tilek', number: 2934);
+    Order order2 = Order(driver: 'Myrza', number: 2034);
+    Order order3 = Order(driver: 'Elbar', number: 2234);
+
+    List<Order> orders = List();
+    orders.add(order);
+    orders.add(order1);
+    orders.add(order2);
+    orders.add(order3);
+
+    Order order4 = Order(driver: 'Izzat', number: 2432);
+    Order order5 = Order(driver: 'Nurga', number: 2474);
+
+    List<Order> orders1 = List();
+    orders1.add(order4);
+    orders1.add(order5);
+
+    List<OrderSection> list = List();
+    list.add(OrderSection(time: 'Вы искали сегодня', items: orders));
+    list.add(OrderSection(time: 'Вы искали 12.03.20', items: orders1));
+
+    return list;
+  }
 }
