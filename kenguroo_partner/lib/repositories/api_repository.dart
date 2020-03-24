@@ -27,8 +27,9 @@ class ApiRepository {
   Future<UserAuth> authenticate({
     @required String username,
     @required String password,
+    @required String deviceId
   }) async {
-    return await client.authenticate(username: username, password: password);
+    return await client.authenticate(username: username, password: password, deviceId: deviceId);
   }
 
   Future<void> refreshToken() async {

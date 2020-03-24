@@ -26,9 +26,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       try {
         final userAuth = await apiRepository.authenticate(
-          username: event.username,
-          password: event.password,
-        );
+            username: event.username,
+            password: event.password,
+            deviceId: authenticationBloc.deviceId);
 
         authenticationBloc.add(LoggedIn(userAuth: userAuth));
         yield LoginInitial();

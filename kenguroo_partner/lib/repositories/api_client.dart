@@ -43,11 +43,12 @@ class ApiClient {
   Future<UserAuth> authenticate({
     @required String username,
     @required String password,
+    @required String deviceId
   }) async {
     final loginUrl = '$baseUrl/store/auth/login';
     final response = await this.httpClient.post(loginUrl,
         body: jsonEncode(
-            {'login': username, 'deviceId': 'deviceId', 'password': password}));
+            {'login': username, 'deviceId': deviceId, 'password': password}));
 
     final json = jsonDecode(response.body);
     if (response.statusCode != 200) {
