@@ -20,7 +20,7 @@ class _StoreFormState extends State<StoreForm> {
     final children = const <int, Widget>{
       0: Text('Новые'),
       1: Text('Готовится'),
-      2: Text('Ожидает'),
+      2: Text('Завершен'),
     };
 
     final iconCorners = [

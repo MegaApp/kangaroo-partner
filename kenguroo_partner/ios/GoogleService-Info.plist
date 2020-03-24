@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>334313097211-2ks872l8agi97rlkjm5i37d2gd2pg8up.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.334313097211-2ks872l8agi97rlkjm5i37d2gd2pg8up</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDDyYncmGTLKx__f9c6GK9xJx-9tLRA1ic</string>
+	<key>GCM_SENDER_ID</key>
+	<string>334313097211</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>kg.kenguroo.partner</string>
+	<key>PROJECT_ID</key>
+	<string>kenguru-partner</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kenguru-partner.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:334313097211:ios:41a76c9704287e1c1bed5e</string>
+	<key>DATABASE_URL</key>
+	<string>https://kenguru-partner.firebaseio.com</string>
+</dict>
+</plist>
