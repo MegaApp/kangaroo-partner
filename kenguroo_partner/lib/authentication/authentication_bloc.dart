@@ -7,7 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final ApiRepository apiRepository;
-  final FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+  final FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
   String deviceId;
 
   AuthenticationBloc({@required this.apiRepository})
@@ -20,23 +20,9 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {
     if (event is AppStarted) {
-
-      _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          print('on message $message');
-        },
-        onBackgroundMessage: myBackgroundMessageHandler,
-        onResume: (Map<String, dynamic> message) async {
-          print('on resume $message');
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-          print('on launch $message');
-        },
-      );
-
-      _firebaseMessaging.requestNotificationPermissions(
+      firebaseMessaging.requestNotificationPermissions(
           const IosNotificationSettings(sound: true, badge: true, alert: true));
-      _firebaseMessaging.getToken().then((token){
+      firebaseMessaging.getToken().then((token) {
         deviceId = token;
       });
 
@@ -73,17 +59,4 @@ class AuthenticationBloc
       yield AuthenticationUnauthenticated();
     }
   }
-}
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
-  if (message.containsKey('data')) {
-    // Handle data message
-    final dynamic data = message['data'];
-  }
-
-  if (message.containsKey('notification')) {
-    // Handle notification message
-    final dynamic notification = message['notification'];
-  }
-
-  // Or do other work.
 }

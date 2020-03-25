@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:kenguroo_partner/order/order.dart';
 import 'package:kenguroo_partner/repositories/api_repository.dart';
 import 'package:kenguroo_partner/store/store.dart';
@@ -14,6 +15,37 @@ class StoreForm extends StatefulWidget {
 
 class _StoreFormState extends State<StoreForm> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    BlocProvider.of<StoreBloc>(context)
+        .authenticationBloc
+        .firebaseMessaging
+        .configure(
+          onMessage: messageHandler,
+          onResume: messageHandler,
+          onLaunch: messageHandler,
+        );
+    super.initState();
+  }
+
+  Future<dynamic> messageHandler(Map<String, dynamic> message) async {
+    print('on message $message');
+    if (message.containsKey('data')) {
+      dynamic data = message['data'];
+      if (data['action'] == 'updateFeed') {
+        FlutterRingtonePlayer.playNotification();
+        BlocProvider.of<StoreBloc>(context)
+            .add(StoreSegmentedCtrPressed(index: _selectedIndex));
+      }
+    } else if (message.containsKey('action')) {
+      if (message['action'] == 'updateFeed') {
+        FlutterRingtonePlayer.playNotification();
+        BlocProvider.of<StoreBloc>(context)
+            .add(StoreSegmentedCtrPressed(index: _selectedIndex));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

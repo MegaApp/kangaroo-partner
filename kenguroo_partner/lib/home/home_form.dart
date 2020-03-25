@@ -58,7 +58,9 @@ class _HomeFormState extends State<HomeForm> {
       );
     }
     return StorePage(
-        userRepository: BlocProvider.of<HomeBloc>(context).apiRepository);
+        userRepository: BlocProvider.of<HomeBloc>(context).apiRepository,
+        authenticationBloc:
+            BlocProvider.of<HomeBloc>(context).authenticationBloc);
   }
 
   Widget _bottomNavigationBar() => BottomNavigationBar(
