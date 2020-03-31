@@ -2,9 +2,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/statistics/statistics.dart';
-import 'package:flutter_picker/flutter_picker.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import '../extentions.dart';
 
 class StatisticsForm extends StatefulWidget {
@@ -54,22 +55,37 @@ class _StatisticsFormState extends State<StatisticsForm> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 21,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.bold,
                         color: HexColor.fromHex('#222831')),
                   ),
                 ),
                 Container(
-                    height: MediaQuery.of(context).copyWith().size.height / 4,
-                    child: CupertinoDatePicker(
-                      initialDateTime: DateTime.now(),
-                      onDateTimeChanged: (DateTime newdate) {
-                        time = newdate;
-                      },
-                      minimumYear: 2020,
-                      minimumDate: (state is StatisticsDidSetStartDate) ? state.startDate : null,
-                      maximumDate: DateTime.now(),
-                      mode: CupertinoDatePickerMode.date,
-                    )),
+                  margin: EdgeInsets.only(left: 8, right: 8),
+                  child: DatePickerWidget(
+                    locale: DateTimePickerLocale.ru,
+                    minDateTime: (state is StatisticsDidSetStartDate)
+                        ? state.startDate
+                        : null,
+                    maxDateTime: DateTime.now(),
+                    initialDateTime: DateTime.now(),
+                    dateFormat: 'MMMM,d,yyyy',
+                    pickerTheme: DateTimePickerTheme(
+                      showTitle: false,
+                      itemTextStyle: TextStyle(
+                          color: HexColor.fromHex('#333333'),
+                          fontSize: 21,
+                          fontWeight: FontWeight.bold),
+                      pickerHeight:
+                          MediaQuery.of(context).copyWith().size.height / 4,
+                      itemHeight: 74.0,
+                    ),
+                    onChange: (dateTime, selectedIndex) {
+                      setState(() {
+                        time = dateTime;
+                      });
+                    },
+                  ),
+                ),
                 Padding(
                   padding:
                       const EdgeInsets.only(bottom: 16.0, right: 16, left: 16),
