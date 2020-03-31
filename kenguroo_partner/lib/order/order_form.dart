@@ -80,7 +80,7 @@ class _OrderFormState extends State<OrderForm> {
                           'Заказ перемещен во вкладку “готовится”. Отслеживайте заказ!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: HexColor.fromHex('#CCCCCC'), fontSize: 16),
+                              color: HexColor.fromHex('#CCCCCC'), fontSize: 14),
                         ),
                       ),
                       SizedBox(

@@ -3,6 +3,7 @@ import 'package:kenguroo_partner/extentions.dart';
 import 'package:flutter/material.dart';
 import 'package:kenguroo_partner/home/home.dart';
 import 'package:kenguroo_partner/profile/profile.dart';
+import 'package:kenguroo_partner/statistics/statistics.dart';
 import 'package:kenguroo_partner/store/store.dart';
 import 'package:kenguroo_partner/search/search.dart';
 
@@ -47,7 +48,8 @@ class _HomeFormState extends State<HomeForm> {
     }
 
     if (state is HomeShowStatistic) {
-      return Center(child: Text('Statistic'));
+      return StatisticsPage(
+          apiRepository: BlocProvider.of<HomeBloc>(context).apiRepository);
     }
 
     if (state is HomeShowProfile) {

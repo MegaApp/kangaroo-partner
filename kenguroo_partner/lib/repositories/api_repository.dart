@@ -104,4 +104,26 @@ class ApiRepository {
 
     return list;
   }
+
+  Future<List<Item>> getStatistics() async {
+    await Future.delayed(Duration(seconds: 1));
+
+    Item item = Item(count: 2000, name: 'Пн');
+    Item item1 = Item(count: 3000, name: 'Вт');
+    Item item2 = Item(count: 2600, name: 'Ср');
+    Item item3 = Item(count: 4000, name: 'Чт');
+    Item item4 = Item(count: 1000, name: 'Пт');
+    Item item5 = Item(count: 1600, name: 'Сб');
+    Item item6 = Item(count: 2800, name: 'Вс');
+
+    List<Item> items = List();
+    items.add(item);
+    items.add(item1);
+    items.add(item2);
+    items.add(item3);
+    items.add(item4);
+    items.add(item5);
+    items.add(item6);
+    return items;
+  }
 }
