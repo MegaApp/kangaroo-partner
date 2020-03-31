@@ -10,8 +10,9 @@ import 'package:kenguroo_partner/statistics/statistics.dart';
 class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   final ApiRepository apiRepository;
 
-  StatisticsBloc({@required this.apiRepository, })
-      : assert(apiRepository != null);
+  StatisticsBloc({
+    @required this.apiRepository,
+  }) : assert(apiRepository != null);
 
   StatisticsState get initialState => StatisticsInitial();
 
@@ -25,6 +26,14 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       } catch (error) {
         yield StatisticsFailure(error: error.toString());
       }
+    }
+
+    if (event is StatisticsSetStartDate) {
+      yield StatisticsDidSetStartDate(startDate: event.start);
+    }
+
+    if (event is StatisticsSetEndDate) {
+      yield StatisticsDidSetEndDate(start: event.start, end: event.end);
     }
   }
 }

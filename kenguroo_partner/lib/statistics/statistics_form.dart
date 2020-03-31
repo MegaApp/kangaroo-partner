@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/statistics/statistics.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 import '../extentions.dart';
 
 class StatisticsForm extends StatefulWidget {
@@ -18,6 +17,94 @@ class StatisticsForm extends StatefulWidget {
 class _StatisticsFormState extends State<StatisticsForm> {
   List<Item> _list;
   int touchedIndex;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String stateText;
+
+  showPicker(StatisticsState state) {
+    DateTime time;
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (BuildContext builder) {
+          return Container(
+            decoration: new BoxDecoration(
+                color: Colors.white,
+                borderRadius: new BorderRadius.only(
+                    topRight: Radius.circular(18.0),
+                    topLeft: Radius.circular(18.0))),
+            height: MediaQuery.of(context).copyWith().size.height / 2.2,
+            child: Column(
+              children: <Widget>[
+                Padding(padding: const EdgeInsets.only(top: 16.0)),
+                Container(
+                  decoration: new BoxDecoration(
+                      color: HexColor.fromHex('#EEEEEE'),
+                      borderRadius: new BorderRadius.only(
+                          topRight: Radius.circular(18.0),
+                          topLeft: Radius.circular(18.0))),
+                  height: 3,
+                  width: 56,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 24.0, bottom: 8),
+                  child: Text(
+                    (state is StatisticsDidSetStartDate)
+                        ? "Укажите период “до”"
+                        : "Укажите период “от”",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.w500,
+                        color: HexColor.fromHex('#222831')),
+                  ),
+                ),
+                Container(
+                    height: MediaQuery.of(context).copyWith().size.height / 4,
+                    child: CupertinoDatePicker(
+                      initialDateTime: DateTime.now(),
+                      onDateTimeChanged: (DateTime newdate) {
+                        time = newdate;
+                      },
+                      minimumYear: 2020,
+                      minimumDate: (state is StatisticsDidSetStartDate) ? state.startDate : null,
+                      maximumDate: DateTime.now(),
+                      mode: CupertinoDatePickerMode.date,
+                    )),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 16.0, right: 16, left: 16),
+                  child: SizedBox(
+                    height: 56,
+                    width: double.infinity,
+                    child: FlatButton(
+                      shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(40.0),
+                          side: BorderSide(color: HexColor.fromHex('#3FC64F'))),
+                      onPressed: () => {
+                        Navigator.pop(context),
+                        (state is StatisticsDidSetStartDate)
+                            ? BlocProvider.of<StatisticsBloc>(context).add(
+                                StatisticsSetEndDate(
+                                    start: state.startDate, end: time))
+                            : BlocProvider.of<StatisticsBloc>(context)
+                                .add(StatisticsSetStartDate(start: time))
+                      },
+                      color: HexColor.fromHex('#3FC64F'),
+                      textColor: Colors.white,
+                      child: Text(
+                          (state is StatisticsDidSetStartDate)
+                              ? 'Готово'
+                              : 'Далее',
+                          style: TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +122,29 @@ class _StatisticsFormState extends State<StatisticsForm> {
         if (state is StatisticsDidGet) {
           _list = state.items;
         }
+
+        if (state is StatisticsDidSetStartDate) {
+          showPicker(state);
+        }
       },
       child: BlocBuilder<StatisticsBloc, StatisticsState>(
         builder: (context, state) {
           if (state is StatisticsInitial)
             BlocProvider.of<StatisticsBloc>(context).add(StatisticsGet());
-          return SafeArea(
-            child: Padding(
+          return Scaffold(
+            key: _scaffoldKey,
+            appBar: AppBar(title: Text('Статистика'), actions: <Widget>[
+              IconButton(
+                icon: Image(
+                  image: AssetImage('assets/ic-calendar.png'),
+                  width: 24,
+                ),
+                onPressed: () {
+                  showPicker(state);
+                },
+              ),
+            ]),
+            body: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Stack(
                 children: <Widget>[
@@ -50,12 +153,12 @@ class _StatisticsFormState extends State<StatisticsForm> {
                       : Container(),
                   ListView(
                     children: <Widget>[
-                      const Padding(padding: EdgeInsets.only(top: 16)),
+                      const Padding(padding: EdgeInsets.only(top: 8)),
                       Text(
                         'Статистика за неделю',
                         style: TextStyle(
                             color: HexColor.fromHex('#0C270F'),
-                            fontSize: 17,
+                            fontSize: 21,
                             fontWeight: FontWeight.bold),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 48)),

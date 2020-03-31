@@ -17,15 +17,6 @@ class StatisticsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Статистика'), actions: <Widget>[
-        IconButton(
-          icon: Image(
-            image: AssetImage('assets/ic-calendar.png'),
-            width: 24,
-          ),
-          onPressed: () {},
-        ),
-      ]),
       body: BlocProvider(
         create: (context) {
           return StatisticsBloc(

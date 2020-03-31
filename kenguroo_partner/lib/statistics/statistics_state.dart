@@ -22,8 +22,34 @@ class StatisticsDidGet extends StatisticsState {
   List<Object> get props => [items];
 
   @override
-  String toString() => 'ProfileDidGet { profile: $items }';
+  String toString() => 'StatisticsDidGet { profile: $items }';
 }
+
+class StatisticsDidSetStartDate extends StatisticsState {
+  final DateTime startDate;
+
+  const StatisticsDidSetStartDate({@required this.startDate});
+
+  @override
+  List<Object> get props => [startDate];
+
+  @override
+  String toString() => 'StatisticsDidSetStartDate { startDate: $startDate }';
+}
+
+class StatisticsDidSetEndDate extends StatisticsState {
+  final DateTime start;
+  final DateTime end;
+
+  const StatisticsDidSetEndDate({@required this.start, @required this.end});
+
+  @override
+  List<Object> get props => [start, end];
+
+  @override
+  String toString() => 'StatisticsDidSetEndDate {start: $start, end: $end}';
+}
+
 
 class StatisticsFailure extends StatisticsState {
   final String error;
@@ -34,5 +60,5 @@ class StatisticsFailure extends StatisticsState {
   List<Object> get props => [error];
 
   @override
-  String toString() => 'ProfileFailure { error: $error }';
+  String toString() => 'StatisticsFailure { error: $error }';
 }
