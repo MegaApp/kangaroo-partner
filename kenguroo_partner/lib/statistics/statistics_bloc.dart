@@ -22,7 +22,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       yield StatisticsLoading();
       try {
         final result = await apiRepository.getStatistics();
-        yield StatisticsDidGet(items: result);
+        yield StatisticsDidGet(statistic: result);
       } catch (error) {
         yield StatisticsFailure(error: error.toString());
       }

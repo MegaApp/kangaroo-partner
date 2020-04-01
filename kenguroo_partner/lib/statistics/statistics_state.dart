@@ -14,15 +14,15 @@ class StatisticsInitial extends StatisticsState {}
 class StatisticsLoading extends StatisticsState {}
 
 class StatisticsDidGet extends StatisticsState {
-  final List<Item> items;
+  final Statistic statistic;
 
-  const StatisticsDidGet({@required this.items});
-
-  @override
-  List<Object> get props => [items];
+  const StatisticsDidGet({@required this.statistic});
 
   @override
-  String toString() => 'StatisticsDidGet { profile: $items }';
+  List<Object> get props => [statistic];
+
+  @override
+  String toString() => 'StatisticsDidGet { profile: $statistic }';
 }
 
 class StatisticsDidSetStartDate extends StatisticsState {

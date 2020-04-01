@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:kenguroo_partner/models/statistic_item.dart';
 import 'package:kenguroo_partner/repositories/repositories.dart';
 import 'package:meta/meta.dart';
 import 'package:kenguroo_partner/models/models.dart';
@@ -24,12 +25,12 @@ class ApiRepository {
     return await client.deleteToken();
   }
 
-  Future<UserAuth> authenticate({
-    @required String username,
-    @required String password,
-    @required String deviceId
-  }) async {
-    return await client.authenticate(username: username, password: password, deviceId: deviceId);
+  Future<UserAuth> authenticate(
+      {@required String username,
+      @required String password,
+      @required String deviceId}) async {
+    return await client.authenticate(
+        username: username, password: password, deviceId: deviceId);
   }
 
   Future<void> refreshToken() async {
@@ -105,18 +106,25 @@ class ApiRepository {
     return list;
   }
 
-  Future<List<Item>> getStatistics() async {
+  Future<Statistic> getStatistics() async {
     await Future.delayed(Duration(seconds: 1));
 
-    Item item = Item(count: 2000, name: 'Пн');
-    Item item1 = Item(count: 3000, name: 'Вт');
-    Item item2 = Item(count: 2600, name: 'Ср');
-    Item item3 = Item(count: 4000, name: 'Чт');
-    Item item4 = Item(count: 1000, name: 'Пт');
-    Item item5 = Item(count: 1600, name: 'Сб');
-    Item item6 = Item(count: 2800, name: 'Вс');
+    StatisticItem item = StatisticItem(
+        count: 13, name: 'Понедельник', total: 20000, date: '13.03.2020');
+    StatisticItem item1 = StatisticItem(
+        count: 23, name: 'Вторник', total: 14000, date: '14.03.2020');
+    StatisticItem item2 = StatisticItem(
+        count: 53, name: 'Среда', total: 24020, date: '15.03.2020');
+    StatisticItem item3 = StatisticItem(
+        count: 43, name: 'Четверг', total: 3000, date: '16.03.2020');
+    StatisticItem item4 = StatisticItem(
+        count: 15, name: 'Пятница', total: 21900, date: '17.03.2020');
+    StatisticItem item5 = StatisticItem(
+        count: 17, name: 'Суббота', total: 35000, date: '18.03.2020');
+    StatisticItem item6 = StatisticItem(
+        count: 7, name: 'Воскресенье', total: 23400, date: '19.03.2020');
 
-    List<Item> items = List();
+    List<StatisticItem> items = List();
     items.add(item);
     items.add(item1);
     items.add(item2);
@@ -124,6 +132,8 @@ class ApiRepository {
     items.add(item4);
     items.add(item5);
     items.add(item6);
-    return items;
+
+    Statistic statistic = new Statistic(items: items, total: 234);
+    return statistic;
   }
 }
