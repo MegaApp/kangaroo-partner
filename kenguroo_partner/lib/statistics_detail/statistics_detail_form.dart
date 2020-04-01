@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/models/statistic_item.dart';
+import 'package:kenguroo_partner/repositories/repositories.dart';
 import 'package:kenguroo_partner/statistics_detail/statistics_detail.dart';
+import 'package:kenguroo_partner/statistics_item/statistics_item.dart';
 import '../extentions.dart';
 
 class StatisticsDetailForm extends StatefulWidget {
@@ -94,38 +96,46 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
                               itemBuilder: (BuildContext context, int index) {
                                 StatisticItem _item =
                                     widget.statistic.items[index];
-                                return Container(
-                                  height: 53,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-                                        _item.name,
-                                        style: TextStyle(
-                                            color: HexColor.fromHex('#0C270F'),
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                      Row(
+                                String title = _item.name == null
+                                    ? _item.date
+                                    : _item.name;
+                                return GestureDetector(
+                                    child: Container(
+                                      color: Colors.transparent,
+                                      height: 53,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Text(
-                                            '${_item.total} сом',
+                                            title,
                                             style: TextStyle(
                                                 color:
                                                     HexColor.fromHex('#0C270F'),
-                                                fontSize: 16),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w300),
                                           ),
-                                          const Padding(
-                                              padding: const EdgeInsets.all(4)),
-                                          Icon(Icons.keyboard_arrow_right,
-                                              color:
-                                                  HexColor.fromHex('#EEEEEE'))
+                                          Row(
+                                            children: <Widget>[
+                                              Text(
+                                                '${_item.total} сом',
+                                                style: TextStyle(
+                                                    color: HexColor.fromHex(
+                                                        '#0C270F'),
+                                                    fontSize: 16),
+                                              ),
+                                              const Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4)),
+                                              Icon(Icons.keyboard_arrow_right,
+                                                  color: HexColor.fromHex(
+                                                      '#EEEEEE'))
+                                            ],
+                                          )
                                         ],
-                                      )
-                                    ],
-                                  ),
-                                );
+                                      ),
+                                    ),
+                                    onTap: () => {onTap(_item)});
                               },
                               separatorBuilder:
                                   (BuildContext context, int index) =>
@@ -141,6 +151,16 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
         },
       ),
     );
+  }
+
+  onTap(StatisticItem item) {
+    ApiRepository apiRepository =
+        BlocProvider.of<StatisticsDetailBloc>(context).apiRepository;
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => StatisticsItemPage(
+              apiRepository: apiRepository,
+              statisticItem: item,
+            )));
   }
 
   showPicker(StatisticsDetailState state) {
