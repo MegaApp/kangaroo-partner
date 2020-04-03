@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/models/statistic_item.dart';
+import 'package:kenguroo_partner/order_list/order_list_page.dart';
+import 'package:kenguroo_partner/repositories/repositories.dart';
 import 'package:kenguroo_partner/statistics_item/statistics_item.dart';
 import '../extentions.dart';
 
@@ -72,7 +74,7 @@ class _StatisticsItemFormState extends State<StatisticsItemForm> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 64),
+                  padding: const EdgeInsets.only(bottom: 32),
                   child: SizedBox(
                     height: 56,
                     width: 223,
@@ -80,7 +82,7 @@ class _StatisticsItemFormState extends State<StatisticsItemForm> {
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(40.0),
                           side: BorderSide(color: HexColor.fromHex('#3FC64F'))),
-                      onPressed: () => {},
+                      onPressed: () => {_buttonClick()},
                       color: HexColor.fromHex('#3FC64F'),
                       textColor: Colors.white,
                       child: Text('Показать заказы',
@@ -93,5 +95,15 @@ class _StatisticsItemFormState extends State<StatisticsItemForm> {
             ),
           );
         }));
+  }
+
+  _buttonClick() {
+    ApiRepository repository =
+        BlocProvider.of<StatisticsItemBloc>(context).apiRepository;
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => OrderListPage(
+              userRepository: repository,
+              date: widget.statisticItem.date,
+            )));
   }
 }

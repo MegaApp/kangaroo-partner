@@ -3,21 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/order/order.dart';
 import 'package:kenguroo_partner/repositories/api_repository.dart';
-import 'package:kenguroo_partner/search/search.dart';
+import 'package:kenguroo_partner/order_list/order_list.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import '../extentions.dart';
 
-class SearchForm extends StatefulWidget {
+class OrderListForm extends StatefulWidget {
+  final String date;
+
+  OrderListForm({Key key, @required this.date})
+      : assert(date != null),
+        super(key: key);
+
   @override
-  State<SearchForm> createState() => _SearchFormState();
+  State<OrderListForm> createState() => _OrderListFormState();
 }
 
-class _SearchFormState extends State<SearchForm> {
+class _OrderListFormState extends State<OrderListForm> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SearchBloc, SearchState>(
+    return BlocListener<OrderListBloc, OrderListState>(
       listener: (context, state) {
-        if (state is SearchFailure) {
+        if (state is OrderListFailure) {
           Scaffold.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
@@ -26,15 +32,9 @@ class _SearchFormState extends State<SearchForm> {
           );
         }
       },
-      child: BlocBuilder<SearchBloc, SearchState>(
+      child: BlocBuilder<OrderListBloc, OrderListState>(
         builder: (context, state) {
-          return Scaffold(
-            appBar: buildAppBar(context),
-            backgroundColor: state is SearchHistoryOrderLoaded
-                ? Colors.white
-                : HexColor.fromHex('#F3F6F9'),
-            body: SafeArea(child: rootWidget(state)),
-          );
+          return SafeArea(child: rootWidget(state));
         },
       ),
     );
@@ -43,7 +43,7 @@ class _SearchFormState extends State<SearchForm> {
   void onTapItem(BuildContext context, Order order) {
     if (order == null) return;
     ApiRepository repository =
-        BlocProvider.of<SearchBloc>(context).apiRepository;
+        BlocProvider.of<OrderListBloc>(context).apiRepository;
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => OrderPage(
               apiRepository: repository,
@@ -65,85 +65,14 @@ class _SearchFormState extends State<SearchForm> {
     );
   }
 
-  Widget listViewWithSectionWidget(List<OrderSection> orders) {
-    List<ListItem> items = List();
-
-    orders.forEach((i) {
-      items.add(HeadingItem(i.time));
-      i.items.forEach((o) {
-        items.add(MessageItem(o));
-      });
-    });
-
-    return ListView(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 24.0, left: 16),
-          child: Text(
-            'История поиска',
-            style: TextStyle(
-                color: HexColor.fromHex('#0C270F'),
-                fontSize: 21,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: items.length,
-          padding: const EdgeInsets.all(16.0),
-          itemBuilder: (context, position) {
-            final orderSection = items[position];
-            Order _order =
-                orderSection is MessageItem ? orderSection.order : null;
-            return GestureDetector(
-                child: Container(
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          orderSection.buildTitle(context),
-                          orderSection.buildSubtitle(context)
-                        ],
-                      ),
-                      orderSection.buildLine(context)
-                    ],
-                  ),
-                ),
-                onTap: () => onTapItem(context, _order));
-          },
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 40.0, left: 64, right: 64),
-          child: FlatButton(
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(40.0),
-                side: BorderSide(color: Colors.red)),
-            color: Colors.white,
-            textColor: Colors.red,
-            padding: EdgeInsets.only(top: 16, bottom: 16, right: 48, left: 48),
-            onPressed: () {},
-            child: Text(
-              'Очистить историю',
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget rootWidget(SearchState state) {
-    if (state is SearchLoading)
+  Widget rootWidget(OrderListState state) {
+    if (state is OrderListLoading)
       return Center(child: CircularProgressIndicator());
-    if (state is SearchOrderLoaded) if (state.orders.length > 0)
+    if (state is OrderListLoaded) if (state.orders.length > 0)
       return listViewWidget(state.orders);
-    if (state is SearchHistoryOrderLoaded) if (state.orders.length > 0)
-      return listViewWithSectionWidget(state.orders);
-    if (state is SearchInitial)
-      BlocProvider.of<SearchBloc>(context).add(SearchTextDidChange(text: ''));
+    if (state is OrderListInitial)
+      BlocProvider.of<OrderListBloc>(context)
+          .add(OrderListDidSetDate(time: widget.date));
     return emptyView();
   }
 
@@ -288,89 +217,7 @@ class _SearchFormState extends State<SearchForm> {
     );
   }
 
-  final TextEditingController _editingController = TextEditingController();
-
   Widget buildAppBar(BuildContext context) {
-    return AppBar(
-        title: TextField(
-          controller: _editingController,
-          style: new TextStyle(
-            color: HexColor.fromHex('#0C270F'),
-          ),
-          decoration: new InputDecoration(
-              border: InputBorder.none,
-              hintText: "Найти",
-              hintStyle: new TextStyle(color: HexColor.fromHex('#D7D7D7'))),
-          onChanged: (text) {
-            BlocProvider.of<SearchBloc>(context)
-                .add(SearchTextDidChange(text: text));
-          },
-        ),
-        leading: Icon(Icons.search, color: HexColor.fromHex('#0C270F')),
-        actions: <Widget>[
-          _editingController.text.isEmpty
-              ? Container()
-              : IconButton(
-                  icon: Icon(
-                    Icons.close,
-                    color: HexColor.fromHex('#0C270F'),
-                  ),
-                  onPressed: () {
-                    _editingController.clear();
-                    BlocProvider.of<SearchBloc>(context)
-                        .add(SearchTextDidChange(text: ''));
-                  },
-                ),
-        ]);
+    return AppBar(title: Text(''));
   }
-}
-
-abstract class ListItem {
-  Widget buildTitle(BuildContext context);
-
-  Widget buildSubtitle(BuildContext context);
-
-  Widget buildLine(BuildContext context);
-}
-
-class HeadingItem implements ListItem {
-  final String heading;
-
-  HeadingItem(this.heading);
-
-  Widget buildTitle(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 32.0, bottom: 16),
-      child: Text(
-        heading,
-        style: TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 13),
-      ),
-    );
-  }
-
-  Widget buildSubtitle(BuildContext context) => Container();
-
-  @override
-  Widget buildLine(BuildContext context) => Container();
-}
-
-class MessageItem implements ListItem {
-  final Order order;
-
-  MessageItem(this.order);
-
-  Widget buildTitle(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-        child: Text(order.driver,
-            style: TextStyle(
-                color: HexColor.fromHex('#0C270F'),
-                fontSize: 16,
-                fontWeight: FontWeight.w300)),
-      );
-
-  Widget buildSubtitle(BuildContext context) => Text('${order.number}',
-      style: TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 16));
-
-  @override
-  Widget buildLine(BuildContext context) => Divider(height: 1);
 }
