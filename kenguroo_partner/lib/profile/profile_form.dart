@@ -53,7 +53,7 @@ class _ProfileFormState extends State<ProfileForm> {
                 ),
                 Container(
                   padding: const EdgeInsets.all(32.0),
-                  height: 331,
+                  height: 352,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -66,6 +66,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         padding: const EdgeInsets.only(top: 20),
                         child: Text(
                           'Есть ли изменения по меню',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               color: HexColor.fromHex('#222831'),
                               fontSize: 19,
@@ -227,90 +228,71 @@ class _ProfileFormState extends State<ProfileForm> {
                   (state is ProfileLoading)
                       ? Center(child: CircularProgressIndicator())
                       : Container(),
-                  Column(
+                  ListView(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: CircleAvatar(
-                          radius: 40.0,
-                          backgroundImage: NetworkImage((_profile != null)
-                              ? _profile.image
-                              : 'https://via.placeholder.com/150'),
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ),
-                      Text(
-                        (_profile != null) ? _profile.name : 'Не указан',
-                        style: TextStyle(
-                            fontSize: 21,
-                            color: HexColor.fromHex('#0C270F'),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const Padding(
-                        padding: const EdgeInsets.only(top: 32.0),
-                      ),
-                      GestureDetector(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Image(
-                                image: AssetImage('assets/ic_food.png'),
-                                width: 24),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                'Внести правки в меню',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: HexColor.fromHex('#0C270F')),
-                              ),
-                            )
-                          ],
-                        ),
-                        onTap: () {
-                          showMenuChangedDialog();
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40),
-                        child: Divider(),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      Column(
                         children: <Widget>[
-                          Image(
-                              image: AssetImage('assets/ic_pin.png'),
-                              width: 24),
                           Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              'Добавить филиал',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: HexColor.fromHex('#0C270F')),
+                            child: CircleAvatar(
+                              radius: 40.0,
+                              backgroundImage: NetworkImage((_profile != null)
+                                  ? _profile.image
+                                  : 'https://via.placeholder.com/150'),
+                              backgroundColor: Colors.transparent,
                             ),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40),
-                        child: Divider(),
-                      ),
-                      GestureDetector(
-                          child: Row(
+                          ),
+                          Text(
+                            (_profile != null) ? _profile.name : 'Не указан',
+                            style: TextStyle(
+                                fontSize: 21,
+                                color: HexColor.fromHex('#0C270F'),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const Padding(
+                            padding: const EdgeInsets.only(top: 32.0),
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Image(
+                                      image: AssetImage('assets/ic_food.png'),
+                                      width: 24),
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Text(
+                                      'Внести правки в меню',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: HexColor.fromHex('#0C270F')),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            onTap: () {
+                              showMenuChangedDialog();
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 40),
+                            child: Divider(),
+                          ),
+                          Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Image(
-                                  image: AssetImage(
-                                      'assets/ic_alert_triangle.png'),
+                                  image: AssetImage('assets/ic_pin.png'),
                                   width: 24),
                               Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Text(
-                                  'Служба поддержки',
+                                  'Добавить филиал',
                                   style: TextStyle(
                                       fontSize: 16,
                                       color: HexColor.fromHex('#0C270F')),
@@ -318,36 +300,68 @@ class _ProfileFormState extends State<ProfileForm> {
                               )
                             ],
                           ),
-                          onTap: _navigateToSupport()),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40),
-                        child: Divider(),
-                      ),
-                      GestureDetector(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Image(
-                                image: AssetImage('assets/ic_exit.png'),
-                                width: 24),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                'Выйти',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: HexColor.fromHex('#0C270F')),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 40),
+                            child: Divider(),
+                          ),
+                          GestureDetector(
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Image(
+                                        image: AssetImage(
+                                            'assets/ic_alert_triangle.png'),
+                                        width: 24),
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Text(
+                                        'Служба поддержки',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: HexColor.fromHex('#0C270F')),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            )
-                          ],
-                        ),
-                        onTap: _logOutAction(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40),
-                        child: Divider(),
-                      ),
+                              onTap: _navigateToSupport()),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 40),
+                            child: Divider(),
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Image(
+                                      image: AssetImage('assets/ic_exit.png'),
+                                      width: 24),
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Text(
+                                      'Выйти',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: HexColor.fromHex('#0C270F')),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            onTap: _logOutAction(),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 40),
+                            child: Divider(),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ],

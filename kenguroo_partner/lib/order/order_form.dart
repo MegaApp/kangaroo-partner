@@ -55,7 +55,7 @@ class _OrderFormState extends State<OrderForm> {
                 ),
                 Container(
                   padding: const EdgeInsets.all(32.0),
-                  height: 315,
+                  height: 325,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -75,12 +75,12 @@ class _OrderFormState extends State<OrderForm> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 16, bottom: 40),
+                        padding: const EdgeInsets.only(top: 16, bottom: 30),
                         child: Text(
                           'Заказ перемещен во вкладку “готовится”. Отслеживайте заказ!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: HexColor.fromHex('#CCCCCC'), fontSize: 14),
+                              color: HexColor.fromHex('#CCCCCC'), fontSize: 16),
                         ),
                       ),
                       SizedBox(
@@ -342,7 +342,7 @@ class _OrderFormState extends State<OrderForm> {
                                       side: BorderSide(
                                           color: HexColor.fromHex('#3FC64F'))),
                                   padding: EdgeInsets.only(
-                                      top: 16, bottom: 16, right: 48, left: 48),
+                                      top: 16, bottom: 16, right: 40, left: 40),
                                   onPressed:
                                       (widget.order.status == 'Готовится')
                                           ? _readyBtnClicked()
@@ -373,8 +373,8 @@ class _OrderFormState extends State<OrderForm> {
                                         padding: EdgeInsets.only(
                                             top: 16,
                                             bottom: 16,
-                                            right: 48,
-                                            left: 48),
+                                            right: 40,
+                                            left: 40),
                                         onPressed: _cancelBtnClicked(),
                                         child: Text(
                                           'Отменить',

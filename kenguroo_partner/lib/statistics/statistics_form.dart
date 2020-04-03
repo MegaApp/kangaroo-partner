@@ -101,33 +101,36 @@ class _StatisticsFormState extends State<StatisticsForm> {
                               : buildBarChart()),
                       const Padding(padding: EdgeInsets.only(top: 48)),
                       GestureDetector(
-                        child: Stack(children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 16),
-                            child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Icon(Icons.keyboard_arrow_right,
-                                    color: HexColor.fromHex('#EEEEEE'))),
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Image(
-                                  image: AssetImage('assets/ic_activity.png'),
-                                  width: 24),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  'Подробная статистика',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: HexColor.fromHex('#0C270F')),
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Stack(children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Icon(Icons.keyboard_arrow_right,
+                                      color: HexColor.fromHex('#EEEEEE'))),
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Image(
+                                    image: AssetImage('assets/ic_activity.png'),
+                                    width: 24),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Text(
+                                    'Подробная статистика',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: HexColor.fromHex('#0C270F')),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          )
-                        ]),
+                              ],
+                            )
+                          ]),
+                        ),
                         onTap: () {
                           ApiRepository repository =
                               BlocProvider.of<StatisticsBloc>(context)
@@ -167,7 +170,7 @@ class _StatisticsFormState extends State<StatisticsForm> {
                 borderRadius: new BorderRadius.only(
                     topRight: Radius.circular(18.0),
                     topLeft: Radius.circular(18.0))),
-            height: MediaQuery.of(context).copyWith().size.height / 2.2,
+            height: 350,
             child: Column(
               children: <Widget>[
                 Padding(padding: const EdgeInsets.only(top: 16.0)),
@@ -209,8 +212,7 @@ class _StatisticsFormState extends State<StatisticsForm> {
                           color: HexColor.fromHex('#333333'),
                           fontSize: 21,
                           fontWeight: FontWeight.bold),
-                      pickerHeight:
-                          MediaQuery.of(context).copyWith().size.height / 4,
+                      pickerHeight: 185,
                       itemHeight: 74.0,
                     ),
                     onChange: (dateTime, selectedIndex) {

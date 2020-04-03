@@ -81,7 +81,7 @@ class _StoreFormState extends State<StoreForm> {
       }
     }
 
-    _listViewWidget(int _index, List<Order> orders) {
+    _listViewWidget(List<Order> orders) {
       return ListView.builder(
         shrinkWrap: true,
         itemCount: orders.length,
@@ -197,7 +197,12 @@ class _StoreFormState extends State<StoreForm> {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Image(
-                        image: AssetImage(iconCorners[_index]), width: 21),
+                        image: AssetImage(_order.status == 'Новый'
+                            ? 'assets/yellow-corn.png'
+                            : (_order.status == 'Готовится'
+                                ? 'assets/green-corn.png'
+                                : 'assets/red-corn.png')),
+                        width: 21),
                   ),
                 ],
               ),
@@ -210,7 +215,7 @@ class _StoreFormState extends State<StoreForm> {
       if (state is StoreLoading)
         return Center(child: CircularProgressIndicator());
       if (state is StoreOrderLoaded) if (state.orders.length > 0)
-        return _listViewWidget(state.index, state.orders);
+        return _listViewWidget(state.orders);
       if (state is StoreInitial) _onValueChanged(_selectedIndex);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,

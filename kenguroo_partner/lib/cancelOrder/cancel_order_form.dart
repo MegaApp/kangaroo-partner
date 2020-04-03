@@ -69,6 +69,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                       const Padding(padding: EdgeInsets.only(top: 40)),
                       GestureDetector(
                           child: Container(
+                            color: Colors.transparent,
                             height: 56,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,6 +101,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                       GestureDetector(
                           child: Container(
                             height: 56,
+                            color: Colors.transparent,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -131,6 +133,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                       GestureDetector(
                           child: Container(
                             height: 56,
+                            color: Colors.transparent,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -161,6 +164,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                       GestureDetector(
                           child: Container(
                             height: 56,
+                            color: Colors.transparent,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[

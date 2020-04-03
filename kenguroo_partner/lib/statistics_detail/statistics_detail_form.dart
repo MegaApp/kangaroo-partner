@@ -175,7 +175,7 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
                 borderRadius: new BorderRadius.only(
                     topRight: Radius.circular(18.0),
                     topLeft: Radius.circular(18.0))),
-            height: MediaQuery.of(context).copyWith().size.height / 2.2,
+            height: 350,
             child: Column(
               children: <Widget>[
                 Padding(padding: const EdgeInsets.only(top: 16.0)),
@@ -217,8 +217,7 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
                           color: HexColor.fromHex('#333333'),
                           fontSize: 21,
                           fontWeight: FontWeight.bold),
-                      pickerHeight:
-                          MediaQuery.of(context).copyWith().size.height / 4,
+                      pickerHeight: 185,
                       itemHeight: 74.0,
                     ),
                     onChange: (dateTime, selectedIndex) {
