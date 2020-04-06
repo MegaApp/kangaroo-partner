@@ -42,6 +42,7 @@ class _SearchFormState extends State<SearchForm> {
 
   void onTapItem(BuildContext context, Order order) {
     if (order == null) return;
+    BlocProvider.of<SearchBloc>(context).add(SearchAddToHistory(orderId: order.id));
     ApiRepository repository =
         BlocProvider.of<SearchBloc>(context).apiRepository;
     Navigator.of(context).push(MaterialPageRoute(
@@ -124,7 +125,9 @@ class _SearchFormState extends State<SearchForm> {
             color: Colors.white,
             textColor: Colors.red,
             padding: EdgeInsets.only(top: 16, bottom: 16, right: 48, left: 48),
-            onPressed: () {},
+            onPressed: () {
+              BlocProvider.of<SearchBloc>(context).add(SearchClearHistory());
+            },
             child: Text(
               'Очистить историю',
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),

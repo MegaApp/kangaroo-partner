@@ -20,3 +20,27 @@ class SearchTextDidChange extends SearchEvent {
   String toString() =>
       'SearchTextDidChange { text: $text}';
 }
+
+class SearchClearHistory extends SearchEvent {
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() =>
+      'SearchClearHistory';
+}
+
+class SearchAddToHistory extends SearchEvent {
+  final String orderId;
+
+  const SearchAddToHistory({
+    @required this.orderId,
+  });
+
+  @override
+  List<Object> get props => [orderId];
+
+  @override
+  String toString() =>
+      'SearchAddToHistory { orderId: $orderId}';
+}

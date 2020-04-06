@@ -21,7 +21,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     if (event is StatisticsGet) {
       yield StatisticsLoading();
       try {
-        final result = await apiRepository.getStatistics();
+        final result = await apiRepository.getStatisticsWeek();
         yield StatisticsDidGet(statistic: result);
       } catch (error) {
         yield StatisticsFailure(error: error.toString());

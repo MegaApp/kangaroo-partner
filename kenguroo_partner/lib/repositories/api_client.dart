@@ -106,6 +106,34 @@ class ApiClient {
         : List<Order>();
   }
 
+  Future<List<Order>> searchOrders(String query) async {
+    final loginUrl = '$baseUrl/store/search/$query';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'] != null
+        ? (json['data'] as List).map((i) => Order.fromJson(i)).toList()
+        : List<Order>();
+  }
+
+  Future<List<Order>> ordersByDate(String date) async {
+    final loginUrl = '$baseUrl/store/statistics/date/$date';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'] != null
+        ? (json['data'] as List).map((i) => Order.fromJson(i)).toList()
+        : List<Order>();
+  }
+
   Future<bool> acceptOrders(String id) async {
     final loginUrl = '$baseUrl/store/orders/accept/$id';
     final token = await secureStorage.read(key: 'access');
@@ -192,5 +220,67 @@ class ApiClient {
       throw Exception(json['error_info']['message']);
     }
     return Profile.fromJson(json['data']);
+  }
+
+  Future<Statistic> statisticsPeriod(String start, String end) async {
+    final loginUrl = '$baseUrl/store/statistics/period?start=$start&end=$end';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return Statistic.fromJson(json['data']);
+  }
+
+  Future<Statistic> statisticsWeek() async {
+    final loginUrl = '$baseUrl/store/statistics/week';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return Statistic.fromJson(json['data']);
+  }
+
+  Future<bool> addToSearchHistory(String orderId) async {
+    final loginUrl = '$baseUrl/store/search/history/$orderId';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.post(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'];
+  }
+
+  Future<List<OrderSection>> getOrderHistory() async {
+    final loginUrl = '$baseUrl/store/search/history';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'] != null
+        ? (json['data'] as List).map((i) => OrderSection.fromJson(i)).toList()
+        : List<OrderSection>();
+  }
+
+  Future<bool> clearOrderHistory() async {
+    final loginUrl = '$baseUrl/store/search/history';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.delete(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'];
   }
 }

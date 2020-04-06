@@ -20,7 +20,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     if (event is OrderListDidSetDate) {
       yield OrderListLoading();
       try {
-        final result = await apiRepository.orders('finished');
+        final result = await apiRepository.ordersByDate(event.time);
         if (result.length > 0)
           yield OrderListLoaded(orders: result);
         else

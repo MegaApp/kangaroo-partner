@@ -51,6 +51,14 @@ class ApiRepository {
     return await client.orders(path);
   }
 
+  Future<List<Order>> searchOrders(String query) async {
+    return await client.searchOrders(query);
+  }
+
+  Future<List<Order>> ordersByDate(String date) async {
+    return await client.ordersByDate(date);
+  }
+
   Future<bool> acceptOrder(String id) async {
     return await client.acceptOrders(id);
   }
@@ -79,61 +87,23 @@ class ApiRepository {
     return await client.createQuestion(title, question);
   }
 
-  Future<List<OrderSection>> getOrderHistory() async {
-    await Future.delayed(Duration(seconds: 1));
-    Order order = Order(driver: 'Damir', number: 2434);
-    Order order1 = Order(driver: 'Tilek', number: 2934);
-    Order order2 = Order(driver: 'Myrza', number: 2034);
-    Order order3 = Order(driver: 'Elbar', number: 2234);
-
-    List<Order> orders = List();
-    orders.add(order);
-    orders.add(order1);
-    orders.add(order2);
-    orders.add(order3);
-
-    Order order4 = Order(driver: 'Izzat', number: 2432);
-    Order order5 = Order(driver: 'Nurga', number: 2474);
-
-    List<Order> orders1 = List();
-    orders1.add(order4);
-    orders1.add(order5);
-
-    List<OrderSection> list = List();
-    list.add(OrderSection(time: 'Вы искали сегодня', items: orders));
-    list.add(OrderSection(time: 'Вы искали 12.03.20', items: orders1));
-
-    return list;
+  Future<bool> addToSearchHistory(String orderId) async {
+    return await client.addToSearchHistory(orderId);
   }
 
-  Future<Statistic> getStatistics() async {
-    await Future.delayed(Duration(seconds: 1));
+  Future<List<OrderSection>> getOrderHistory() async {
+    return await client.getOrderHistory();
+  }
 
-    StatisticItem item = StatisticItem(
-        count: 13, name: 'Понедельник', total: 20000, date: '13.03.2020');
-    StatisticItem item1 = StatisticItem(
-        count: 23, name: 'Вторник', total: 14000, date: '14.03.2020');
-    StatisticItem item2 = StatisticItem(
-        count: 53, name: 'Среда', total: 24020, date: '15.03.2020');
-    StatisticItem item3 = StatisticItem(
-        count: 43, name: 'Четверг', total: 3000, date: '16.03.2020');
-    StatisticItem item4 = StatisticItem(
-        count: 15, name: 'Пятница', total: 21900, date: '17.03.2020');
-    StatisticItem item5 = StatisticItem(
-        count: 17, name: 'Суббота', total: 35000, date: '18.03.2020');
-    StatisticItem item6 = StatisticItem(
-        count: 7, name: 'Воскресенье', total: 23400, date: '19.03.2020');
+  Future<bool> clearOrderHistory() async {
+    return await client.clearOrderHistory();
+  }
 
-    List<StatisticItem> items = List();
-    items.add(item);
-    items.add(item1);
-    items.add(item2);
-    items.add(item3);
-    items.add(item4);
-    items.add(item5);
-    items.add(item6);
+  Future<Statistic> getStatisticsWeek() async {
+    return await client.statisticsWeek();
+  }
 
-    Statistic statistic = new Statistic(items: items, total: 234);
-    return statistic;
+  Future<Statistic> statisticsPeriod(String start, String end) async {
+    return await client.statisticsPeriod(start, end);
   }
 }

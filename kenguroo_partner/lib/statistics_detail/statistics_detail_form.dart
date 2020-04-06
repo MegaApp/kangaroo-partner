@@ -89,60 +89,72 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
                                   const Padding(
                                       padding: const EdgeInsets.all(20)),
                                 ]),
-                            ListView.separated(
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: widget.statistic.items.length,
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                StatisticItem _item =
-                                    widget.statistic.items[index];
-                                String title = _item.name == null
-                                    ? _item.date
-                                    : _item.name;
-                                return GestureDetector(
-                                    child: Container(
-                                      color: Colors.transparent,
-                                      height: 53,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text(
-                                            title,
-                                            style: TextStyle(
-                                                color:
-                                                    HexColor.fromHex('#0C270F'),
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w300),
+                            (widget.statistic.items == null ||
+                                    widget.statistic.items.isEmpty)
+                                ? Container()
+                                : ListView.separated(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: widget.statistic.items.length,
+                                    shrinkWrap: true,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      StatisticItem _item =
+                                          widget.statistic.items[index];
+                                      String title = _item.name == null
+                                          ? _item.date
+                                          : _item.name;
+                                      return GestureDetector(
+                                          child: Container(
+                                            color: Colors.transparent,
+                                            height: 53,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Row(children: <Widget>[
+                                                  Text(
+                                                    '${_item.count}',
+                                                    style: TextStyle(
+                                                        color:
+                                                        HexColor.fromHex(
+                                                            '#0C270F'),
+                                                        fontSize: 16),
+                                                  ),
+                                                  const Padding(
+                                                      padding:
+                                                      const EdgeInsets
+                                                          .all(4)),
+                                                  Text(
+                                                    title,
+                                                    style: TextStyle(
+                                                        color: HexColor.fromHex(
+                                                            '#0C270F'),
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                        FontWeight.w300),
+                                                  ),
+                                                ]),
+                                                Text(
+                                                  '${_item.total} сом',
+                                                  style: TextStyle(
+                                                      color:
+                                                      HexColor.fromHex(
+                                                          '#0C270F'),
+                                                      fontSize: 16),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          Row(
-                                            children: <Widget>[
-                                              Text(
-                                                '${_item.total} сом',
-                                                style: TextStyle(
-                                                    color: HexColor.fromHex(
-                                                        '#0C270F'),
-                                                    fontSize: 16),
-                                              ),
-                                              const Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(4)),
-                                              Icon(Icons.keyboard_arrow_right,
-                                                  color: HexColor.fromHex(
-                                                      '#EEEEEE'))
-                                            ],
-                                          )
-                                        ],
-                                      ),
+                                          onTap: () => {onTap(_item)});
+                                    },
+                                    separatorBuilder:
+                                        (BuildContext context, int index) =>
+                                            const Divider(
+                                      height: 1,
                                     ),
-                                    onTap: () => {onTap(_item)});
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
-                                      const Divider(
-                                height: 1,
-                              ),
-                            )
+                                  )
                           ],
                         )
                       : Container(),

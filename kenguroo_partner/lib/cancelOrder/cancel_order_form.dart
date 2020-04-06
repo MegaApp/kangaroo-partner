@@ -42,8 +42,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
         }
 
         if (state is CancelOrderApproved) {
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
+          Navigator.of(context).pop({'needUpdate':true});
         }
       },
       child: BlocBuilder<CancelOrderBloc, CancelOrderState>(

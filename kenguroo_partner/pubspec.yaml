@@ -34,6 +34,7 @@ dependencies:
   flutter_ringtone_player: ^2.0.0
   fl_chart: ^0.8.7
   flutter_cupertino_date_picker: ^1.0.12
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:

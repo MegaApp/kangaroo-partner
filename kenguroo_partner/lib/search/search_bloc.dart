@@ -27,7 +27,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           else
             yield SearchOrderEmpty();
         } else {
-          final result = await apiRepository.orders('finished');
+          final result = await apiRepository.searchOrders(event.text);
           if (result.length > 0)
             yield SearchOrderLoaded(orders: result);
           else

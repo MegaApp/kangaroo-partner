@@ -29,12 +29,15 @@ class _OrderFormState extends State<OrderForm> {
             .add(OrderFinishBtnPressed(id: widget.order.id));
       };
 
-  _cancelBtnClicked() => () {
+  _cancelBtnClicked() => () async {
         ApiRepository repository =
             BlocProvider.of<OrderBloc>(context).apiRepository;
-        Navigator.of(context).push(MaterialPageRoute(
+        Map result = await Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) => CancelOrderPage(
                 apiRepository: repository, id: widget.order.id)));
+        if (result != null && result['needUpdate']) {
+          Navigator.of(context).pop({'needUpdate':true});
+        }
       };
 
   _showAcceptDialog() {
@@ -50,7 +53,7 @@ class _OrderFormState extends State<OrderForm> {
                 IconButton(
                   icon: Icon(Icons.close),
                   onPressed: () {
-                    Navigator.of(context).pop({'needUpdate':true});
+                    Navigator.of(context).pop();
                   },
                 ),
                 Container(
