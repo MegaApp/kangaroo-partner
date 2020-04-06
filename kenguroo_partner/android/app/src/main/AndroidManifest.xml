@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name=".Application"
-        android:label="kenguroo_partner"
+        android:label="Kenguru Partner"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
