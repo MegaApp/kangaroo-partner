@@ -25,6 +25,10 @@ class _SearchFormState extends State<SearchForm> {
             ),
           );
         }
+
+        if (state is SearchDidCleanHistory) {
+          BlocProvider.of<SearchBloc>(context).add(SearchTextDidChange(text: ''));
+        }
       },
       child: BlocBuilder<SearchBloc, SearchState>(
         builder: (context, state) {

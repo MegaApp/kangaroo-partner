@@ -15,6 +15,8 @@ class SearchLoading extends SearchState {}
 
 class SearchOrderEmpty extends SearchState {}
 
+class SearchDidCleanHistory extends SearchState {}
+
 class SearchFailure extends SearchState {
   final String error;
 

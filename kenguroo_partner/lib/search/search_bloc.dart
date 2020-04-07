@@ -37,5 +37,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         yield SearchFailure(error: error.toString());
       }
     }
+
+    if (event is SearchAddToHistory) {
+      await apiRepository.addToSearchHistory(event.orderId);
+    }
+
+    if (event is SearchClearHistory) {
+      await apiRepository.clearOrderHistory();
+      yield SearchDidCleanHistory();
+    }
   }
 }

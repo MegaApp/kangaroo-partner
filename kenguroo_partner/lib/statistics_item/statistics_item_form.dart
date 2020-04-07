@@ -57,7 +57,7 @@ class _StatisticsItemFormState extends State<StatisticsItemForm> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          '${widget.statisticItem.count} заказов',
+                          'количество: ${widget.statisticItem.count}',
                           style: TextStyle(
                               color: HexColor.fromHex('#0C270F'),
                               fontSize: 16,
