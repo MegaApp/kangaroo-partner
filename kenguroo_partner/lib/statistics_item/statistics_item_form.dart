@@ -37,7 +37,7 @@ class _StatisticsItemFormState extends State<StatisticsItemForm> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               const Padding(padding: const EdgeInsets.all(20)),
-                              Text('Итого за неделю',
+                              Text('Итого за день',
                                   style: TextStyle(
                                       fontSize: 13,
                                       color: HexColor.fromHex('#E4E4E4'))),
