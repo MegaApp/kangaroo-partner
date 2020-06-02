@@ -9,7 +9,7 @@ class ApiRepository {
 
   ApiRepository({@required this.client}) : assert(client != null);
 
-  Future<void> persistToken(UserAuth userAuth) async {
+  Future<bool> persistToken(UserAuth userAuth) async {
     return await client.persistToken(userAuth);
   }
 
@@ -33,7 +33,7 @@ class ApiRepository {
         username: username, password: password, deviceId: deviceId);
   }
 
-  Future<void> refreshToken() async {
+  Future<bool> refreshToken() async {
     return await client.refreshToken();
   }
 

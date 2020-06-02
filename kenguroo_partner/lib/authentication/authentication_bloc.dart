@@ -29,7 +29,11 @@ class AuthenticationBloc
       final bool hasToken = await apiRepository.hasToken();
       if (hasToken) {
         yield AuthenticationLoading();
-        await apiRepository.refreshToken();
+        final bool result = await apiRepository.refreshToken();
+        if (!result) {
+          yield AuthenticationUnauthenticated();
+          return;
+        }
         final bool isFirstLogin = await apiRepository.isFirstLogin();
         if (isFirstLogin)
           yield AuthenticationNeedChangePassword();

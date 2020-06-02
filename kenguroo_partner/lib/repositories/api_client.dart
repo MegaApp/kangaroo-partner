@@ -15,12 +15,12 @@ class ApiClient {
   ApiClient({@required this.httpClient, @required this.secureStorage})
       : assert(httpClient != null, secureStorage != null);
 
-  Future<void> persistToken(UserAuth userAuth) async {
+  Future<bool> persistToken(UserAuth userAuth) async {
     await secureStorage.write(key: 'access', value: userAuth.access);
     await secureStorage.write(key: 'refresh', value: userAuth.refresh);
     await secureStorage.write(
         key: 'is_first_login', value: userAuth.isFirstLogin.toString());
-    return;
+    return true;
   }
 
   Future<bool> hasToken() async {
@@ -57,7 +57,7 @@ class ApiClient {
     return UserAuth.fromJson(json['data']);
   }
 
-  Future<void> refreshToken() async {
+  Future<bool> refreshToken() async {
     final loginUrl = '$baseUrl/store/auth/refresh';
     final token = await secureStorage.read(key: 'refresh');
     final response =
@@ -65,10 +65,9 @@ class ApiClient {
 
     final json = jsonDecode(response.body);
     if (response.statusCode != 200) {
-      throw Exception(json['error_info']['message']);
+      return false;
     }
-    await persistToken(UserAuth.fromJson(json['data']));
-    return;
+    return await persistToken(UserAuth.fromJson(json['data']));
   }
 
   Future<bool> changePassword({
