@@ -36,7 +36,7 @@ class _OrderFormState extends State<OrderForm> {
             builder: (BuildContext context) => CancelOrderPage(
                 apiRepository: repository, id: widget.order.id)));
         if (result != null && result['needUpdate']) {
-          Navigator.of(context).pop({'needUpdate':true});
+          Navigator.of(context).pop({'needUpdate': true});
         }
       };
 
@@ -96,7 +96,7 @@ class _OrderFormState extends State<OrderForm> {
                                   color: HexColor.fromHex('#3FC64F'))),
                           onPressed: () {
                             Navigator.of(context).pop();
-                            Navigator.of(context).pop({'needUpdate':true});
+                            Navigator.of(context).pop({'needUpdate': true});
                           },
                           color: HexColor.fromHex('#3FC64F'),
                           textColor: Colors.white,
@@ -132,7 +132,7 @@ class _OrderFormState extends State<OrderForm> {
         }
 
         if (state is OrderFinished) {
-          Navigator.of(context).pop({'needUpdate':true});
+          Navigator.of(context).pop({'needUpdate': true});
         }
       },
       child: BlocBuilder<OrderBloc, OrderState>(
