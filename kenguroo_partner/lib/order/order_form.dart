@@ -169,13 +169,14 @@ class _OrderFormState extends State<OrderForm> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text(
+                                  Expanded(
+                                      child: Text(
                                     _item.name,
                                     style: TextStyle(
                                         color: HexColor.fromHex('#0C270F'),
                                         fontSize: 16,
                                         fontWeight: FontWeight.w300),
-                                  ),
+                                  )),
                                   Text(
                                     '${_item.count} шт.',
                                     style: TextStyle(
