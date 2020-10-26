@@ -51,6 +51,10 @@ class ApiRepository {
     return await client.orders(path);
   }
 
+  Future<List<Menu>> menus() async {
+    return await client.menus();
+  }
+
   Future<List<Order>> searchOrders(String query) async {
     return await client.searchOrders(query);
   }
@@ -73,6 +77,14 @@ class ApiRepository {
 
   Future<bool> menuChanged() async {
     return await client.updateMenu();
+  }
+
+  Future<bool> profileActivation(bool active) async {
+    return await client.profileActivation(active);
+  }
+
+  Future<bool> menuActivation(bool active, String id) async {
+    return await client.menuActivation(active, id);
   }
 
   Future<Profile> getProfile() async {

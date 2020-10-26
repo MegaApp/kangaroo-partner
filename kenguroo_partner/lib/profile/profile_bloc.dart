@@ -38,6 +38,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       }
     }
 
+    if (event is ProfileActivation) {
+      yield ProfileLoading();
+      try {
+        await apiRepository.profileActivation(event.active);
+        final result = await apiRepository.getProfile();
+        yield ProfileDidGet(profile: result);
+      } catch (error) {
+        yield ProfileFailure(error: error.toString());
+      }
+    }
+
     if (event is ProfileLoggedOut) {
       authenticationBloc.add(LoggedOut());
     }

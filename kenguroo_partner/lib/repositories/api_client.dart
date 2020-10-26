@@ -40,11 +40,10 @@ class ApiClient {
     return;
   }
 
-  Future<UserAuth> authenticate({
-    @required String username,
-    @required String password,
-    @required String deviceId
-  }) async {
+  Future<UserAuth> authenticate(
+      {@required String username,
+      @required String password,
+      @required String deviceId}) async {
     final loginUrl = '$baseUrl/store/auth/login';
     final response = await this.httpClient.post(loginUrl,
         body: jsonEncode(
@@ -105,11 +104,25 @@ class ApiClient {
         : List<Order>();
   }
 
+  Future<List<Menu>> menus() async {
+    final loginUrl = '$baseUrl/store/profile/menu';
+    final token = await secureStorage.read(key: 'access');
+    final response =
+    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'] != null
+        ? (json['data'] as List).map((i) => Menu.fromJson(i)).toList()
+        : List<Order>();
+  }
+
   Future<List<Order>> searchOrders(String query) async {
     final loginUrl = '$baseUrl/store/search/$query';
     final token = await secureStorage.read(key: 'access');
     final response =
-    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+        await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       throw Exception(json['error_info']['message']);
@@ -123,7 +136,7 @@ class ApiClient {
     final loginUrl = '$baseUrl/store/statistics/date/$date';
     final token = await secureStorage.read(key: 'access');
     final response =
-    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+        await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       throw Exception(json['error_info']['message']);
@@ -182,6 +195,42 @@ class ApiClient {
     return json['data'];
   }
 
+  Future<bool> profileActivation(bool active) async {
+    final loginUrl = active
+        ? '$baseUrl/store/profile/disable'
+        : '$baseUrl/store/profile/enable';
+    final token = await secureStorage.read(key: 'access');
+    final response = active
+        ? await this
+            .httpClient
+            .delete(loginUrl, headers: {'Authorization': token})
+        : await this
+            .httpClient
+            .post(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'];
+  }
+
+  Future<bool> menuActivation(bool active, String id) async {
+    final loginUrl = '$baseUrl/store/profile/menu/$id';
+    final token = await secureStorage.read(key: 'access');
+    final response = active
+        ? await this
+        .httpClient
+        .delete(loginUrl, headers: {'Authorization': token})
+        : await this
+        .httpClient
+        .post(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'];
+  }
+
   Future<List<Question>> questions() async {
     final loginUrl = '$baseUrl/store/profile/questions';
     final token = await secureStorage.read(key: 'access');
@@ -225,7 +274,7 @@ class ApiClient {
     final loginUrl = '$baseUrl/store/statistics/period?start=$start&end=$end';
     final token = await secureStorage.read(key: 'access');
     final response =
-    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+        await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       throw Exception(json['error_info']['message']);
@@ -237,7 +286,7 @@ class ApiClient {
     final loginUrl = '$baseUrl/store/statistics/week';
     final token = await secureStorage.read(key: 'access');
     final response =
-    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+        await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       throw Exception(json['error_info']['message']);
@@ -249,7 +298,7 @@ class ApiClient {
     final loginUrl = '$baseUrl/store/search/history/$orderId';
     final token = await secureStorage.read(key: 'access');
     final response =
-    await this.httpClient.post(loginUrl, headers: {'Authorization': token});
+        await this.httpClient.post(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       throw Exception(json['error_info']['message']);
@@ -261,7 +310,7 @@ class ApiClient {
     final loginUrl = '$baseUrl/store/search/history';
     final token = await secureStorage.read(key: 'access');
     final response =
-    await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+        await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       throw Exception(json['error_info']['message']);
@@ -274,8 +323,9 @@ class ApiClient {
   Future<bool> clearOrderHistory() async {
     final loginUrl = '$baseUrl/store/search/history';
     final token = await secureStorage.read(key: 'access');
-    final response =
-    await this.httpClient.delete(loginUrl, headers: {'Authorization': token});
+    final response = await this
+        .httpClient
+        .delete(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       throw Exception(json['error_info']['message']);
