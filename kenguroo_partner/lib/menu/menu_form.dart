@@ -19,7 +19,8 @@ class _MenuFormState extends State<MenuForm> {
     }
 
     _onTapItem(BuildContext context, Menu menu) {
-      BlocProvider.of<MenuBloc>(context).add(MenuActivation(active: menu.active, id: menu.id));
+      BlocProvider.of<MenuBloc>(context)
+          .add(MenuActivation(active: menu.active, id: menu.id));
     }
 
     _listViewWidget(List<Menu> orders) {
@@ -41,15 +42,23 @@ class _MenuFormState extends State<MenuForm> {
                           _menu.name,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 16,
-                              color: HexColor.fromHex('#0C270F')),
+                              fontSize: 16, color: HexColor.fromHex('#0C270F')),
                         ),
                       ),
-                      Image(
-                          image: AssetImage(_menu.active
-                              ? 'assets/close.png'
-                              : 'assets/open.png'),
-                          width: 24),
+                      // Image(
+                      //     image: AssetImage(_menu.active
+                      //         ? 'assets/close.png'
+                      //         : 'assets/open.png'),
+                      //     width: 24),
+                      Checkbox(
+                        value: _menu.active,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _onTapItem(context, _menu);
+                            _menu.active = value;
+                          });
+                        },
+                      ),
                     ],
                   ),
                   Divider(),

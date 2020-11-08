@@ -31,14 +31,14 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     }
 
     if (event is MenuActivation) {
-      yield MenuLoading();
+      //yield MenuLoading();
       try {
         await apiRepository.menuActivation(event.active, event.id);
-        final result = await apiRepository.menus();
-        if (result.length > 0)
-          yield MenuLoaded(menu: result);
-        else
-          yield MenuOrderEmpty();
+        // final result = await apiRepository.menus();
+        // if (result.length > 0)
+        //   yield MenuLoaded(menu: result);
+        // else
+        //   yield MenuOrderEmpty();
       } catch (error) {
         yield MenuFailure(error: error.toString());
       }

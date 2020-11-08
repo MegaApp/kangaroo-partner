@@ -332,6 +332,25 @@ class _OrderFormState extends State<OrderForm> {
                           ],
                         ),
                       ),
+                      !widget.order.cash
+                          ? const Divider(height: 1)
+                          : Container(),
+                      !widget.order.cash
+                          ? const Padding(padding: EdgeInsets.only(top: 16))
+                          : Container(),
+                      !widget.order.cash
+                          ? Container(
+                              height: 53,
+                              child: Text(
+                                'Заказ оплачен картой. Итого за заказ оплачено ${widget.order.price}',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: HexColor.fromHex('#3FC64F'),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          : Container(),
                       const Divider(height: 1),
                       const Padding(padding: EdgeInsets.only(top: 40)),
                       (widget.order.status == 'Ожидает')
