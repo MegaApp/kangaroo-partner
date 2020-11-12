@@ -45,11 +45,6 @@ class _ProfileFormState extends State<ProfileForm> {
                 )));
       };
 
-  _storeActivation() => () {
-        BlocProvider.of<ProfileBloc>(context)
-            .add(ProfileActivation(active: _profile.active));
-      };
-
   void showMenuChangedDialog() {
     showDialog(
         context: context,
@@ -293,6 +288,47 @@ class _ProfileFormState extends State<ProfileForm> {
                           //     showMenuChangedDialog();
                           //   },
                           // ),
+                          Padding(padding: const EdgeInsets.only(top: 50)),
+                          GestureDetector(
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  // Image(
+                                  //     image: AssetImage((_profile == null ||
+                                  //             _profile.active)
+                                  //         ? 'assets/close.png'
+                                  //         : 'assets/open.png'),
+                                  //     width: 24),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 16.0),
+                                    child: Text(
+                                      'Статус ресторана',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: HexColor.fromHex('#0C270F')),
+                                    ),
+                                  ),
+                                  Switch(
+                                      value: _profile == null
+                                          ? false
+                                          : _profile.active,
+                                      onChanged: (bool value) {
+                                        setState(() {
+                                          BlocProvider.of<ProfileBloc>(context)
+                                              .add(ProfileActivation(
+                                                  active: !value));
+                                          _profile.active = value;
+                                        });
+                                      })
+                                ],
+                              ),
+                            ),
+                            //onTap: _storeActivation()
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(left: 40),
                             child: Divider(),
@@ -300,58 +336,36 @@ class _ProfileFormState extends State<ProfileForm> {
                           GestureDetector(
                               child: Container(
                                 color: Colors.transparent,
-                                child: Row(
+                                child:
+                                Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Image(
+                                            image: AssetImage('assets/ic_food.png'),
+                                            width: 24),
+                                        Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Text(
+                                            'Редактировать меню',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: HexColor.fromHex('#0C270F')),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                     Image(
-                                        image: AssetImage('assets/ic_food.png'),
-                                        width: 24),
-                                    Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Text(
-                                        'Редактировать меню',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: HexColor.fromHex('#0C270F')),
-                                      ),
-                                    )
+                                        image: AssetImage('assets/arrow_right.png'),
+                                        width: 32),
                                   ],
                                 ),
                               ),
                               onTap: _navigateToMenuEditor()),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 40),
-                            child: Divider(),
-                          ),
-                          GestureDetector(
-                              child: Container(
-                                color: Colors.transparent,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Image(
-                                        image: AssetImage((_profile == null ||
-                                                _profile.active)
-                                            ? 'assets/close.png'
-                                            : 'assets/open.png'),
-                                        width: 24),
-                                    Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Text(
-                                        (_profile == null || _profile.active)
-                                            ? 'Отключить ресторан'
-                                            : 'Включить ресторан',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: HexColor.fromHex('#0C270F')),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              onTap: _storeActivation()),
                           Padding(
                             padding: const EdgeInsets.only(left: 40),
                             child: Divider(),
@@ -383,21 +397,31 @@ class _ProfileFormState extends State<ProfileForm> {
                                 color: Colors.transparent,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Image(
+                                            image: AssetImage(
+                                                'assets/ic_alert_triangle.png'),
+                                            width: 24),
+                                        Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Text(
+                                            'Служба поддержки',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: HexColor.fromHex('#0C270F')),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                     Image(
                                         image: AssetImage(
-                                            'assets/ic_alert_triangle.png'),
-                                        width: 24),
-                                    Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Text(
-                                        'Служба поддержки',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: HexColor.fromHex('#0C270F')),
-                                      ),
-                                    )
+                                            'assets/arrow_right.png'),
+                                        width: 32),
                                   ],
                                 ),
                               ),

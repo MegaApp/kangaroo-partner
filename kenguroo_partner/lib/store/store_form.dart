@@ -7,6 +7,7 @@ import 'package:kenguroo_partner/repositories/api_repository.dart';
 import 'package:kenguroo_partner/store/store.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import '../extentions.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 class StoreForm extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class StoreForm extends StatefulWidget {
 
 class _StoreFormState extends State<StoreForm> {
   int _selectedIndex = 0;
+  static AudioCache player = new AudioCache();
 
   @override
   void initState() {
@@ -34,13 +36,17 @@ class _StoreFormState extends State<StoreForm> {
     if (message.containsKey('data')) {
       dynamic data = message['data'];
       if (data['action'] == 'updateFeed') {
-        FlutterRingtonePlayer.playNotification();
+        const alarmAudioPath = "1.mp3";
+        player.play(alarmAudioPath);
+        //FlutterRingtonePlayer.playNotification();
         BlocProvider.of<StoreBloc>(context)
             .add(StoreSegmentedCtrPressed(index: _selectedIndex));
       }
     } else if (message.containsKey('action')) {
       if (message['action'] == 'updateFeed') {
-        FlutterRingtonePlayer.playNotification();
+        const alarmAudioPath = "1.mp3";
+        player.play(alarmAudioPath);
+        //FlutterRingtonePlayer.playNotification();
         BlocProvider.of<StoreBloc>(context)
             .add(StoreSegmentedCtrPressed(index: _selectedIndex));
       }

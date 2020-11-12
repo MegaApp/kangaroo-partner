@@ -157,31 +157,34 @@ class _OrderFormState extends State<OrderForm> {
                       ),
                       const Padding(padding: EdgeInsets.only(top: 16)),
                       Container(
-                        height: widget.order.items.length * 53.0,
+                        height: widget.order.items.length * 73.0,
                         child: ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: widget.order.items.length,
                           itemBuilder: (BuildContext context, int index) {
                             Item _item = widget.order.items[index];
                             return Container(
-                              height: 53,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              height: 73,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Expanded(
-                                      child: Text(
+                                  const Padding(
+                                      padding: EdgeInsets.only(top: 8)),
+                                  Text(
                                     _item.name,
                                     style: TextStyle(
                                         color: HexColor.fromHex('#0C270F'),
                                         fontSize: 16,
-                                        fontWeight: FontWeight.w300),
-                                  )),
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  const Padding(
+                                      padding: EdgeInsets.only(top: 12)),
                                   Text(
-                                    '${_item.count} шт.',
+                                    'Кол-во: ${_item.count} шт.      Стоимость: ${_item.price}',
                                     style: TextStyle(
                                         color: HexColor.fromHex('#0C270F'),
-                                        fontSize: 16),
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 13),
                                   ),
                                 ],
                               ),

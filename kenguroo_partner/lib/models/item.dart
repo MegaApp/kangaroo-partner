@@ -1,13 +1,15 @@
 class Item {
     int count;
     String name;
+    String price;
 
-    Item({this.count, this.name});
+    Item({this.count, this.name, this.price});
 
     factory Item.fromJson(Map<String, dynamic> json) {
         return Item(
             count: json['count'], 
-            name: json['name'], 
+            name: json['name'],
+            price: json['price']
         );
     }
 

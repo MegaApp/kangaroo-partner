@@ -36,15 +36,16 @@ class _MenuFormState extends State<MenuForm> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
+                      Expanded(
+                          child: Padding(
                         padding: const EdgeInsets.only(top: 16, bottom: 16),
                         child: Text(
                           _menu.name,
-                          textAlign: TextAlign.center,
+                          textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 16, color: HexColor.fromHex('#0C270F')),
                         ),
-                      ),
+                      )),
                       // Image(
                       //     image: AssetImage(_menu.active
                       //         ? 'assets/close.png'
