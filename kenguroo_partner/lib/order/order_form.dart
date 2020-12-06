@@ -139,280 +139,287 @@ class _OrderFormState extends State<OrderForm> {
         builder: (context, state) {
           return SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
               child: Stack(
                 children: <Widget>[
                   (state is OrderLoading)
                       ? Center(child: CircularProgressIndicator())
                       : Container(),
-                  ListView(
-                    children: <Widget>[
-                      const Padding(padding: EdgeInsets.only(top: 16)),
-                      Text(
-                        'Блюда (${widget.order.itemsCount})',
-                        style: TextStyle(
-                            color: HexColor.fromHex('#0C270F'),
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 16)),
-                      Container(
-                        height: widget.order.items.length * 73.0,
-                        child: ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: widget.order.items.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            Item _item = widget.order.items[index];
-                            return Container(
-                              height: 73,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  const Padding(
-                                      padding: EdgeInsets.only(top: 8)),
-                                  Text(
-                                    _item.name,
-                                    style: TextStyle(
-                                        color: HexColor.fromHex('#0C270F'),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                  const Padding(
-                                      padding: EdgeInsets.only(top: 12)),
-                                  Text(
-                                    'Кол-во: ${_item.count} шт.      Стоимость: ${_item.price}',
-                                    style: TextStyle(
-                                        color: HexColor.fromHex('#0C270F'),
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 13),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(
-                            height: 1,
-                          ),
+                  Padding(
+                    padding: (widget.order.status == 'Завершен')
+                        ? const EdgeInsets.all(0)
+                        : const EdgeInsets.only(bottom: 60),
+                    child: ListView(
+                      children: <Widget>[
+                        const Padding(padding: EdgeInsets.only(top: 16)),
+                        Text(
+                          'Блюда (${widget.order.itemsCount})',
+                          style: TextStyle(
+                              color: HexColor.fromHex('#0C270F'),
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      const Divider(),
-                      const Padding(padding: EdgeInsets.only(top: 32)),
-                      widget.order.comment.isNotEmpty
-                          ? Column(
-                              children: <Widget>[
-                                Row(
+                        const Padding(padding: EdgeInsets.only(top: 16)),
+                        Container(
+                          height: widget.order.items.length * 73.0,
+                          child: ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: widget.order.items.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              Item _item = widget.order.items[index];
+                              return Container(
+                                height: 73,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Image(
-                                        image: AssetImage('assets/info.png'),
-                                        width: 20),
                                     const Padding(
-                                        padding: EdgeInsets.only(right: 10)),
+                                        padding: EdgeInsets.only(top: 8)),
                                     Text(
-                                      'Комментарий к заказу',
+                                      _item.name,
                                       style: TextStyle(
                                           color: HexColor.fromHex('#0C270F'),
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold),
-                                    )
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    const Padding(
+                                        padding: EdgeInsets.only(top: 12)),
+                                    Text(
+                                      'Кол-во: ${_item.count} шт.      Стоимость: ${_item.price}',
+                                      style: TextStyle(
+                                          color: HexColor.fromHex('#0C270F'),
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 13),
+                                    ),
                                   ],
                                 ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 16),
-                                  padding: EdgeInsets.all(16),
-                                  decoration: new BoxDecoration(
-                                      border: Border.all(
-                                        width: 1,
-                                        color: HexColor.fromHex('#DEE9F5'),
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider(
+                              height: 1,
+                            ),
+                          ),
+                        ),
+                        const Divider(),
+                        const Padding(padding: EdgeInsets.only(top: 32)),
+                        widget.order.comment.isNotEmpty
+                            ? Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Image(
+                                          image: AssetImage('assets/info.png'),
+                                          width: 20),
+                                      const Padding(
+                                          padding: EdgeInsets.only(right: 10)),
+                                      Text(
+                                        'Комментарий к заказу',
+                                        style: TextStyle(
+                                            color: HexColor.fromHex('#0C270F'),
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(top: 16),
+                                    padding: EdgeInsets.all(16),
+                                    decoration: new BoxDecoration(
+                                        border: Border.all(
+                                          width: 1,
+                                          color: HexColor.fromHex('#DEE9F5'),
+                                        ),
+                                        borderRadius: new BorderRadius.all(
+                                            Radius.circular(12.0))),
+                                    child: Center(
+                                      child: Text(
+                                        widget.order.comment,
+                                        style: TextStyle(
+                                            color: HexColor.fromHex('#5E5E5E'),
+                                            fontSize: 15),
                                       ),
-                                      borderRadius: new BorderRadius.all(
-                                          Radius.circular(12.0))),
-                                  child: Center(
-                                    child: Text(
-                                      widget.order.comment,
-                                      style: TextStyle(
-                                          color: HexColor.fromHex('#5E5E5E'),
-                                          fontSize: 15),
                                     ),
                                   ),
-                                ),
-                              ],
-                            )
-                          : Container(),
-                      const Padding(padding: EdgeInsets.only(top: 40)),
-                      Text(
-                        'О заказе',
-                        style: TextStyle(
-                            color: HexColor.fromHex('#0C270F'),
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 16)),
-                      Container(
-                        height: 53,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Номер заказа',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w300),
-                            ),
-                            Text(
-                              '${widget.order.number}',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16),
-                            ),
-                          ],
+                                ],
+                              )
+                            : Container(),
+                        const Padding(padding: EdgeInsets.only(top: 40)),
+                        Text(
+                          'О заказе',
+                          style: TextStyle(
+                              color: HexColor.fromHex('#0C270F'),
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      const Divider(height: 1),
-                      Container(
-                        height: 53,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Время выдачи',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w300),
-                            ),
-                            Text(
-                              '${widget.order.orderedAt}',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Divider(height: 1),
-                      Container(
-                        height: 53,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Курьер',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w300),
-                            ),
-                            Text(
-                              '${widget.order.driver}',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Divider(height: 1),
-                      Container(
-                        height: 53,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Итого',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w300),
-                            ),
-                            Text(
-                              '${widget.order.price}',
-                              style: TextStyle(
-                                  color: HexColor.fromHex('#0C270F'),
-                                  fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
-                      !widget.order.cash
-                          ? const Divider(height: 1)
-                          : Container(),
-                      !widget.order.cash
-                          ? const Padding(padding: EdgeInsets.only(top: 16))
-                          : Container(),
-                      !widget.order.cash
-                          ? Container(
-                              height: 53,
-                              child: Text(
-                                'Заказ оплачен картой. Итого за заказ оплачено ${widget.order.price}',
-                                textAlign: TextAlign.center,
+                        const Padding(padding: EdgeInsets.only(top: 16)),
+                        Container(
+                          height: 53,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                'Номер заказа',
                                 style: TextStyle(
-                                    color: HexColor.fromHex('#3FC64F'),
+                                    color: HexColor.fromHex('#0C270F'),
                                     fontSize: 16,
-                                    fontWeight: FontWeight.bold),
+                                    fontWeight: FontWeight.w300),
                               ),
-                            )
-                          : Container(),
-                      const Divider(height: 1),
-                      const Padding(padding: EdgeInsets.only(top: 40)),
-                      (widget.order.status == 'Ожидает')
-                          ? Container()
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                FlatButton(
-                                  shape: new RoundedRectangleBorder(
-                                      borderRadius:
-                                          new BorderRadius.circular(40.0),
-                                      side: BorderSide(
-                                          color: HexColor.fromHex('#3FC64F'))),
-                                  padding: EdgeInsets.only(
-                                      top: 16, bottom: 16, right: 40, left: 40),
-                                  onPressed:
-                                      (widget.order.status == 'Готовится')
-                                          ? _readyBtnClicked()
-                                          : _acceptBtnClicked(),
-                                  color: HexColor.fromHex('#3FC64F'),
-                                  textColor: Colors.white,
-                                  child: Text(
-                                      (widget.order.status == 'Готовится')
-                                          ? 'Готово'
-                                          : 'Принять',
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold)),
+                              Text(
+                                '${widget.order.number}',
+                                style: TextStyle(
+                                    color: HexColor.fromHex('#0C270F'),
+                                    fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(height: 1),
+                        Container(
+                          height: 53,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                'Время выдачи',
+                                style: TextStyle(
+                                    color: HexColor.fromHex('#0C270F'),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              Text(
+                                '${widget.order.orderedAt}',
+                                style: TextStyle(
+                                    color: HexColor.fromHex('#0C270F'),
+                                    fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(height: 1),
+                        Container(
+                          height: 53,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                'Курьер',
+                                style: TextStyle(
+                                    color: HexColor.fromHex('#0C270F'),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              Text(
+                                '${widget.order.driver}',
+                                style: TextStyle(
+                                    color: HexColor.fromHex('#0C270F'),
+                                    fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(height: 1),
+                        Container(
+                          height: 53,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                'Итого',
+                                style: TextStyle(
+                                    color: HexColor.fromHex('#0C270F'),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              Text(
+                                '${widget.order.price}',
+                                style: TextStyle(
+                                    color: HexColor.fromHex('#0C270F'),
+                                    fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ),
+                        !widget.order.cash
+                            ? const Divider(height: 1)
+                            : Container(),
+                        !widget.order.cash
+                            ? const Padding(padding: EdgeInsets.only(top: 16))
+                            : Container(),
+                        !widget.order.cash
+                            ? Container(
+                                height: 53,
+                                child: Text(
+                                  'Заказ оплачен картой. Итого за заказ оплачено ${widget.order.price}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: HexColor.fromHex('#3FC64F'),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                (widget.order.status == 'Готовится')
-                                    ? Container()
-                                    : SizedBox(width: 16),
-                                (widget.order.status == 'Готовится')
-                                    ? Container()
-                                    : FlatButton(
-                                        shape: new RoundedRectangleBorder(
-                                            borderRadius:
-                                                new BorderRadius.circular(40.0),
-                                            side:
-                                                BorderSide(color: Colors.red)),
-                                        color: Colors.white,
-                                        textColor: Colors.red,
-                                        padding: EdgeInsets.only(
-                                            top: 16,
-                                            bottom: 16,
-                                            right: 40,
-                                            left: 40),
-                                        onPressed: _cancelBtnClicked(),
-                                        child: Text(
-                                          'Отменить',
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      )
-                              ],
-                            ),
-                      const Padding(padding: EdgeInsets.only(top: 40)),
-                    ],
+                              )
+                            : Container(),
+                        const Divider(height: 1),
+                        const Padding(padding: EdgeInsets.only(top: 40)),
+                      ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: (widget.order.status == 'Завершен')
+                        ? Container()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              FlatButton(
+                                shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(40.0),
+                                    side: BorderSide(
+                                        color: HexColor.fromHex('#3FC64F'))),
+                                padding: EdgeInsets.only(
+                                    top: 16, bottom: 16, right: 40, left: 40),
+                                onPressed: (widget.order.status == 'Готовится')
+                                    ? _readyBtnClicked()
+                                    : _acceptBtnClicked(),
+                                color: HexColor.fromHex('#3FC64F'),
+                                textColor: Colors.white,
+                                child: Text(
+                                    (widget.order.status == 'Готовится')
+                                        ? 'Готово'
+                                        : 'Принять',
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              (widget.order.status == 'Готовится')
+                                  ? Container()
+                                  : SizedBox(width: 16),
+                              (widget.order.status == 'Готовится')
+                                  ? Container()
+                                  : FlatButton(
+                                      shape: new RoundedRectangleBorder(
+                                          borderRadius:
+                                              new BorderRadius.circular(40.0),
+                                          side: BorderSide(color: Colors.red)),
+                                      color: Colors.white,
+                                      textColor: Colors.red,
+                                      padding: EdgeInsets.only(
+                                          top: 16,
+                                          bottom: 16,
+                                          right: 40,
+                                          left: 40),
+                                      onPressed: _cancelBtnClicked(),
+                                      child: Text(
+                                        'Отменить',
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                            ],
+                          ),
                   )
                 ],
               ),
