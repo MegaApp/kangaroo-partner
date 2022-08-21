@@ -203,7 +203,6 @@ class _StatisticsFormState extends State<StatisticsForm> {
                     minDateTime: (state is StatisticsDidSetStartDate)
                         ? state.startDate
                         : null,
-                    maxDateTime: DateTime.now(),
                     initialDateTime: DateTime.now(),
                     dateFormat: 'MMMM,d,yyyy',
                     pickerTheme: DateTimePickerTheme(

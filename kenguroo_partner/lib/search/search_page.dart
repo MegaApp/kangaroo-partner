@@ -17,6 +17,7 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Поиск')),
       backgroundColor: HexColor.fromHex('#F3F6F9'),
       body: BlocProvider(
         create: (context) {

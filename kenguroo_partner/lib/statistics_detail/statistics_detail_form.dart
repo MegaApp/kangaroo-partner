@@ -101,9 +101,7 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
                                         (BuildContext context, int index) {
                                       StatisticItem _item =
                                           widget.statistic.items[index];
-                                      String title = _item.name == null
-                                          ? _item.date
-                                          : _item.name;
+                                      String title = _item.date;
                                       return GestureDetector(
                                           child: Container(
                                             color: Colors.transparent,
@@ -220,7 +218,6 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
                     minDateTime: (state is StatisticsDetailDidSetStartDate)
                         ? state.startDate
                         : null,
-                    maxDateTime: DateTime.now(),
                     initialDateTime: DateTime.now(),
                     dateFormat: 'MMMM,d,yyyy',
                     pickerTheme: DateTimePickerTheme(

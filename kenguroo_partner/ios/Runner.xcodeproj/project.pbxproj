@@ -385,7 +385,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2.1.3;
+				MARKETING_VERSION = 2.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = kg.kenguroo.partner;
 				PRODUCT_NAME = "Kenguru Partner";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -516,7 +516,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2.1.3;
+				MARKETING_VERSION = 2.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = kg.kenguroo.partner;
 				PRODUCT_NAME = "Kenguru Partner";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -543,7 +543,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2.1.3;
+				MARKETING_VERSION = 2.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = kg.kenguroo.partner;
 				PRODUCT_NAME = "Kenguru Partner";
 				VERSIONING_SYSTEM = "apple-generic";

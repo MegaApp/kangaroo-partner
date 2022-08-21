@@ -5,6 +5,7 @@ import 'package:kenguroo_partner/extentions.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/profile/profile.dart';
 import 'package:kenguroo_partner/repositories/repositories.dart';
+import 'package:kenguroo_partner/search/search.dart';
 import 'package:kenguroo_partner/support/support.dart';
 import 'package:kenguroo_partner/menu/menu.dart';
 
@@ -40,9 +41,8 @@ class _ProfileFormState extends State<ProfileForm> {
         ApiRepository repository =
             BlocProvider.of<ProfileBloc>(context).apiRepository;
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => MenuPage(
-                  userRepository: repository,
-                )));
+            builder: (BuildContext context) =>
+                SearchPage(userRepository: repository)));
       };
 
   void showMenuChangedDialog() {
@@ -336,31 +336,37 @@ class _ProfileFormState extends State<ProfileForm> {
                           GestureDetector(
                               child: Container(
                                 color: Colors.transparent,
-                                child:
-                                Row(
+                                child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: <Widget>[
-                                        Image(
-                                            image: AssetImage('assets/ic_food.png'),
-                                            width: 24),
+                                        Icon(
+                                          Icons.search,
+                                          color: HexColor.fromHex('#e3e3e3'),
+                                          size: 24
+                                        ),
                                         Padding(
                                           padding: const EdgeInsets.all(16.0),
                                           child: Text(
-                                            'Редактировать меню',
+                                            'Поиск',
                                             style: TextStyle(
                                                 fontSize: 16,
-                                                color: HexColor.fromHex('#0C270F')),
+                                                color: HexColor.fromHex(
+                                                    '#0C270F')),
                                           ),
                                         )
                                       ],
                                     ),
                                     Image(
-                                        image: AssetImage('assets/arrow_right.png'),
+                                        image: AssetImage(
+                                            'assets/arrow_right.png'),
                                         width: 32),
                                   ],
                                 ),
@@ -397,11 +403,14 @@ class _ProfileFormState extends State<ProfileForm> {
                                 color: Colors.transparent,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: <Widget>[
                                         Image(
                                             image: AssetImage(
@@ -413,7 +422,8 @@ class _ProfileFormState extends State<ProfileForm> {
                                             'Служба поддержки',
                                             style: TextStyle(
                                                 fontSize: 16,
-                                                color: HexColor.fromHex('#0C270F')),
+                                                color: HexColor.fromHex(
+                                                    '#0C270F')),
                                           ),
                                         )
                                       ],

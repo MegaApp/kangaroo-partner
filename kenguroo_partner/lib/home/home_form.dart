@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/extentions.dart';
 import 'package:flutter/material.dart';
 import 'package:kenguroo_partner/home/home.dart';
+import 'package:kenguroo_partner/menu/menu.dart';
 import 'package:kenguroo_partner/profile/profile.dart';
 import 'package:kenguroo_partner/statistics/statistics.dart';
 import 'package:kenguroo_partner/store/store.dart';
@@ -43,8 +44,7 @@ class _HomeFormState extends State<HomeForm> {
 
   Widget rootWidget(BuildContext context, HomeState state) {
     if (state is HomeShowSearch) {
-      return SearchPage(
-          userRepository: BlocProvider.of<HomeBloc>(context).apiRepository);
+      return MenuPage(userRepository: BlocProvider.of<HomeBloc>(context).apiRepository);
     }
 
     if (state is HomeShowStatistic) {
@@ -71,11 +71,11 @@ class _HomeFormState extends State<HomeForm> {
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.room_service),
+            icon: Icon(Icons.receipt),
             title: Text('Users'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.room_service),
             title: Text('Ads'),
           ),
           BottomNavigationBarItem(

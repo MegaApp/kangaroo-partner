@@ -27,18 +27,21 @@ class _SearchFormState extends State<SearchForm> {
         }
 
         if (state is SearchDidCleanHistory) {
-          BlocProvider.of<SearchBloc>(context).add(SearchTextDidChange(text: ''));
+          BlocProvider.of<SearchBloc>(context)
+              .add(SearchTextDidChange(text: ''));
         }
       },
       child: BlocBuilder<SearchBloc, SearchState>(
         builder: (context, state) {
-          return Scaffold(
-            appBar: buildAppBar(context),
-            backgroundColor: state is SearchHistoryOrderLoaded
-                ? Colors.white
-                : HexColor.fromHex('#F3F6F9'),
-            body: SafeArea(child: rootWidget(state)),
-          );
+          return Padding(
+              padding: EdgeInsets.all(16),
+              child: Scaffold(
+                appBar: buildAppBar(context),
+                backgroundColor: state is SearchHistoryOrderLoaded
+                    ? Colors.white
+                    : HexColor.fromHex('#F3F6F9'),
+                body: SafeArea(child: rootWidget(state)),
+              ));
         },
       ),
     );
@@ -46,7 +49,8 @@ class _SearchFormState extends State<SearchForm> {
 
   void onTapItem(BuildContext context, Order order) {
     if (order == null) return;
-    BlocProvider.of<SearchBloc>(context).add(SearchAddToHistory(orderId: order.id));
+    BlocProvider.of<SearchBloc>(context)
+        .add(SearchAddToHistory(orderId: order.id));
     ApiRepository repository =
         BlocProvider.of<SearchBloc>(context).apiRepository;
     Navigator.of(context).push(MaterialPageRoute(
@@ -60,7 +64,7 @@ class _SearchFormState extends State<SearchForm> {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: orders.length,
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(top: 16, bottom: 16),
       itemBuilder: (context, position) {
         Order _order = orders[position];
         return GestureDetector(
@@ -83,7 +87,7 @@ class _SearchFormState extends State<SearchForm> {
     return ListView(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 24.0, left: 16),
+          padding: const EdgeInsets.only(top: 24.0),
           child: Text(
             'История поиска',
             style: TextStyle(
@@ -96,7 +100,7 @@ class _SearchFormState extends State<SearchForm> {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: items.length,
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(top: 16.0, bottom: 16),
           itemBuilder: (context, position) {
             final orderSection = items[position];
             Order _order =
@@ -164,7 +168,7 @@ class _SearchFormState extends State<SearchForm> {
           width: 120,
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 80, left: 80, top: 66),
+          padding: const EdgeInsets.only(right: 64, left: 64, top: 66),
           child: Text(
             'Пока нет результатов. Воспользуйтесь поиском',
             textAlign: TextAlign.center,
