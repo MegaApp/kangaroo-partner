@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:kenguroo_partner/repositories/api_repository.dart';
-import 'package:kenguroo_partner/cancelOrder/cancel_order.dart';
+import 'package:kenguroo_partner/cancel_order/cancel_order.dart';
 
 class CancelOrderBloc extends Bloc<CancelOrderEvent, CancelOrderState> {
   final ApiRepository apiRepository;

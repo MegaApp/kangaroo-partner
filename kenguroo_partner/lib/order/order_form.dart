@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kenguroo_partner/cancelOrder/cancel_order.dart';
+import 'package:kenguroo_partner/cancel_order/cancel_order.dart';
 import 'package:kenguroo_partner/extentions.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/order/order.dart';

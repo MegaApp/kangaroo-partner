@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/repositories/api_repository.dart';
-import 'package:kenguroo_partner/cancelOrder/cancel_order.dart';
+import 'package:kenguroo_partner/cancel_order/cancel_order.dart';
 
 class CancelOrderPage extends StatelessWidget {
   final ApiRepository apiRepository;
