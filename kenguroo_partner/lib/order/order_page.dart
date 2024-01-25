@@ -9,9 +9,7 @@ class OrderPage extends StatelessWidget {
   final ApiRepository apiRepository;
   final Order order;
 
-  OrderPage({Key key, @required this.apiRepository, @required this.order})
-      : assert(apiRepository != null, order != null),
-        super(key: key);
+  OrderPage({super.key, required this.apiRepository, required this.order});
 
   @override
   Widget build(BuildContext context) {

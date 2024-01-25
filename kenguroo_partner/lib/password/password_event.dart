@@ -9,7 +9,7 @@ class PasswordButtonPressed extends PasswordEvent {
   final String password;
 
   const PasswordButtonPressed({
-    @required this.password
+    required this.password
   });
 
   @override

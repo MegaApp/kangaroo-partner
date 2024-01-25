@@ -10,31 +10,35 @@ import 'package:kenguroo_partner/repositories/repositories.dart';
 class OrderForm extends StatefulWidget {
   final Order order;
 
-  OrderForm({Key key, @required this.order})
-      : assert(order != null),
-        super(key: key);
+  OrderForm({super.key, required this.order});
 
   @override
   State<OrderForm> createState() => _OrderFormState();
 }
 
 class _OrderFormState extends State<OrderForm> {
-  _acceptBtnClicked() => () {
+  _acceptBtnClicked() =>
+          () {
         BlocProvider.of<OrderBloc>(context)
             .add(OrderConfirmBtnPressed(id: widget.order.id));
       };
 
-  _readyBtnClicked() => () {
+  _readyBtnClicked() =>
+          () {
         BlocProvider.of<OrderBloc>(context)
             .add(OrderFinishBtnPressed(id: widget.order.id));
       };
 
-  _cancelBtnClicked() => () async {
+  _cancelBtnClicked() =>
+          () async {
         ApiRepository repository =
-            BlocProvider.of<OrderBloc>(context).apiRepository;
+            BlocProvider
+                .of<OrderBloc>(context)
+                .apiRepository;
         Map result = await Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => CancelOrderPage(
-                apiRepository: repository, id: widget.order.id)));
+            builder: (BuildContext context) =>
+                CancelOrderPage(
+                    apiRepository: repository, id: widget.order.id)));
         if (result != null && result['needUpdate']) {
           Navigator.of(context).pop({'needUpdate': true});
         }
@@ -64,7 +68,9 @@ class _OrderFormState extends State<OrderForm> {
                     children: <Widget>[
                       Icon(
                         Icons.room_service,
-                        color: Theme.of(context).accentColor,
+                        color: Theme
+                            .of(context)
+                            .hintColor,
                         size: 56,
                       ),
                       Padding(
@@ -86,25 +92,25 @@ class _OrderFormState extends State<OrderForm> {
                               color: HexColor.fromHex('#CCCCCC'), fontSize: 16),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         height: 56,
                         width: double.infinity,
-                        child: FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(40.0),
-                              side: BorderSide(
-                                  color: HexColor.fromHex('#3FC64F'))),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40.0),
+                            border: Border.all(color: HexColor.fromHex('#3FC64F'), width: 2)),
+                        child: TextButton(
+                          style: TextButton.styleFrom(foregroundColor: Colors.white, backgroundColor: HexColor.fromHex(
+                              '#3FC64F')),
                           onPressed: () {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop({'needUpdate': true});
                           },
-                          color: HexColor.fromHex('#3FC64F'),
-                          textColor: Colors.white,
-                          child: Text("Готово",
-                              style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold)),
+                          child: Text(
+                            "Готово",
+                            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 )
@@ -119,7 +125,7 @@ class _OrderFormState extends State<OrderForm> {
     return BlocListener<OrderBloc, OrderState>(
       listener: (context, state) {
         if (state is OrderFailure) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
               backgroundColor: Colors.red,
@@ -172,7 +178,7 @@ class _OrderFormState extends State<OrderForm> {
                                   height: 73,
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: <Widget>[
                                       const Padding(
                                           padding: EdgeInsets.only(top: 8)),
@@ -198,7 +204,7 @@ class _OrderFormState extends State<OrderForm> {
                               },
                               separatorBuilder:
                                   (BuildContext context, int index) =>
-                                      const Divider(
+                              const Divider(
                                 height: 1,
                               ),
                             ),
@@ -207,44 +213,44 @@ class _OrderFormState extends State<OrderForm> {
                         const Padding(padding: EdgeInsets.only(top: 32)),
                         widget.order.comment.isNotEmpty
                             ? Column(
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Image(
-                                          image: AssetImage('assets/info.png'),
-                                          width: 20),
-                                      const Padding(
-                                          padding: EdgeInsets.only(right: 10)),
-                                      Text(
-                                        'Комментарий к заказу',
-                                        style: TextStyle(
-                                            color: HexColor.fromHex('#0C270F'),
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Image(
+                                    image: AssetImage('assets/info.png'),
+                                    width: 20),
+                                const Padding(
+                                    padding: EdgeInsets.only(right: 10)),
+                                Text(
+                                  'Комментарий к заказу',
+                                  style: TextStyle(
+                                      color: HexColor.fromHex('#0C270F'),
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 16),
+                              padding: EdgeInsets.all(16),
+                              decoration: new BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: HexColor.fromHex('#DEE9F5'),
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 16),
-                                    padding: EdgeInsets.all(16),
-                                    decoration: new BoxDecoration(
-                                        border: Border.all(
-                                          width: 1,
-                                          color: HexColor.fromHex('#DEE9F5'),
-                                        ),
-                                        borderRadius: new BorderRadius.all(
-                                            Radius.circular(12.0))),
-                                    child: Center(
-                                      child: Text(
-                                        widget.order.comment,
-                                        style: TextStyle(
-                                            color: HexColor.fromHex('#5E5E5E'),
-                                            fontSize: 15),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
+                                  borderRadius: new BorderRadius.all(
+                                      Radius.circular(12.0))),
+                              child: Center(
+                                child: Text(
+                                  widget.order.comment,
+                                  style: TextStyle(
+                                      color: HexColor.fromHex('#5E5E5E'),
+                                      fontSize: 15),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                             : Container(),
                         const Padding(padding: EdgeInsets.only(top: 40)),
                         Text(
@@ -350,16 +356,16 @@ class _OrderFormState extends State<OrderForm> {
                             : Container(),
                         !widget.order.cash
                             ? Container(
-                                height: 53,
-                                child: Text(
-                                  'Заказ оплачен картой. Итого за заказ оплачено ${widget.order.price}',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: HexColor.fromHex('#3FC64F'),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
+                          height: 53,
+                          child: Text(
+                            'Заказ оплачен картой. Итого за заказ оплачено ${widget.order.price}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: HexColor.fromHex('#3FC64F'),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
                             : Container(),
                         const Divider(height: 1),
                         const Padding(padding: EdgeInsets.only(top: 40)),
@@ -371,57 +377,58 @@ class _OrderFormState extends State<OrderForm> {
                     child: (widget.order.status == 'Завершен')
                         ? Container()
                         : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              FlatButton(
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(40.0),
-                                    side: BorderSide(
-                                        color: HexColor.fromHex('#3FC64F'))),
-                                padding: EdgeInsets.only(
-                                    top: 16, bottom: 16, right: 40, left: 40),
-                                onPressed: (widget.order.status == 'Готовится')
-                                    ? _readyBtnClicked()
-                                    : _acceptBtnClicked(),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        InkWell(
+                          child: Container(
+                            decoration: BoxDecoration(
                                 color: HexColor.fromHex('#3FC64F'),
-                                textColor: Colors.white,
-                                child: Text(
-                                    (widget.order.status == 'Готовится')
-                                        ? 'Готово'
-                                        : 'Принять',
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              (widget.order.status == 'Готовится')
-                                  ? Container()
-                                  : SizedBox(width: 16),
-                              (widget.order.status == 'Готовится')
-                                  ? Container()
-                                  : FlatButton(
-                                      shape: new RoundedRectangleBorder(
-                                          borderRadius:
-                                              new BorderRadius.circular(40.0),
-                                          side: BorderSide(color: Colors.red)),
-                                      color: Colors.white,
-                                      textColor: Colors.red,
-                                      padding: EdgeInsets.only(
-                                          top: 16,
-                                          bottom: 16,
-                                          right: 40,
-                                          left: 40),
-                                      onPressed: _cancelBtnClicked(),
-                                      child: Text(
-                                        'Отменить',
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                            ],
+                                borderRadius: BorderRadius.circular(40.0),
+                                border: Border.all(
+                                    color: HexColor.fromHex('#3FC64F'), width: 2)),
+                            padding: EdgeInsets.only(
+                                top: 16, bottom: 16, right: 40, left: 40),
+                            child: Text(
+                                (widget.order.status == 'Готовится')
+                                    ? 'Готово'
+                                    : 'Принять',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold, color: Colors.white,)),
                           ),
+                          onTap: (widget.order.status == 'Готовится')
+                              ? _readyBtnClicked()
+                              : _acceptBtnClicked(),
+                        ),
+                        (widget.order.status == 'Готовится')
+                            ? Container()
+                            : SizedBox(width: 16),
+                        (widget.order.status == 'Готовится')
+                            ? Container()
+                            : InkWell(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                BorderRadius.circular(40.0),
+                                border: Border.all(color: Colors.red, width: 2)),
+                            padding: EdgeInsets.only(
+                                top: 16,
+                                bottom: 16,
+                                right: 40,
+                                left: 40),
+                            child: Text(
+                              'Отменить',
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold, color: Colors.red),
+                            ),
+                          ),
+                          onTap: _cancelBtnClicked(),
+                        )
+                      ],
+                    ),
                   )
                 ],
               ),

@@ -3,7 +3,7 @@ class ErrorInfo {
   String description;
   String message;
 
-  ErrorInfo({this.code, this.description, this.message});
+  ErrorInfo({required this.code, required this.description, required this.message});
 
   factory ErrorInfo.fromJson(Map<String, dynamic> json) {
     return ErrorInfo(

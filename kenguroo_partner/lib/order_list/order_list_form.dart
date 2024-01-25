@@ -10,9 +10,7 @@ import '../extentions.dart';
 class OrderListForm extends StatefulWidget {
   final String date;
 
-  OrderListForm({Key key, @required this.date})
-      : assert(date != null),
-        super(key: key);
+  OrderListForm({super.key, required this.date});
 
   @override
   State<OrderListForm> createState() => _OrderListFormState();
@@ -24,7 +22,7 @@ class _OrderListFormState extends State<OrderListForm> {
     return BlocListener<OrderListBloc, OrderListState>(
       listener: (context, state) {
         if (state is OrderListFailure) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
               backgroundColor: Colors.red,

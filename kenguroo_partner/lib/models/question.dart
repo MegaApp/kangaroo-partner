@@ -6,7 +6,7 @@ class Question {
   String question;
   String title;
 
-  Question({this.answer, this.id, this.question, this.title});
+  Question({required this.answer, required this.id, required this.question, required this.title});
 
   factory Question.fromJson(Map<String, dynamic> json) {
     return Question(

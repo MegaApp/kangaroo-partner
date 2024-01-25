@@ -18,7 +18,7 @@ class MenuOrderEmpty extends MenuState {}
 class MenuFailure extends MenuState {
   final String error;
 
-  const MenuFailure({@required this.error});
+  const MenuFailure({required this.error});
 
   @override
   List<Object> get props => [error];
@@ -31,7 +31,7 @@ class MenuLoaded extends MenuState {
   final List<Menu> menu;
 
   const MenuLoaded({
-    @required this.menu
+    required this.menu
   });
 
   @override

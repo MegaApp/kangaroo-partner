@@ -7,7 +7,7 @@ import 'package:kenguroo_partner/models/models.dart';
 class ApiRepository {
   final ApiClient client;
 
-  ApiRepository({@required this.client}) : assert(client != null);
+  ApiRepository({required this.client}) : assert(client != null);
 
   Future<bool> persistToken(UserAuth userAuth) async {
     return await client.persistToken(userAuth);
@@ -26,9 +26,9 @@ class ApiRepository {
   }
 
   Future<UserAuth> authenticate(
-      {@required String username,
-      @required String password,
-      @required String deviceId}) async {
+      {required String username,
+      required String password,
+      required String deviceId}) async {
     return await client.authenticate(
         username: username, password: password, deviceId: deviceId);
   }
@@ -38,7 +38,7 @@ class ApiRepository {
   }
 
   Future<bool> changePassword({
-    @required String password,
+    required String password,
   }) async {
     return await client.changePassword(password: password);
   }

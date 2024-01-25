@@ -10,11 +10,9 @@ class ProfilePage extends StatelessWidget {
   final AuthenticationBloc authenticationBloc;
 
   ProfilePage(
-      {Key key,
-      @required this.apiRepository,
-      @required this.authenticationBloc})
-      : assert(apiRepository != null),
-        super(key: key);
+      {super.key,
+      required this.apiRepository,
+      required this.authenticationBloc});
 
   @override
   Widget build(BuildContext context) {

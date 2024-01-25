@@ -26,7 +26,7 @@ class _HomeFormState extends State<HomeForm> {
   Widget build(BuildContext context) {
     return BlocListener<HomeBloc, HomeState>(listener: (context, state) {
       if (state is HomeFailure) {
-        Scaffold.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${state.error}'),
             backgroundColor: Colors.red,
@@ -72,23 +72,23 @@ class _HomeFormState extends State<HomeForm> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt),
-            title: Text('Users'),
+            label: 'Users',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.room_service),
-            title: Text('Ads'),
+            label: 'Ads',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.timeline),
-            title: Text('Ads'),
+            label:'Ads',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text('Ads'),
+            label: 'Ads',
           )
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: Theme.of(context).accentColor,
+        selectedItemColor: Theme.of(context).hintColor,
       );
 }

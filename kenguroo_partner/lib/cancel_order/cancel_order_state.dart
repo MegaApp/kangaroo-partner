@@ -17,7 +17,7 @@ class CancelOrderApproved extends CancelOrderState {}
 class CancelOrderFailure extends CancelOrderState {
   final String error;
 
-  const CancelOrderFailure({@required this.error});
+  const CancelOrderFailure({required this.error});
 
   @override
   List<Object> get props => [error];

@@ -18,7 +18,7 @@ class OrderListEmpty extends OrderListState {}
 class OrderListFailure extends OrderListState {
   final String error;
 
-  const OrderListFailure({@required this.error});
+  const OrderListFailure({required this.error});
 
   @override
   List<Object> get props => [error];
@@ -31,7 +31,7 @@ class OrderListLoaded extends OrderListState {
   final List<Order> orders;
 
   const OrderListLoaded({
-    @required this.orders
+    required this.orders
   });
 
   @override

@@ -10,8 +10,8 @@ class CancelOrderBtnPressed extends CancelOrderEvent {
   final String message;
 
   const CancelOrderBtnPressed({
-    @required this.id,
-    @required this.message
+    required this.id,
+    required this.message
   });
 
   @override

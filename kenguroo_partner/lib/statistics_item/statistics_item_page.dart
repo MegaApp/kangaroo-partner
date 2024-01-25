@@ -9,9 +9,7 @@ class StatisticsItemPage extends StatelessWidget {
   final StatisticItem statisticItem;
 
   StatisticsItemPage(
-      {Key key, @required this.apiRepository, @required this.statisticItem})
-      : assert(apiRepository != null && statisticItem != null),
-        super(key: key);
+      {super.key, required this.apiRepository, required this.statisticItem});
 
   @override
   Widget build(BuildContext context) {

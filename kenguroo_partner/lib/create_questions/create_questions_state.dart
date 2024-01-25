@@ -17,7 +17,7 @@ class CreateQuestionsApproved extends CreateQuestionsState {}
 class CreateQuestionsFailure extends CreateQuestionsState {
   final String error;
 
-  const CreateQuestionsFailure({@required this.error});
+  const CreateQuestionsFailure({required this.error});
 
   @override
   List<Object> get props => [error];

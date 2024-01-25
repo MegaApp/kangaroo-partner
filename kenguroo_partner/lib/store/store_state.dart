@@ -18,7 +18,7 @@ class StoreOrderEmpty extends StoreState {}
 class StoreFailure extends StoreState {
   final String error;
 
-  const StoreFailure({@required this.error});
+  const StoreFailure({required this.error});
 
   @override
   List<Object> get props => [error];
@@ -32,8 +32,8 @@ class StoreOrderLoaded extends StoreState {
   final List<Order> orders;
 
   const StoreOrderLoaded({
-    @required this.index,
-    @required this.orders
+    required this.index,
+    required this.orders
   });
 
   @override

@@ -53,10 +53,10 @@ class _MenuFormState extends State<MenuForm> {
                       //     width: 24),
                       Checkbox(
                         value: _menu.active,
-                        onChanged: (bool value) {
+                        onChanged: (value) {
                           setState(() {
                             _onTapItem(context, _menu);
-                            _menu.active = value;
+                            _menu.active = value ?? false;
                           });
                         },
                       ),
@@ -102,7 +102,7 @@ class _MenuFormState extends State<MenuForm> {
     return BlocListener<MenuBloc, MenuState>(
       listener: (context, state) {
         if (state is MenuFailure) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
               backgroundColor: Colors.red,

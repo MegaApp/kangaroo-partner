@@ -15,7 +15,7 @@ class PasswordLoading extends PasswordState {}
 class PasswordFailure extends PasswordState {
   final String error;
 
-  const PasswordFailure({@required this.error});
+  const PasswordFailure({required this.error});
 
   @override
   List<Object> get props => [error];

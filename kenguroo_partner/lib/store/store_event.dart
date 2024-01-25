@@ -10,7 +10,7 @@ class StoreSegmentedCtrPressed extends StoreEvent {
   final int index;
 
   const StoreSegmentedCtrPressed({
-    @required this.index,
+    required this.index,
   });
 
   @override

@@ -11,36 +11,13 @@ import 'package:kenguroo_partner/common/common.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-
-  @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print(error);
-  }
-}
-
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
-  final userRepository = ApiRepository(
-      client: ApiClient(
-          httpClient: http.Client(), secureStorage: FlutterSecureStorage()));
+  final userRepository =
+      ApiRepository(client: ApiClient(httpClient: http.Client(), secureStorage: const FlutterSecureStorage()));
   runApp(
     BlocProvider<AuthenticationBloc>(
       create: (context) {
-        return AuthenticationBloc(apiRepository: userRepository)
-          ..add(AppStarted());
+        return AuthenticationBloc(apiRepository: userRepository)..add(AppStarted());
       },
       child: App(apiRepository: userRepository),
     ),
@@ -50,21 +27,18 @@ void main() {
 class App extends StatelessWidget {
   final ApiRepository apiRepository;
 
-  App({Key key, @required this.apiRepository}) : super(key: key);
+  const App({super.key, required this.apiRepository});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-          primaryColor: Colors.white,
-          accentColor: Color.fromRGBO(63, 198, 79, 1)),
+      theme: ThemeData(primaryColor: Colors.white, hintColor: const Color.fromRGBO(63, 198, 79, 1)),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if (state is AuthenticationUninitialized) {
             return SplashPage();
           }
-          if (state is AuthenticationAuthenticated ||
-              state is AuthenticationPasswordChanged) {
+          if (state is AuthenticationAuthenticated || state is AuthenticationPasswordChanged) {
             return HomePage(userRepository: apiRepository);
           }
           if (state is AuthenticationUnauthenticated) {
@@ -76,7 +50,7 @@ class App extends StatelessWidget {
           if (state is AuthenticationNeedChangePassword) {
             return PasswordPage(apiRepository: apiRepository);
           }
-          return null;
+          return SplashPage();
         },
       ),
     );

@@ -7,9 +7,7 @@ import 'package:kenguroo_partner/create_questions/create_questions.dart';
 class CreateQuestionsPage extends StatelessWidget {
   final ApiRepository apiRepository;
 
-  CreateQuestionsPage({Key key, @required this.apiRepository})
-      : assert(apiRepository != null),
-        super(key: key);
+  CreateQuestionsPage({super.key, required this.apiRepository});
 
   @override
   Widget build(BuildContext context) {

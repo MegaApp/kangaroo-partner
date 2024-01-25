@@ -10,14 +10,14 @@ import 'package:kenguroo_partner/support/support.dart';
 import 'package:kenguroo_partner/menu/menu.dart';
 
 class ProfileForm extends StatefulWidget {
-  ProfileForm({Key key}) : super(key: key);
+  ProfileForm({super.key});
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
 }
 
 class _ProfileFormState extends State<ProfileForm> {
-  Profile _profile;
+  Profile? _profile;
 
   _menuNeedChanges() => () {
         Navigator.of(context).pop();
@@ -29,8 +29,7 @@ class _ProfileFormState extends State<ProfileForm> {
       };
 
   _navigateToSupport() => () {
-        ApiRepository repository =
-            BlocProvider.of<ProfileBloc>(context).apiRepository;
+        ApiRepository repository = BlocProvider.of<ProfileBloc>(context).apiRepository;
         Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) => SupportPage(
                   apiRepository: repository,
@@ -38,11 +37,9 @@ class _ProfileFormState extends State<ProfileForm> {
       };
 
   _navigateToMenuEditor() => () {
-        ApiRepository repository =
-            BlocProvider.of<ProfileBloc>(context).apiRepository;
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) =>
-                SearchPage(userRepository: repository)));
+        ApiRepository repository = BlocProvider.of<ProfileBloc>(context).apiRepository;
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (BuildContext context) => SearchPage(userRepository: repository)));
       };
 
   void showMenuChangedDialog() {
@@ -50,8 +47,7 @@ class _ProfileFormState extends State<ProfileForm> {
         context: context,
         builder: (BuildContext context) {
           return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
             child: Stack(
               alignment: Alignment.topRight,
               children: <Widget>[
@@ -69,7 +65,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     children: <Widget>[
                       Icon(
                         Icons.room_service,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).hintColor,
                         size: 56,
                       ),
                       Padding(
@@ -77,50 +73,44 @@ class _ProfileFormState extends State<ProfileForm> {
                         child: Text(
                           'Есть ли изменения по меню',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: HexColor.fromHex('#222831'),
-                              fontSize: 19,
-                              fontWeight: FontWeight.bold),
+                          style:
+                              TextStyle(color: HexColor.fromHex('#222831'), fontSize: 19, fontWeight: FontWeight.bold),
                         ),
                       ),
                       const Padding(
                         padding: const EdgeInsets.only(bottom: 40),
                       ),
-                      SizedBox(
+                      Container(
                         height: 56,
                         width: double.infinity,
-                        child: FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(40.0),
-                              side: BorderSide(
-                                  color: HexColor.fromHex('#3FC64F'))),
-                          onPressed: _menuNeedChanges(),
+                        decoration: BoxDecoration(
+                          borderRadius: new BorderRadius.circular(40.0),
                           color: HexColor.fromHex('#3FC64F'),
-                          textColor: Colors.white,
+                        ),
+                        child: TextButton(
+                          onPressed: _menuNeedChanges(),
                           child: Text("Да",
                               style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold)),
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              )),
                         ),
                       ),
                       const Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                       ),
-                      SizedBox(
+                      Container(
                         height: 56,
                         width: double.infinity,
-                        child: FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(40.0),
-                              side: BorderSide(
-                                  color: HexColor.fromHex('#3FC64F'))),
+                        decoration: BoxDecoration(
+                            color: HexColor.fromHex('#3FC64F'), borderRadius: BorderRadius.circular(40.0)),
+                        child: TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          color: HexColor.fromHex('#3FC64F'),
-                          textColor: Colors.white,
                           child: Text("Нет",
-                              style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white)),
                         ),
                       ),
                     ],
@@ -137,8 +127,7 @@ class _ProfileFormState extends State<ProfileForm> {
         context: context,
         builder: (BuildContext context) {
           return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
             child: Stack(
               alignment: Alignment.topRight,
               children: <Widget>[
@@ -156,17 +145,15 @@ class _ProfileFormState extends State<ProfileForm> {
                     children: <Widget>[
                       Icon(
                         Icons.room_service,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).hintColor,
                         size: 56,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
                         child: Text(
                           'Благодарим вас',
-                          style: TextStyle(
-                              color: HexColor.fromHex('#222831'),
-                              fontSize: 21,
-                              fontWeight: FontWeight.bold),
+                          style:
+                              TextStyle(color: HexColor.fromHex('#222831'), fontSize: 21, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Padding(
@@ -174,26 +161,20 @@ class _ProfileFormState extends State<ProfileForm> {
                         child: Text(
                           'В ближайшее время с вами свяжется наш менеджер',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: HexColor.fromHex('#CCCCCC'), fontSize: 16),
+                          style: TextStyle(color: HexColor.fromHex('#CCCCCC'), fontSize: 16),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         height: 56,
                         width: double.infinity,
-                        child: FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(40.0),
-                              side: BorderSide(
-                                  color: HexColor.fromHex('#3FC64F'))),
+                        decoration: BoxDecoration(
+                            color: HexColor.fromHex('#3FC64F'), borderRadius: new BorderRadius.circular(40.0)),
+                        child: TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          color: HexColor.fromHex('#3FC64F'),
-                          textColor: Colors.white,
                           child: Text("Готово",
-                              style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white)),
                         ),
                       )
                     ],
@@ -210,7 +191,7 @@ class _ProfileFormState extends State<ProfileForm> {
     return BlocListener<ProfileBloc, ProfileState>(
       listener: (context, state) {
         if (state is ProfileFailure) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
               backgroundColor: Colors.red,
@@ -228,16 +209,13 @@ class _ProfileFormState extends State<ProfileForm> {
       },
       child: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
-          if (state is ProfileInitial && _profile == null)
-            BlocProvider.of<ProfileBloc>(context).add(ProfileGet());
+          if (state is ProfileInitial && _profile == null) BlocProvider.of<ProfileBloc>(context).add(ProfileGet());
           return SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Stack(
                 children: <Widget>[
-                  (state is ProfileLoading)
-                      ? Center(child: CircularProgressIndicator())
-                      : Container(),
+                  (state is ProfileLoading) ? Center(child: CircularProgressIndicator()) : Container(),
                   ListView(
                     children: <Widget>[
                       Column(
@@ -246,18 +224,15 @@ class _ProfileFormState extends State<ProfileForm> {
                             padding: const EdgeInsets.all(16.0),
                             child: CircleAvatar(
                               radius: 40.0,
-                              backgroundImage: NetworkImage((_profile != null)
-                                  ? _profile.image
-                                  : 'https://via.placeholder.com/150'),
+                              backgroundImage:
+                                  NetworkImage((_profile != null) ? _profile!.image : 'https://via.placeholder.com/150'),
                               backgroundColor: Colors.transparent,
                             ),
                           ),
                           Text(
-                            (_profile != null) ? _profile.name : 'Не указан',
+                            (_profile != null) ? _profile!.name : 'Не указан',
                             style: TextStyle(
-                                fontSize: 21,
-                                color: HexColor.fromHex('#0C270F'),
-                                fontWeight: FontWeight.bold),
+                                fontSize: 21, color: HexColor.fromHex('#0C270F'), fontWeight: FontWeight.bold),
                           ),
                           // const Padding(
                           //   padding: const EdgeInsets.only(top: 32.0),
@@ -294,8 +269,7 @@ class _ProfileFormState extends State<ProfileForm> {
                               color: Colors.transparent,
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   // Image(
                                   //     image: AssetImage((_profile == null ||
@@ -307,21 +281,15 @@ class _ProfileFormState extends State<ProfileForm> {
                                     padding: const EdgeInsets.only(right: 16.0),
                                     child: Text(
                                       'Статус ресторана',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: HexColor.fromHex('#0C270F')),
+                                      style: TextStyle(fontSize: 16, color: HexColor.fromHex('#0C270F')),
                                     ),
                                   ),
                                   Switch(
-                                      value: _profile == null
-                                          ? false
-                                          : _profile.active,
+                                      value: _profile == null ? false : _profile!.active,
                                       onChanged: (bool value) {
                                         setState(() {
-                                          BlocProvider.of<ProfileBloc>(context)
-                                              .add(ProfileActivation(
-                                                  active: !value));
-                                          _profile.active = value;
+                                          BlocProvider.of<ProfileBloc>(context).add(ProfileActivation(active: !value));
+                                          _profile?.active = value;
                                         });
                                       })
                                 ],
@@ -338,36 +306,23 @@ class _ProfileFormState extends State<ProfileForm> {
                                 color: Colors.transparent,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.start,
                                       children: <Widget>[
-                                        Icon(
-                                          Icons.search,
-                                          color: HexColor.fromHex('#e3e3e3'),
-                                          size: 24
-                                        ),
+                                        Icon(Icons.search, color: HexColor.fromHex('#e3e3e3'), size: 24),
                                         Padding(
                                           padding: const EdgeInsets.all(16.0),
                                           child: Text(
                                             'Поиск',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: HexColor.fromHex(
-                                                    '#0C270F')),
+                                            style: TextStyle(fontSize: 16, color: HexColor.fromHex('#0C270F')),
                                           ),
                                         )
                                       ],
                                     ),
-                                    Image(
-                                        image: AssetImage(
-                                            'assets/arrow_right.png'),
-                                        width: 32),
+                                    Image(image: AssetImage('assets/arrow_right.png'), width: 32),
                                   ],
                                 ),
                               ),
@@ -380,16 +335,12 @@ class _ProfileFormState extends State<ProfileForm> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Image(
-                                  image: AssetImage('assets/ic_pin.png'),
-                                  width: 24),
+                              Image(image: AssetImage('assets/ic_pin.png'), width: 24),
                               Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Text(
                                   'Добавить филиал',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: HexColor.fromHex('#0C270F')),
+                                  style: TextStyle(fontSize: 16, color: HexColor.fromHex('#0C270F')),
                                 ),
                               )
                             ],
@@ -403,35 +354,23 @@ class _ProfileFormState extends State<ProfileForm> {
                                 color: Colors.transparent,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.start,
                                       children: <Widget>[
-                                        Image(
-                                            image: AssetImage(
-                                                'assets/ic_alert_triangle.png'),
-                                            width: 24),
+                                        Image(image: AssetImage('assets/ic_alert_triangle.png'), width: 24),
                                         Padding(
                                           padding: const EdgeInsets.all(16.0),
                                           child: Text(
                                             'Служба поддержки',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: HexColor.fromHex(
-                                                    '#0C270F')),
+                                            style: TextStyle(fontSize: 16, color: HexColor.fromHex('#0C270F')),
                                           ),
                                         )
                                       ],
                                     ),
-                                    Image(
-                                        image: AssetImage(
-                                            'assets/arrow_right.png'),
-                                        width: 32),
+                                    Image(image: AssetImage('assets/arrow_right.png'), width: 32),
                                   ],
                                 ),
                               ),
@@ -447,16 +386,12 @@ class _ProfileFormState extends State<ProfileForm> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  Image(
-                                      image: AssetImage('assets/ic_exit.png'),
-                                      width: 24),
+                                  Image(image: AssetImage('assets/ic_exit.png'), width: 24),
                                   Padding(
                                     padding: const EdgeInsets.all(16.0),
                                     child: Text(
                                       'Выйти',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: HexColor.fromHex('#0C270F')),
+                                      style: TextStyle(fontSize: 16, color: HexColor.fromHex('#0C270F')),
                                     ),
                                   )
                                 ],

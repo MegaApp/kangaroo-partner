@@ -1,5 +1,3 @@
-import 'package:kenguroo_partner/models/order.dart';
-import 'package:meta/meta.dart';
 import 'dart:convert';
 import 'dart:async';
 
@@ -12,8 +10,7 @@ class ApiClient {
   final http.Client httpClient;
   final FlutterSecureStorage secureStorage;
 
-  ApiClient({@required this.httpClient, @required this.secureStorage})
-      : assert(httpClient != null, secureStorage != null);
+  ApiClient({required this.httpClient, required this.secureStorage});
 
   Future<bool> persistToken(UserAuth userAuth) async {
     await secureStorage.write(key: 'access', value: userAuth.access);
@@ -24,12 +21,12 @@ class ApiClient {
   }
 
   Future<bool> hasToken() async {
-    String token = await secureStorage.read(key: 'access');
+    String? token = await secureStorage.read(key: 'access');
     return token != null && token.isNotEmpty;
   }
 
   Future<bool> isFirstLogin() async {
-    String isFirstLogin = await secureStorage.read(key: 'is_first_login');
+    String? isFirstLogin = await secureStorage.read(key: 'is_first_login');
     return isFirstLogin != null && isFirstLogin.isNotEmpty
         ? isFirstLogin == 'true'
         : false;
@@ -41,10 +38,10 @@ class ApiClient {
   }
 
   Future<UserAuth> authenticate(
-      {@required String username,
-      @required String password,
-      @required String deviceId}) async {
-    final loginUrl = '$baseUrl/store/auth/login';
+      {required String username,
+      required String password,
+      required String deviceId}) async {
+    final loginUrl = Uri.parse('$baseUrl/store/auth/login');
     final response = await this.httpClient.post(loginUrl,
         body: jsonEncode(
             {'login': username, 'deviceId': deviceId, 'password': password}));
@@ -57,10 +54,10 @@ class ApiClient {
   }
 
   Future<bool> refreshToken() async {
-    final loginUrl = '$baseUrl/store/auth/refresh';
+    final loginUrl = Uri.parse('$baseUrl/store/auth/refresh');
     final token = await secureStorage.read(key: 'refresh');
     final response =
-        await this.httpClient.get(loginUrl, headers: {'Authorization': token});
+        await this.httpClient.get(loginUrl, headers: {'Authorization': token ?? ''});
 
     final json = jsonDecode(response.body);
     if (response.statusCode != 200) {
@@ -70,10 +67,10 @@ class ApiClient {
   }
 
   Future<bool> changePassword({
-    @required String password,
+    required String password,
   }) async {
-    final loginUrl = '$baseUrl/store/auth/change';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/auth/change');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response = await this.httpClient.post(loginUrl,
         headers: {'Authorization': token},
         body: jsonEncode({'new_password': password}));
@@ -91,8 +88,8 @@ class ApiClient {
   }
 
   Future<List<Order>> orders(String path) async {
-    final loginUrl = '$baseUrl/store/orders/$path';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/orders/$path');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -101,12 +98,12 @@ class ApiClient {
     }
     return json['data'] != null
         ? (json['data'] as List).map((i) => Order.fromJson(i)).toList()
-        : List<Order>();
+        : List.empty();
   }
 
   Future<List<Menu>> menus() async {
-    final loginUrl = '$baseUrl/store/profile/menu';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/profile/menu');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
     await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -115,12 +112,12 @@ class ApiClient {
     }
     return json['data'] != null
         ? (json['data'] as List).map((i) => Menu.fromJson(i)).toList()
-        : List<Order>();
+        : List.empty();
   }
 
   Future<List<Order>> searchOrders(String query) async {
-    final loginUrl = '$baseUrl/store/search/$query';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/search/$query');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -129,12 +126,12 @@ class ApiClient {
     }
     return json['data'] != null
         ? (json['data'] as List).map((i) => Order.fromJson(i)).toList()
-        : List<Order>();
+        : List.empty();
   }
 
   Future<List<Order>> ordersByDate(String date) async {
-    final loginUrl = '$baseUrl/store/statistics/date/$date';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/statistics/date/$date');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -143,12 +140,12 @@ class ApiClient {
     }
     return json['data'] != null
         ? (json['data'] as List).map((i) => Order.fromJson(i)).toList()
-        : List<Order>();
+        : List.empty();
   }
 
   Future<bool> acceptOrders(String id) async {
-    final loginUrl = '$baseUrl/store/orders/accept/$id';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/orders/accept/$id');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.post(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -159,8 +156,8 @@ class ApiClient {
   }
 
   Future<bool> cancelOrders(String id, String message) async {
-    final loginUrl = '$baseUrl/store/orders/cancel/$id';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/orders/cancel/$id');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response = await this.httpClient.post(loginUrl,
         body: jsonEncode({'message': message}),
         headers: {'Authorization': token});
@@ -172,8 +169,8 @@ class ApiClient {
   }
 
   Future<bool> finishOrders(String id) async {
-    final loginUrl = '$baseUrl/store/orders/finish/$id';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/orders/finish/$id');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.post(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -184,8 +181,8 @@ class ApiClient {
   }
 
   Future<bool> updateMenu() async {
-    final loginUrl = '$baseUrl/store/profile/update';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/profile/update');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.post(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -196,10 +193,10 @@ class ApiClient {
   }
 
   Future<bool> profileActivation(bool active) async {
-    final loginUrl = active
+    final loginUrl = Uri.parse(active
         ? '$baseUrl/store/profile/disable'
-        : '$baseUrl/store/profile/enable';
-    final token = await secureStorage.read(key: 'access');
+        : '$baseUrl/store/profile/enable');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response = active
         ? await this
             .httpClient
@@ -215,8 +212,8 @@ class ApiClient {
   }
 
   Future<bool> menuActivation(bool active, String id) async {
-    final loginUrl = '$baseUrl/store/profile/menu/$id';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/profile/menu/$id');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response = active
         ? await this
         .httpClient
@@ -232,8 +229,8 @@ class ApiClient {
   }
 
   Future<List<Question>> questions() async {
-    final loginUrl = '$baseUrl/store/profile/questions';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/profile/questions');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -242,12 +239,12 @@ class ApiClient {
     }
     return json['data'] != null
         ? (json['data'] as List).map((i) => Question.fromJson(i)).toList()
-        : List<Question>();
+        : List.empty();
   }
 
   Future<bool> createQuestion(String title, String question) async {
-    final loginUrl = '$baseUrl/store/profile/questions';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/profile/questions');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response = await this.httpClient.post(loginUrl,
         body: jsonEncode({'title': title, 'question': question}),
         headers: {'Authorization': token});
@@ -259,8 +256,8 @@ class ApiClient {
   }
 
   Future<Profile> getProfile() async {
-    final loginUrl = '$baseUrl/store/profile';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/profile');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -271,8 +268,8 @@ class ApiClient {
   }
 
   Future<Statistic> statisticsPeriod(String start, String end) async {
-    final loginUrl = '$baseUrl/store/statistics/period?start=$start&end=$end';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/statistics/period?start=$start&end=$end');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -283,8 +280,8 @@ class ApiClient {
   }
 
   Future<Statistic> statisticsWeek() async {
-    final loginUrl = '$baseUrl/store/statistics/week';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/statistics/week');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -295,8 +292,8 @@ class ApiClient {
   }
 
   Future<bool> addToSearchHistory(String orderId) async {
-    final loginUrl = '$baseUrl/store/search/history/$orderId';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/search/history/$orderId');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.post(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -307,8 +304,8 @@ class ApiClient {
   }
 
   Future<List<OrderSection>> getOrderHistory() async {
-    final loginUrl = '$baseUrl/store/search/history';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/search/history');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response =
         await this.httpClient.get(loginUrl, headers: {'Authorization': token});
     final json = jsonDecode(response.body);
@@ -317,12 +314,12 @@ class ApiClient {
     }
     return json['data'] != null
         ? (json['data'] as List).map((i) => OrderSection.fromJson(i)).toList()
-        : List<OrderSection>();
+        : List.empty();
   }
 
   Future<bool> clearOrderHistory() async {
-    final loginUrl = '$baseUrl/store/search/history';
-    final token = await secureStorage.read(key: 'access');
+    final loginUrl = Uri.parse('$baseUrl/store/search/history');
+    final token = await secureStorage.read(key: 'access') ?? '';
     final response = await this
         .httpClient
         .delete(loginUrl, headers: {'Authorization': token});

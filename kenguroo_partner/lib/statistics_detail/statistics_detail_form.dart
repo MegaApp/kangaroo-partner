@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+// import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/models/statistic_item.dart';
 import 'package:kenguroo_partner/repositories/repositories.dart';
@@ -10,13 +10,12 @@ import 'package:kenguroo_partner/statistics_item/statistics_item.dart';
 import '../extentions.dart';
 
 class StatisticsDetailForm extends StatefulWidget {
-  final DateTime from;
-  final DateTime to;
+  final DateTime? from;
+  final DateTime? to;
 
-  Statistic statistic;
+  Statistic? statistic;
 
-  StatisticsDetailForm({Key key, this.statistic, this.from, this.to})
-      : super(key: key);
+  StatisticsDetailForm({super.key, required this.statistic, required this.from, required this.to});
 
   @override
   State<StatisticsDetailForm> createState() => _StatisticsDetailFormState();
@@ -28,7 +27,7 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
     return BlocListener<StatisticsDetailBloc, StatisticsDetailState>(
       listener: (context, state) {
         if (state is StatisticsDetailFailure) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
               backgroundColor: Colors.red,
@@ -41,7 +40,7 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
         }
 
         if (state is StatisticsDetailDidSetStartDate) {
-          showPicker(state);
+          //showPicker(state);
         }
       },
       child: BlocBuilder<StatisticsDetailBloc, StatisticsDetailState>(
@@ -50,7 +49,7 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
               widget.from != null &&
               widget.to != null)
             BlocProvider.of<StatisticsDetailBloc>(context).add(
-                StatisticsDetailSetEndDate(start: widget.from, end: widget.to));
+                StatisticsDetailSetEndDate(start: widget.from ?? DateTime.timestamp(), end: widget.to ?? DateTime.timestamp()));
           return Scaffold(
             appBar:
                 AppBar(title: Text('Подробная статистика'), actions: <Widget>[
@@ -60,7 +59,7 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
                   width: 24,
                 ),
                 onPressed: () {
-                  showPicker(state);
+                  //showPicker(state);
                 },
               ),
             ]),
@@ -82,25 +81,25 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
                                           color: HexColor.fromHex('#E4E4E4'))),
                                   const Padding(
                                       padding: const EdgeInsets.all(4)),
-                                  Text('${widget.statistic.total} сом',
+                                  Text('${widget.statistic?.total} сом',
                                       style: TextStyle(
                                           fontSize: 29,
                                           color: HexColor.fromHex('#0C270F'))),
                                   const Padding(
                                       padding: const EdgeInsets.all(20)),
                                 ]),
-                            (widget.statistic.items == null ||
-                                    widget.statistic.items.isEmpty)
+                            (widget.statistic?.items == null ||
+                                    widget.statistic!.items.isEmpty)
                                 ? Container()
                                 : ListView.separated(
                                     physics:
                                         const NeverScrollableScrollPhysics(),
-                                    itemCount: widget.statistic.items.length,
+                                    itemCount: widget.statistic!.items.length,
                                     shrinkWrap: true,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       StatisticItem _item =
-                                          widget.statistic.items[index];
+                                          widget.statistic!.items[index];
                                       String title = _item.date;
                                       return GestureDetector(
                                           child: Container(
@@ -173,100 +172,100 @@ class _StatisticsDetailFormState extends State<StatisticsDetailForm> {
             )));
   }
 
-  showPicker(StatisticsDetailState state) {
-    DateTime time = DateTime.now();
-    showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: context,
-        builder: (BuildContext builder) {
-          return Container(
-            decoration: new BoxDecoration(
-                color: Colors.white,
-                borderRadius: new BorderRadius.only(
-                    topRight: Radius.circular(18.0),
-                    topLeft: Radius.circular(18.0))),
-            height: 350,
-            child: Column(
-              children: <Widget>[
-                Padding(padding: const EdgeInsets.only(top: 16.0)),
-                Container(
-                  decoration: new BoxDecoration(
-                      color: HexColor.fromHex('#EEEEEE'),
-                      borderRadius: new BorderRadius.only(
-                          topRight: Radius.circular(18.0),
-                          topLeft: Radius.circular(18.0))),
-                  height: 3,
-                  width: 56,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 24.0, bottom: 8),
-                  child: Text(
-                    (state is StatisticsDetailDidSetStartDate)
-                        ? "Укажите период “до”"
-                        : "Укажите период “от”",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.bold,
-                        color: HexColor.fromHex('#222831')),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 8, right: 8),
-                  child: DatePickerWidget(
-                    locale: DateTimePickerLocale.ru,
-                    minDateTime: (state is StatisticsDetailDidSetStartDate)
-                        ? state.startDate
-                        : null,
-                    initialDateTime: DateTime.now(),
-                    dateFormat: 'MMMM,d,yyyy',
-                    pickerTheme: DateTimePickerTheme(
-                      showTitle: false,
-                      itemTextStyle: TextStyle(
-                          color: HexColor.fromHex('#333333'),
-                          fontSize: 21,
-                          fontWeight: FontWeight.bold),
-                      pickerHeight: 185,
-                      itemHeight: 74.0,
-                    ),
-                    onChange: (dateTime, selectedIndex) {
-                      time = dateTime;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 16.0, right: 16, left: 16),
-                  child: SizedBox(
-                    height: 56,
-                    width: double.infinity,
-                    child: FlatButton(
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(40.0),
-                          side: BorderSide(color: HexColor.fromHex('#3FC64F'))),
-                      onPressed: () => {
-                        Navigator.pop(context),
-                        (state is StatisticsDetailDidSetStartDate)
-                            ? BlocProvider.of<StatisticsDetailBloc>(context)
-                                .add(StatisticsDetailSetEndDate(
-                                    start: state.startDate, end: time))
-                            : BlocProvider.of<StatisticsDetailBloc>(context)
-                                .add(StatisticsDetailSetStartDate(start: time))
-                      },
-                      color: HexColor.fromHex('#3FC64F'),
-                      textColor: Colors.white,
-                      child: Text(
-                          (state is StatisticsDetailDidSetStartDate)
-                              ? 'Готово'
-                              : 'Далее',
-                          style: TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        });
-  }
+  // showPicker(StatisticsDetailState state) {
+  //   DateTime time = DateTime.now();
+  //   showModalBottomSheet(
+  //       backgroundColor: Colors.transparent,
+  //       context: context,
+  //       builder: (BuildContext builder) {
+  //         return Container(
+  //           decoration: new BoxDecoration(
+  //               color: Colors.white,
+  //               borderRadius: new BorderRadius.only(
+  //                   topRight: Radius.circular(18.0),
+  //                   topLeft: Radius.circular(18.0))),
+  //           height: 350,
+  //           child: Column(
+  //             children: <Widget>[
+  //               Padding(padding: const EdgeInsets.only(top: 16.0)),
+  //               Container(
+  //                 decoration: new BoxDecoration(
+  //                     color: HexColor.fromHex('#EEEEEE'),
+  //                     borderRadius: new BorderRadius.only(
+  //                         topRight: Radius.circular(18.0),
+  //                         topLeft: Radius.circular(18.0))),
+  //                 height: 3,
+  //                 width: 56,
+  //               ),
+  //               Padding(
+  //                 padding: const EdgeInsets.only(top: 24.0, bottom: 8),
+  //                 child: Text(
+  //                   (state is StatisticsDetailDidSetStartDate)
+  //                       ? "Укажите период “до”"
+  //                       : "Укажите период “от”",
+  //                   textAlign: TextAlign.center,
+  //                   style: TextStyle(
+  //                       fontSize: 21,
+  //                       fontWeight: FontWeight.bold,
+  //                       color: HexColor.fromHex('#222831')),
+  //                 ),
+  //               ),
+  //               Container(
+  //                 margin: EdgeInsets.only(left: 8, right: 8),
+  //                 child: DatePickerWidget(
+  //                   locale: DateTimePickerLocale.ru,
+  //                   minDateTime: (state is StatisticsDetailDidSetStartDate)
+  //                       ? state.startDate
+  //                       : null,
+  //                   initialDateTime: DateTime.now(),
+  //                   dateFormat: 'MMMM,d,yyyy',
+  //                   pickerTheme: DateTimePickerTheme(
+  //                     showTitle: false,
+  //                     itemTextStyle: TextStyle(
+  //                         color: HexColor.fromHex('#333333'),
+  //                         fontSize: 21,
+  //                         fontWeight: FontWeight.bold),
+  //                     pickerHeight: 185,
+  //                     itemHeight: 74.0,
+  //                   ),
+  //                   onChange: (dateTime, selectedIndex) {
+  //                     time = dateTime;
+  //                   },
+  //                 ),
+  //               ),
+  //               Padding(
+  //                 padding:
+  //                     const EdgeInsets.only(bottom: 16.0, right: 16, left: 16),
+  //                 child: SizedBox(
+  //                   height: 56,
+  //                   width: double.infinity,
+  //                   child: FlatButton(
+  //                     shape: new RoundedRectangleBorder(
+  //                         borderRadius: new BorderRadius.circular(40.0),
+  //                         side: BorderSide(color: HexColor.fromHex('#3FC64F'))),
+  //                     onPressed: () => {
+  //                       Navigator.pop(context),
+  //                       (state is StatisticsDetailDidSetStartDate)
+  //                           ? BlocProvider.of<StatisticsDetailBloc>(context)
+  //                               .add(StatisticsDetailSetEndDate(
+  //                                   start: state.startDate, end: time))
+  //                           : BlocProvider.of<StatisticsDetailBloc>(context)
+  //                               .add(StatisticsDetailSetStartDate(start: time))
+  //                     },
+  //                     color: HexColor.fromHex('#3FC64F'),
+  //                     textColor: Colors.white,
+  //                     child: Text(
+  //                         (state is StatisticsDetailDidSetStartDate)
+  //                             ? 'Готово'
+  //                             : 'Далее',
+  //                         style: TextStyle(
+  //                             fontSize: 17, fontWeight: FontWeight.bold)),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         );
+  //       });
+  // }
 }

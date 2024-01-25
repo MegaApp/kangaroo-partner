@@ -9,15 +9,13 @@ import 'package:kenguroo_partner/password/password.dart';
 class PasswordPage extends StatelessWidget {
   final ApiRepository apiRepository;
 
-  PasswordPage({Key key, @required this.apiRepository})
-      : assert(apiRepository != null),
-        super(key: key);
+  PasswordPage({super.key, required this.apiRepository});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset : false,
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).hintColor,
       body: BlocProvider(
         create: (context) {
           return PasswordBloc(

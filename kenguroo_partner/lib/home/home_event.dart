@@ -9,7 +9,7 @@ class HomeNavBottomItemClicked extends HomeEvent {
   final int index;
 
   const HomeNavBottomItemClicked({
-    @required this.index,
+    required this.index,
   });
 
   @override

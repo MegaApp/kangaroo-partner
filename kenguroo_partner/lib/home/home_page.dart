@@ -7,9 +7,7 @@ import 'home.dart';
 class HomePage extends StatelessWidget {
   final ApiRepository userRepository;
 
-  HomePage({Key key, @required this.userRepository})
-      : assert(userRepository != null),
-        super(key: key);
+  HomePage({super.key, required this.userRepository});
 
   @override
   Widget build(BuildContext context) {

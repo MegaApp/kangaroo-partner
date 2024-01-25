@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:kenguroo_partner/repositories/api_repository.dart';
 
@@ -12,29 +9,23 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthenticationBloc authenticationBloc;
 
   LoginBloc({
-    @required this.apiRepository,
-    @required this.authenticationBloc,
-  })  : assert(apiRepository != null),
-        assert(authenticationBloc != null);
+    required this.apiRepository,
+    required this.authenticationBloc,
+  }) : super(LoginInitial()) {
+    on((event, emit) async {
+      if (event is LoginButtonPressed) {
+        emit(LoginLoading());
 
-  LoginState get initialState => LoginInitial();
+        try {
+          final userAuth = await apiRepository.authenticate(
+              username: event.username, password: event.password, deviceId: authenticationBloc.deviceId);
 
-  @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is LoginButtonPressed) {
-      yield LoginLoading();
-
-      try {
-        final userAuth = await apiRepository.authenticate(
-            username: event.username,
-            password: event.password,
-            deviceId: authenticationBloc.deviceId);
-
-        authenticationBloc.add(LoggedIn(userAuth: userAuth));
-        yield LoginInitial();
-      } catch (error) {
-        yield LoginFailure(error: error.toString());
+          authenticationBloc.add(LoggedIn(userAuth: userAuth));
+          emit(LoginInitial());
+        } catch (error) {
+          emit(LoginFailure(error: error.toString()));
+        }
       }
-    }
+    });
   }
 }

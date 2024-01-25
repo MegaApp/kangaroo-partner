@@ -29,7 +29,7 @@ class _LoginFormState extends State<LoginForm> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
               backgroundColor: Colors.red,
@@ -46,7 +46,7 @@ class _LoginFormState extends State<LoginForm> {
                   alignment: FractionalOffset.topRight,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8.0, right: 8),
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: _onLoginButtonPressed,
                       child: Text(
                         "Далее",

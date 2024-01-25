@@ -3,7 +3,7 @@ class UserAuth {
   bool isFirstLogin;
   String refresh;
 
-  UserAuth({this.access, this.isFirstLogin, this.refresh});
+  UserAuth({required this.access, required this.isFirstLogin, required this.refresh});
 
   factory UserAuth.fromJson(Map<String, dynamic> json) {
     return UserAuth(

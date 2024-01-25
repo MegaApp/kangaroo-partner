@@ -5,8 +5,8 @@ class Statistic {
   int total;
 
   Statistic({
-    this.total,
-    this.items,
+    required this.total,
+    required this.items,
   });
 
   factory Statistic.fromJson(Map<String, dynamic> json) {
@@ -15,7 +15,7 @@ class Statistic {
           ? (json['items'] as List)
               .map((i) => StatisticItem.fromJson(i))
               .toList()
-          : null,
+          : List.empty(),
       total: json['total'],
     );
   }

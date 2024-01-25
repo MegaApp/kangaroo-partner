@@ -11,9 +11,7 @@ class OrderListPage extends StatelessWidget {
   final ApiRepository userRepository;
   final String date;
 
-  OrderListPage({Key key, @required this.userRepository, @required this.date})
-      : assert(userRepository != null),
-        super(key: key);
+  OrderListPage({super.key, required this.userRepository, required this.date});
 
   @override
   Widget build(BuildContext context) {

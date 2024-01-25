@@ -10,8 +10,8 @@ class CreateQuestionsBtnPressed extends CreateQuestionsEvent {
   final String questions;
 
   const CreateQuestionsBtnPressed({
-    @required this.title,
-    @required this.questions
+    required this.title,
+    required this.questions
   });
 
   @override

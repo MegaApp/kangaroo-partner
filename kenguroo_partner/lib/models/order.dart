@@ -13,16 +13,16 @@ class Order {
   bool cash;
 
   Order(
-      {this.driver,
-      this.id,
-      this.items,
-      this.number,
-      this.orderedAt,
-      this.price,
-      this.status,
-      this.itemsCount,
-      this.comment,
-      this.cash});
+      {required this.driver,
+      required this.id,
+      required this.items,
+      required this.number,
+      required this.orderedAt,
+      required this.price,
+      required this.status,
+      required this.itemsCount,
+      required this.comment,
+      required this.cash});
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
@@ -30,7 +30,7 @@ class Order {
         id: json['id'],
         items: json['items'] != null
             ? (json['items'] as List).map((i) => Item.fromJson(i)).toList()
-            : null,
+            : List.empty(),
         number: json['number'],
         orderedAt: json['ordered_at'],
         price: json['price'],

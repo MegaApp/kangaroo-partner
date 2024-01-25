@@ -6,19 +6,12 @@ import 'package:kenguroo_partner/statistics_detail/statistics_detail.dart';
 
 class StatisticsDetailPage extends StatelessWidget {
   final ApiRepository apiRepository;
-  final DateTime from;
-  final DateTime to;
+  final DateTime? from;
+  final DateTime? to;
 
-  final Statistic statistic;
+  final Statistic? statistic;
 
-  StatisticsDetailPage(
-      {Key key,
-      @required this.apiRepository,
-      this.statistic,
-      this.to,
-      this.from})
-      : assert(apiRepository != null),
-        super(key: key);
+  StatisticsDetailPage({super.key, required this.apiRepository, this.statistic, this.to, this.from});
 
   @override
   Widget build(BuildContext context) {

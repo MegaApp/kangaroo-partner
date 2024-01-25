@@ -16,7 +16,7 @@ class StatisticsDetailLoading extends StatisticsDetailState {}
 class StatisticsDetailDidGet extends StatisticsDetailState {
   final Statistic statistic;
 
-  const StatisticsDetailDidGet({@required this.statistic});
+  const StatisticsDetailDidGet({required this.statistic});
 
   @override
   List<Object> get props => [statistic];
@@ -28,7 +28,7 @@ class StatisticsDetailDidGet extends StatisticsDetailState {
 class StatisticsDetailDidSetStartDate extends StatisticsDetailState {
   final DateTime startDate;
 
-  const StatisticsDetailDidSetStartDate({@required this.startDate});
+  const StatisticsDetailDidSetStartDate({required this.startDate});
 
   @override
   List<Object> get props => [startDate];
@@ -40,7 +40,7 @@ class StatisticsDetailDidSetStartDate extends StatisticsDetailState {
 class StatisticsDetailFailure extends StatisticsDetailState {
   final String error;
 
-  const StatisticsDetailFailure({@required this.error});
+  const StatisticsDetailFailure({required this.error});
 
   @override
   List<Object> get props => [error];

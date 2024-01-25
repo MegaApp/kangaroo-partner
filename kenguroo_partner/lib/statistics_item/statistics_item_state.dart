@@ -10,5 +10,5 @@ class StatisticsItemInitial extends StatisticsItemState {
   const StatisticsItemInitial();
 
   @override
-  List<Object> get props => null;
+  List<Object> get props => [];
 }

@@ -23,7 +23,7 @@ class HomeShowProfile extends HomeState {}
 class HomeFailure extends HomeState {
   final String error;
 
-  const HomeFailure({@required this.error});
+  const HomeFailure({required this.error});
 
   @override
   List<Object> get props => [error];

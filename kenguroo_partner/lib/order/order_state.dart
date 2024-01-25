@@ -19,7 +19,7 @@ class OrderFinished extends OrderState {}
 class OrderFailure extends OrderState {
   final String error;
 
-  const OrderFailure({@required this.error});
+  const OrderFailure({required this.error});
 
   @override
   List<Object> get props => [error];

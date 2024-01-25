@@ -18,7 +18,7 @@ class _SearchFormState extends State<SearchForm> {
     return BlocListener<SearchBloc, SearchState>(
       listener: (context, state) {
         if (state is SearchFailure) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
               backgroundColor: Colors.red,
@@ -27,8 +27,7 @@ class _SearchFormState extends State<SearchForm> {
         }
 
         if (state is SearchDidCleanHistory) {
-          BlocProvider.of<SearchBloc>(context)
-              .add(SearchTextDidChange(text: ''));
+          BlocProvider.of<SearchBloc>(context).add(SearchTextDidChange(text: ''));
         }
       },
       child: BlocBuilder<SearchBloc, SearchState>(
@@ -36,10 +35,36 @@ class _SearchFormState extends State<SearchForm> {
           return Padding(
               padding: EdgeInsets.all(16),
               child: Scaffold(
-                appBar: buildAppBar(context),
-                backgroundColor: state is SearchHistoryOrderLoaded
-                    ? Colors.white
-                    : HexColor.fromHex('#F3F6F9'),
+                appBar: AppBar(
+                    title: TextField(
+                      controller: _editingController,
+                      style: new TextStyle(
+                        color: HexColor.fromHex('#0C270F'),
+                      ),
+                      decoration: new InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Найти",
+                          hintStyle: new TextStyle(color: HexColor.fromHex('#D7D7D7'))),
+                      onChanged: (text) {
+                        BlocProvider.of<SearchBloc>(context).add(SearchTextDidChange(text: text));
+                      },
+                    ),
+                    leading: Icon(Icons.search, color: HexColor.fromHex('#0C270F')),
+                    actions: <Widget>[
+                      _editingController.text.isEmpty
+                          ? Container()
+                          : IconButton(
+                              icon: Icon(
+                                Icons.close,
+                                color: HexColor.fromHex('#0C270F'),
+                              ),
+                              onPressed: () {
+                                _editingController.clear();
+                                BlocProvider.of<SearchBloc>(context).add(SearchTextDidChange(text: ''));
+                              },
+                            ),
+                    ]),
+                backgroundColor: state is SearchHistoryOrderLoaded ? Colors.white : HexColor.fromHex('#F3F6F9'),
                 body: SafeArea(child: rootWidget(state)),
               ));
         },
@@ -47,12 +72,10 @@ class _SearchFormState extends State<SearchForm> {
     );
   }
 
-  void onTapItem(BuildContext context, Order order) {
+  void onTapItem(BuildContext context, Order? order) {
     if (order == null) return;
-    BlocProvider.of<SearchBloc>(context)
-        .add(SearchAddToHistory(orderId: order.id));
-    ApiRepository repository =
-        BlocProvider.of<SearchBloc>(context).apiRepository;
+    BlocProvider.of<SearchBloc>(context).add(SearchAddToHistory(orderId: order.id));
+    ApiRepository repository = BlocProvider.of<SearchBloc>(context).apiRepository;
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => OrderPage(
               apiRepository: repository,
@@ -67,15 +90,13 @@ class _SearchFormState extends State<SearchForm> {
       padding: const EdgeInsets.only(top: 16, bottom: 16),
       itemBuilder: (context, position) {
         Order _order = orders[position];
-        return GestureDetector(
-            child: buildListItem(_order),
-            onTap: () => onTapItem(context, _order));
+        return GestureDetector(child: buildListItem(_order), onTap: () => onTapItem(context, _order));
       },
     );
   }
 
   Widget listViewWithSectionWidget(List<OrderSection> orders) {
-    List<ListItem> items = List();
+    List<ListItem> items = List.empty(growable: true);
 
     orders.forEach((i) {
       items.add(HeadingItem(i.time));
@@ -90,10 +111,7 @@ class _SearchFormState extends State<SearchForm> {
           padding: const EdgeInsets.only(top: 24.0),
           child: Text(
             'История поиска',
-            style: TextStyle(
-                color: HexColor.fromHex('#0C270F'),
-                fontSize: 21,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 21, fontWeight: FontWeight.bold),
           ),
         ),
         ListView.builder(
@@ -103,8 +121,7 @@ class _SearchFormState extends State<SearchForm> {
           padding: const EdgeInsets.only(top: 16.0, bottom: 16),
           itemBuilder: (context, position) {
             final orderSection = items[position];
-            Order _order =
-                orderSection is MessageItem ? orderSection.order : null;
+            Order? _order = orderSection is MessageItem ? orderSection.order : null;
             return GestureDetector(
                 child: Container(
                   color: Colors.white,
@@ -112,10 +129,7 @@ class _SearchFormState extends State<SearchForm> {
                     children: <Widget>[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          orderSection.buildTitle(context),
-                          orderSection.buildSubtitle(context)
-                        ],
+                        children: <Widget>[orderSection.buildTitle(context), orderSection.buildSubtitle(context)],
                       ),
                       orderSection.buildLine(context)
                     ],
@@ -124,21 +138,20 @@ class _SearchFormState extends State<SearchForm> {
                 onTap: () => onTapItem(context, _order));
           },
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 40.0, left: 64, right: 64),
-          child: FlatButton(
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(40.0),
-                side: BorderSide(color: Colors.red)),
-            color: Colors.white,
-            textColor: Colors.red,
-            padding: EdgeInsets.only(top: 16, bottom: 16, right: 48, left: 48),
+        Container(
+          margin: const EdgeInsets.only(top: 40.0, left: 64, right: 64),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(40.0),
+              border: Border.all(color: Colors.red, width: 2)),
+          padding: EdgeInsets.only(top: 16, bottom: 16, right: 48, left: 48),
+          child: TextButton(
             onPressed: () {
               BlocProvider.of<SearchBloc>(context).add(SearchClearHistory());
             },
             child: Text(
               'Очистить историю',
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.red),
             ),
           ),
         )
@@ -147,14 +160,10 @@ class _SearchFormState extends State<SearchForm> {
   }
 
   Widget rootWidget(SearchState state) {
-    if (state is SearchLoading)
-      return Center(child: CircularProgressIndicator());
-    if (state is SearchOrderLoaded) if (state.orders.length > 0)
-      return listViewWidget(state.orders);
-    if (state is SearchHistoryOrderLoaded) if (state.orders.length > 0)
-      return listViewWithSectionWidget(state.orders);
-    if (state is SearchInitial)
-      BlocProvider.of<SearchBloc>(context).add(SearchTextDidChange(text: ''));
+    if (state is SearchLoading) return Center(child: CircularProgressIndicator());
+    if (state is SearchOrderLoaded) if (state.orders.length > 0) return listViewWidget(state.orders);
+    if (state is SearchHistoryOrderLoaded) if (state.orders.length > 0) return listViewWithSectionWidget(state.orders);
+    if (state is SearchInitial) BlocProvider.of<SearchBloc>(context).add(SearchTextDidChange(text: ''));
     return emptyView();
   }
 
@@ -172,10 +181,7 @@ class _SearchFormState extends State<SearchForm> {
           child: Text(
             'Пока нет результатов. Воспользуйтесь поиском',
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 21,
-                color: HexColor.fromHex('#E0E0E0'),
-                fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 21, color: HexColor.fromHex('#E0E0E0'), fontWeight: FontWeight.bold),
           ),
         )
       ],
@@ -187,9 +193,7 @@ class _SearchFormState extends State<SearchForm> {
       children: <Widget>[
         Container(
           margin: EdgeInsets.all(4),
-          decoration: new BoxDecoration(
-              color: Colors.white,
-              borderRadius: new BorderRadius.all(Radius.circular(18.0))),
+          decoration: new BoxDecoration(color: Colors.white, borderRadius: new BorderRadius.all(Radius.circular(18.0))),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -202,47 +206,34 @@ class _SearchFormState extends State<SearchForm> {
                       children: <Widget>[
                         Text(
                           '№ заказа',
-                          style: TextStyle(
-                              color: HexColor.fromHex('#869FB1'), fontSize: 13),
+                          style: TextStyle(color: HexColor.fromHex('#869FB1'), fontSize: 13),
                         ),
                         const Padding(padding: EdgeInsets.all(8)),
                         Text(
                           '${_order.number}',
-                          style: TextStyle(
-                              color: HexColor.fromHex('#0C270F'),
-                              fontSize: 21,
-                              fontWeight: FontWeight.bold),
+                          style:
+                              TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 21, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text('Блюда',
-                            style: TextStyle(
-                                color: HexColor.fromHex('#869FB1'),
-                                fontSize: 13)),
+                        Text('Блюда', style: TextStyle(color: HexColor.fromHex('#869FB1'), fontSize: 13)),
                         const Padding(padding: EdgeInsets.all(8)),
                         Text('${_order.itemsCount}',
                             style: TextStyle(
-                                color: HexColor.fromHex('#0C270F'),
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold)),
+                                color: HexColor.fromHex('#0C270F'), fontSize: 21, fontWeight: FontWeight.bold)),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text('Время выдачи',
-                            style: TextStyle(
-                                color: HexColor.fromHex('#869FB1'),
-                                fontSize: 13)),
+                        Text('Время выдачи', style: TextStyle(color: HexColor.fromHex('#869FB1'), fontSize: 13)),
                         const Padding(padding: EdgeInsets.all(8)),
                         Text(_order.orderedAt,
                             style: TextStyle(
-                                color: HexColor.fromHex('#0C270F'),
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold)),
+                                color: HexColor.fromHex('#0C270F'), fontSize: 21, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ],
@@ -290,9 +281,7 @@ class _SearchFormState extends State<SearchForm> {
           child: Image(
               image: AssetImage(_order.status == 'Новый'
                   ? 'assets/yellow-corn.png'
-                  : (_order.status == 'Готовится'
-                      ? 'assets/green-corn.png'
-                      : 'assets/red-corn.png')),
+                  : (_order.status == 'Готовится' ? 'assets/green-corn.png' : 'assets/red-corn.png')),
               width: 21),
         ),
       ],
@@ -300,40 +289,6 @@ class _SearchFormState extends State<SearchForm> {
   }
 
   final TextEditingController _editingController = TextEditingController();
-
-  Widget buildAppBar(BuildContext context) {
-    return AppBar(
-        title: TextField(
-          controller: _editingController,
-          style: new TextStyle(
-            color: HexColor.fromHex('#0C270F'),
-          ),
-          decoration: new InputDecoration(
-              border: InputBorder.none,
-              hintText: "Найти",
-              hintStyle: new TextStyle(color: HexColor.fromHex('#D7D7D7'))),
-          onChanged: (text) {
-            BlocProvider.of<SearchBloc>(context)
-                .add(SearchTextDidChange(text: text));
-          },
-        ),
-        leading: Icon(Icons.search, color: HexColor.fromHex('#0C270F')),
-        actions: <Widget>[
-          _editingController.text.isEmpty
-              ? Container()
-              : IconButton(
-                  icon: Icon(
-                    Icons.close,
-                    color: HexColor.fromHex('#0C270F'),
-                  ),
-                  onPressed: () {
-                    _editingController.clear();
-                    BlocProvider.of<SearchBloc>(context)
-                        .add(SearchTextDidChange(text: ''));
-                  },
-                ),
-        ]);
-  }
 }
 
 abstract class ListItem {
@@ -373,14 +328,11 @@ class MessageItem implements ListItem {
   Widget buildTitle(BuildContext context) => Padding(
         padding: const EdgeInsets.only(top: 16.0, bottom: 16),
         child: Text(order.driver,
-            style: TextStyle(
-                color: HexColor.fromHex('#0C270F'),
-                fontSize: 16,
-                fontWeight: FontWeight.w300)),
+            style: TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 16, fontWeight: FontWeight.w300)),
       );
 
-  Widget buildSubtitle(BuildContext context) => Text('${order.number}',
-      style: TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 16));
+  Widget buildSubtitle(BuildContext context) =>
+      Text('${order.number}', style: TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 16));
 
   @override
   Widget buildLine(BuildContext context) => Divider(height: 1);

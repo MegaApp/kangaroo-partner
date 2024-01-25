@@ -2,65 +2,60 @@ import 'package:kenguroo_partner/repositories/repositories.dart';
 import 'package:kenguroo_partner/authentication/authentication.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
-class AuthenticationBloc
-    extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   final ApiRepository apiRepository;
-  final FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
-  String deviceId;
 
-  AuthenticationBloc({@required this.apiRepository})
-      : assert(apiRepository != null);
+  //final FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+  String deviceId = "";
 
-  @override
-  AuthenticationState get initialState => AuthenticationUninitialized();
+  AuthenticationBloc({required this.apiRepository}) : super(AuthenticationUninitialized()) {
+    on<AuthenticationEvent>((event, emit) async {
+      if (event is AppStarted) {
+        // firebaseMessaging
+        //     .requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
+        // firebaseMessaging.getToken().then((token) {
+        //   deviceId = token;
+        // });
 
-  @override
-  Stream<AuthenticationState> mapEventToState(
-      AuthenticationEvent event) async* {
-    if (event is AppStarted) {
-      firebaseMessaging.requestNotificationPermissions(
-          const IosNotificationSettings(sound: true, badge: true, alert: true));
-      firebaseMessaging.getToken().then((token) {
-        deviceId = token;
-      });
-
-      final bool hasToken = await apiRepository.hasToken();
-      if (hasToken) {
-        yield AuthenticationLoading();
-        final bool result = await apiRepository.refreshToken();
-        if (!result) {
-          yield AuthenticationUnauthenticated();
-          return;
+        final bool hasToken = await apiRepository.hasToken();
+        if (hasToken) {
+          emit(AuthenticationLoading());
+          final bool result = await apiRepository.refreshToken();
+          if (!result) {
+            emit(AuthenticationUnauthenticated());
+            return;
+          }
+          final bool isFirstLogin = await apiRepository.isFirstLogin();
+          if (isFirstLogin) {
+            emit(AuthenticationNeedChangePassword());
+          } else {
+            emit(AuthenticationAuthenticated());
+          }
+        } else {
+          emit(AuthenticationUnauthenticated());
         }
-        final bool isFirstLogin = await apiRepository.isFirstLogin();
-        if (isFirstLogin)
-          yield AuthenticationNeedChangePassword();
-        else
-          yield AuthenticationAuthenticated();
-      } else {
-        yield AuthenticationUnauthenticated();
       }
-    }
 
-    if (event is LoggedIn) {
-      await apiRepository.persistToken(event.userAuth);
-      final bool isFirstLogin = await apiRepository.isFirstLogin();
-      if (isFirstLogin)
-        yield AuthenticationNeedChangePassword();
-      else
-        yield AuthenticationAuthenticated();
-    }
+      if (event is LoggedIn) {
+        await apiRepository.persistToken(event.userAuth);
+        final bool isFirstLogin = await apiRepository.isFirstLogin();
+        if (isFirstLogin) {
+          emit(AuthenticationNeedChangePassword());
+        } else {
+          emit(AuthenticationAuthenticated());
+        }
+      }
 
-    if (event is ChangedPassword) {
-      await apiRepository.passwordChanged(event.result);
-      yield AuthenticationPasswordChanged();
-    }
+      if (event is ChangedPassword) {
+        await apiRepository.passwordChanged(event.result);
+        emit(AuthenticationPasswordChanged());
+      }
 
-    if (event is LoggedOut) {
-      await apiRepository.deleteToken();
-      yield AuthenticationUnauthenticated();
-    }
+      if (event is LoggedOut) {
+        await apiRepository.deleteToken();
+        emit(AuthenticationUnauthenticated());
+      }
+    });
   }
 }

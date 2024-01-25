@@ -14,7 +14,7 @@ class AppStarted extends AuthenticationEvent {}
 class LoggedIn extends AuthenticationEvent {
   final UserAuth userAuth;
 
-  const LoggedIn({@required this.userAuth});
+  const LoggedIn({required this.userAuth});
 
   @override
   List<Object> get props => [userAuth];
@@ -26,7 +26,7 @@ class LoggedIn extends AuthenticationEvent {
 class ChangedPassword extends AuthenticationEvent {
   final bool result;
 
-  const ChangedPassword({@required this.result});
+  const ChangedPassword({required this.result});
 
   @override
   List<Object> get props => [result];

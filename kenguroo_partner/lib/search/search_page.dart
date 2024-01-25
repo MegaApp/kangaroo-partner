@@ -10,9 +10,7 @@ import '../extentions.dart';
 class SearchPage extends StatelessWidget {
   final ApiRepository userRepository;
 
-  SearchPage({Key key, @required this.userRepository})
-      : assert(userRepository != null),
-        super(key: key);
+  SearchPage({super.key, required this.userRepository});
 
   @override
   Widget build(BuildContext context) {

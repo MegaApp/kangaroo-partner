@@ -9,15 +9,13 @@ import 'package:kenguroo_partner/login/login.dart';
 class LoginPage extends StatelessWidget {
   final ApiRepository userRepository;
 
-  LoginPage({Key key, @required this.userRepository})
-      : assert(userRepository != null),
-        super(key: key);
+  LoginPage({super.key, required this.userRepository});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset : false,
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).hintColor,
       body: BlocProvider(
         create: (context) {
           return LoginBloc(

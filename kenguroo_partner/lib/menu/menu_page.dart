@@ -11,11 +11,7 @@ import '../extentions.dart';
 class MenuPage extends StatelessWidget {
   final ApiRepository userRepository;
 
-  MenuPage(
-      {Key key,
-      @required this.userRepository})
-      : assert(userRepository != null),
-        super(key: key);
+  MenuPage({super.key, required this.userRepository});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +20,7 @@ class MenuPage extends StatelessWidget {
       backgroundColor: HexColor.fromHex('#F3F6F9'),
       body: BlocProvider(
         create: (context) {
-          return MenuBloc(
-            apiRepository: userRepository
-          );
+          return MenuBloc(apiRepository: userRepository);
         },
         child: MenuForm(),
       ),

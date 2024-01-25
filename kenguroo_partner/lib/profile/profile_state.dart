@@ -18,7 +18,7 @@ class ProfileLoading extends ProfileState {}
 class ProfileDidGet extends ProfileState {
   final Profile profile;
 
-  const ProfileDidGet({@required this.profile});
+  const ProfileDidGet({required this.profile});
 
   @override
   List<Object> get props => [profile];
@@ -30,7 +30,7 @@ class ProfileDidGet extends ProfileState {
 class ProfileFailure extends ProfileState {
   final String error;
 
-  const ProfileFailure({@required this.error});
+  const ProfileFailure({required this.error});
 
   @override
   List<Object> get props => [error];

@@ -10,7 +10,7 @@ class SearchTextDidChange extends SearchEvent {
   final String text;
 
   const SearchTextDidChange({
-    @required this.text,
+    required this.text,
   });
 
   @override
@@ -34,7 +34,7 @@ class SearchAddToHistory extends SearchEvent {
   final String orderId;
 
   const SearchAddToHistory({
-    @required this.orderId,
+    required this.orderId,
   });
 
   @override

@@ -8,9 +8,7 @@ class CancelOrderPage extends StatelessWidget {
   final ApiRepository apiRepository;
   final String id;
 
-  CancelOrderPage({Key key, @required this.apiRepository, @required this.id})
-      : assert(apiRepository != null, id != null),
-        super(key: key);
+  CancelOrderPage({super.key, required this.apiRepository, required this.id});
 
   @override
   Widget build(BuildContext context) {

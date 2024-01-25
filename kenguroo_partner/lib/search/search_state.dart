@@ -20,7 +20,7 @@ class SearchDidCleanHistory extends SearchState {}
 class SearchFailure extends SearchState {
   final String error;
 
-  const SearchFailure({@required this.error});
+  const SearchFailure({required this.error});
 
   @override
   List<Object> get props => [error];
@@ -33,7 +33,7 @@ class SearchOrderLoaded extends SearchState {
   final List<Order> orders;
 
   const SearchOrderLoaded({
-    @required this.orders
+    required this.orders
   });
 
   @override
@@ -47,7 +47,7 @@ class SearchHistoryOrderLoaded extends SearchState {
   final List<OrderSection> orders;
 
   const SearchHistoryOrderLoaded({
-    @required this.orders
+    required this.orders
   });
 
   @override

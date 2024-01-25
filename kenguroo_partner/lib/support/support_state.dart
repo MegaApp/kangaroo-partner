@@ -16,7 +16,7 @@ class SupportLoading extends SupportState {}
 class SupportDidGetQuestions extends SupportState {
   final List<Question> questions;
 
-  const SupportDidGetQuestions({@required this.questions});
+  const SupportDidGetQuestions({required this.questions});
 
   @override
   List<Object> get props => [questions];
@@ -28,7 +28,7 @@ class SupportDidGetQuestions extends SupportState {
 class SupportFailure extends SupportState {
   final String error;
 
-  const SupportFailure({@required this.error});
+  const SupportFailure({required this.error});
 
   @override
   List<Object> get props => [error];

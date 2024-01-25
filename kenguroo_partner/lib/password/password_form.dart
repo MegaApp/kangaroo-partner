@@ -28,7 +28,7 @@ class _PasswordFormState extends State<PasswordForm> {
     return BlocListener<PasswordBloc, PasswordState>(
       listener: (context, state) {
         if (state is PasswordFailure) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
               backgroundColor: Colors.red,
@@ -45,7 +45,7 @@ class _PasswordFormState extends State<PasswordForm> {
                   alignment: FractionalOffset.topRight,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8.0, right: 8),
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: _onReadyButtonPressed,
                       child: Text(
                         "Готово",
@@ -57,8 +57,7 @@ class _PasswordFormState extends State<PasswordForm> {
                 Align(
                   alignment: FractionalOffset.topCenter,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 100.0, left: 16, right: 16),
+                    padding: const EdgeInsets.only(top: 100.0, left: 16, right: 16),
                     child: Text(
                       "Создайте пароль",
                       textAlign: TextAlign.center,
@@ -104,8 +103,7 @@ class _PasswordFormState extends State<PasswordForm> {
                                 width: double.infinity,
                                 height: 4,
                                 child: LinearProgressIndicator(
-                                  backgroundColor:
-                                      Color.fromRGBO(242, 242, 242, 1),
+                                  backgroundColor: Color.fromRGBO(242, 242, 242, 1),
                                 )),
                           )
                         : null)

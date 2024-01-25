@@ -9,7 +9,7 @@ class OrderConfirmBtnPressed extends OrderEvent {
   final String id;
 
   const OrderConfirmBtnPressed({
-    @required this.id,
+    required this.id,
   });
 
   @override
@@ -24,7 +24,7 @@ class OrderFinishBtnPressed extends OrderEvent {
   final String id;
 
   const OrderFinishBtnPressed({
-    @required this.id,
+    required this.id,
   });
 
   @override

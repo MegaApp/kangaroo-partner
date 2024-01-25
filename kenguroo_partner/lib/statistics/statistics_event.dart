@@ -16,7 +16,7 @@ class StatisticsGet extends StatisticsEvent {
 class StatisticsSetStartDate extends StatisticsEvent {
   final DateTime start;
 
-  const StatisticsSetStartDate({@required this.start});
+  const StatisticsSetStartDate({required this.start});
 
   @override
   List<Object> get props => [start];
@@ -29,7 +29,7 @@ class StatisticsSetEndDate extends StatisticsEvent {
   final DateTime start;
   final DateTime end;
 
-  const StatisticsSetEndDate({@required this.start, @required this.end});
+  const StatisticsSetEndDate({required this.start, required this.end});
 
   @override
   List<Object> get props => [start, end];

@@ -33,7 +33,7 @@ class ProfileActivation extends ProfileEvent {
   final bool active;
 
   const ProfileActivation({
-    @required this.active,
+    required this.active,
   });
 
   @override

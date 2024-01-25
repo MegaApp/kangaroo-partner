@@ -20,8 +20,8 @@ class MenuActivation extends MenuEvent {
   final String id;
 
   const MenuActivation({
-    @required this.active,
-    @required this.id
+    required this.active,
+    required this.id
   });
 
   @override

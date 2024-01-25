@@ -10,31 +10,28 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final ApiRepository apiRepository;
 
   OrderBloc({
-    @required this.apiRepository,
-  }) : assert(apiRepository != null);
-
-  OrderState get initialState => OrderInitial();
-
-  @override
-  Stream<OrderState> mapEventToState(OrderEvent event) async* {
-    if (event is OrderConfirmBtnPressed) {
-      yield OrderLoading();
-      try {
-        await apiRepository.acceptOrder(event.id);
-        yield OrderShowDialog();
-      } catch (error) {
-        yield OrderFailure(error: error.toString());
+    required this.apiRepository,
+  }) : super(OrderInitial()) {
+    on((event, emit) async {
+      if (event is OrderConfirmBtnPressed) {
+        emit(OrderLoading());
+        try {
+          await apiRepository.acceptOrder(event.id);
+          emit(OrderShowDialog());
+        } catch (error) {
+          emit(OrderFailure(error: error.toString()));
+        }
       }
-    }
 
-    if (event is OrderFinishBtnPressed) {
-      yield OrderLoading();
-      try {
-        await apiRepository.finishOrder(event.id);
-        yield OrderFinished();
-      } catch (error) {
-        yield OrderFailure(error: error.toString());
+      if (event is OrderFinishBtnPressed) {
+        emit(OrderLoading());
+        try {
+          await apiRepository.finishOrder(event.id);
+          emit(OrderFinished());
+        } catch (error) {
+          emit(OrderFailure(error: error.toString()));
+        }
       }
-    }
+    });
   }
 }

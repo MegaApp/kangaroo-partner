@@ -4,7 +4,7 @@ class StatisticItem {
   int total;
   String date;
 
-  StatisticItem({this.count, this.name, this.total, this.date});
+  StatisticItem({required this.count, required this.name, required this.total, required this.date});
 
   factory StatisticItem.fromJson(Map<String, dynamic> json) {
     return StatisticItem(

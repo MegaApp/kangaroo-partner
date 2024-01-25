@@ -8,14 +8,14 @@ import 'package:kenguroo_partner/repositories/repositories.dart';
 import 'package:kenguroo_partner/support/support.dart';
 
 class SupportForm extends StatefulWidget {
-  SupportForm({Key key}) : super(key: key);
+  SupportForm({super.key});
 
   @override
   State<SupportForm> createState() => _SupportFormState();
 }
 
 class _SupportFormState extends State<SupportForm> {
-  List<Question> questions;
+  List<Question> questions = List.empty(growable: true);
 
   void _onTapItem(BuildContext context, Question question) {}
 
@@ -68,7 +68,7 @@ class _SupportFormState extends State<SupportForm> {
     return BlocListener<SupportBloc, SupportState>(
       listener: (context, state) {
         if (state is SupportFailure) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
               backgroundColor: Colors.red,
@@ -117,7 +117,7 @@ class _SupportFormState extends State<SupportForm> {
                 Icons.edit,
                 color: Colors.white,
               ),
-              backgroundColor: Theme.of(context).accentColor,
+              backgroundColor: Theme.of(context).hintColor,
             ),
           );
         },

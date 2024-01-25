@@ -9,10 +9,9 @@ class StatisticsPage extends StatelessWidget {
   final ApiRepository apiRepository;
 
   StatisticsPage({
-    Key key,
-    @required this.apiRepository,
-  })  : assert(apiRepository != null),
-        super(key: key);
+    super.key,
+    required this.apiRepository,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -8,9 +8,7 @@ import 'package:kenguroo_partner/support/support.dart';
 class SupportPage extends StatelessWidget {
   final ApiRepository apiRepository;
 
-  SupportPage({Key key, @required this.apiRepository})
-      : assert(apiRepository != null),
-        super(key: key);
+  SupportPage({super.key, required this.apiRepository});
 
   @override
   Widget build(BuildContext context) {

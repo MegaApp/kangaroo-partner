@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:kenguroo_partner/order/order.dart';
 import 'package:kenguroo_partner/repositories/api_repository.dart';
 import 'package:kenguroo_partner/store/store.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import '../extentions.dart';
-import 'package:audioplayers/audio_cache.dart';
 
 class StoreForm extends StatefulWidget {
   @override
@@ -16,18 +14,18 @@ class StoreForm extends StatefulWidget {
 
 class _StoreFormState extends State<StoreForm> {
   int _selectedIndex = 0;
-  static AudioCache player = new AudioCache();
+  // static AudioCache player = new AudioCache();
 
   @override
   void initState() {
-    BlocProvider.of<StoreBloc>(context)
-        .authenticationBloc
-        .firebaseMessaging
-        .configure(
-          onMessage: messageHandler,
-          onResume: messageHandler,
-          onLaunch: messageHandler,
-        );
+    // BlocProvider.of<StoreBloc>(context)
+    //     .authenticationBloc
+    //     .firebaseMessaging
+    //     .configure(
+    //       onMessage: messageHandler,
+    //       onResume: messageHandler,
+    //       onLaunch: messageHandler,
+    //     );
     super.initState();
   }
 
@@ -37,7 +35,7 @@ class _StoreFormState extends State<StoreForm> {
       dynamic data = message['data'];
       if (data['action'] == 'updateFeed') {
         const alarmAudioPath = "1.mp3";
-        player.play(alarmAudioPath);
+        //player.play(alarmAudioPath);
         //FlutterRingtonePlayer.playNotification();
         BlocProvider.of<StoreBloc>(context)
             .add(StoreSegmentedCtrPressed(index: _selectedIndex));
@@ -45,7 +43,7 @@ class _StoreFormState extends State<StoreForm> {
     } else if (message.containsKey('action')) {
       if (message['action'] == 'updateFeed') {
         const alarmAudioPath = "1.mp3";
-        player.play(alarmAudioPath);
+        //player.play(alarmAudioPath);
         //FlutterRingtonePlayer.playNotification();
         BlocProvider.of<StoreBloc>(context)
             .add(StoreSegmentedCtrPressed(index: _selectedIndex));
@@ -67,10 +65,10 @@ class _StoreFormState extends State<StoreForm> {
       'assets/red-corn.png'
     ];
 
-    _onValueChanged(int newValue) {
-      _selectedIndex = newValue;
+    _onValueChanged(int? newValue) {
+      _selectedIndex = newValue ?? 0;
       BlocProvider.of<StoreBloc>(context)
-          .add(StoreSegmentedCtrPressed(index: newValue));
+          .add(StoreSegmentedCtrPressed(index: newValue ?? 0));
     }
 
     Future<void> _onTapItem(BuildContext context, Order order) async {
@@ -249,7 +247,7 @@ class _StoreFormState extends State<StoreForm> {
     return BlocListener<StoreBloc, StoreState>(
       listener: (context, state) {
         if (state is StoreFailure) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
               backgroundColor: Colors.red,

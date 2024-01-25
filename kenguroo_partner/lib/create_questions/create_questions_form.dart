@@ -25,7 +25,7 @@ class _CreateQuestionsFormState extends State<CreateQuestionsForm> {
     return BlocListener<CreateQuestionsBloc, CreateQuestionsState>(
       listener: (context, state) {
         if (state is CreateQuestionsFailure) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
               backgroundColor: Colors.red,
@@ -95,21 +95,18 @@ class _CreateQuestionsFormState extends State<CreateQuestionsForm> {
                       Padding(
                         padding:
                             const EdgeInsets.only(top: 56, right: 56, left: 56),
-                        child: SizedBox(
+                        child: Container(
                           height: 56,
                           width: double.infinity,
-                          child: FlatButton(
-                            shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(40.0),
-                                side: BorderSide(
-                                    color: Theme.of(context).accentColor)),
-                            color: Theme.of(context).accentColor,
-                            textColor: Colors.white,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40.0),
+                              border: Border.all(color: Theme.of(context).hintColor, width: 2)),
+                          child: TextButton(
+                            style: TextButton.styleFrom(foregroundColor: Theme.of(context).hintColor, backgroundColor: Colors.white),
                             onPressed: _cancelBtnClicked(),
                             child: Text(
-                              'Отправить',
-                              style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold),
+                              "Отправить",
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),

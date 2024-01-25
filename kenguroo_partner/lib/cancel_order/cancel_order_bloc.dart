@@ -8,21 +8,18 @@ class CancelOrderBloc extends Bloc<CancelOrderEvent, CancelOrderState> {
   final ApiRepository apiRepository;
 
   CancelOrderBloc({
-    @required this.apiRepository,
-  }) : assert(apiRepository != null);
-
-  CancelOrderState get initialState => CancelOrderInitial();
-
-  @override
-  Stream<CancelOrderState> mapEventToState(CancelOrderEvent event) async* {
-    if (event is CancelOrderBtnPressed) {
-      yield CancelOrderLoading();
-      try {
-        await apiRepository.cancelOrder(event.id, event.message);
-        yield CancelOrderApproved();
-      } catch (error) {
-        yield CancelOrderFailure(error: error.toString());
+    required this.apiRepository,
+  }) : super(CancelOrderInitial()) {
+    on((event, emit) async {
+      if (event is CancelOrderBtnPressed) {
+        emit(CancelOrderLoading());
+        try {
+          await apiRepository.cancelOrder(event.id, event.message);
+          emit(CancelOrderApproved());
+        } catch (error) {
+          emit(CancelOrderFailure(error: error.toString()));
+        }
       }
-    }
+    });
   }
 }

@@ -3,7 +3,7 @@ class Item {
     String name;
     String price;
 
-    Item({this.count, this.name, this.price});
+    Item({required this.count, required this.name, required this.price});
 
     factory Item.fromJson(Map<String, dynamic> json) {
         return Item(

@@ -3,7 +3,7 @@ class Profile {
   String image;
   bool active;
 
-  Profile({this.name, this.image, this.active});
+  Profile({required this.name, required this.image, required this.active});
 
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(

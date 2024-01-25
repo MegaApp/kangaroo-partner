@@ -9,7 +9,7 @@ class OrderListDidSetDate extends OrderListEvent {
   final String time;
 
   const OrderListDidSetDate({
-    @required this.time,
+    required this.time,
   });
 
   @override

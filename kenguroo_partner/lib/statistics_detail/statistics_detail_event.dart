@@ -8,7 +8,7 @@ abstract class StatisticsDetailEvent extends Equatable {
 class StatisticsDetailSetStartDate extends StatisticsDetailEvent {
   final DateTime start;
 
-  const StatisticsDetailSetStartDate({@required this.start});
+  const StatisticsDetailSetStartDate({required this.start});
 
   @override
   List<Object> get props => [start];
@@ -21,7 +21,7 @@ class StatisticsDetailSetEndDate extends StatisticsDetailEvent {
   final DateTime start;
   final DateTime end;
 
-  const StatisticsDetailSetEndDate({@required this.start, @required this.end});
+  const StatisticsDetailSetEndDate({required this.start, required this.end});
 
   @override
   List<Object> get props => [start, end];

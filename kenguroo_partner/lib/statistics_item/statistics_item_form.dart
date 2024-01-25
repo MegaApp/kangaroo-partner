@@ -10,7 +10,7 @@ import '../extentions.dart';
 class StatisticsItemForm extends StatefulWidget {
   final StatisticItem statisticItem;
 
-  StatisticsItemForm({Key key, this.statisticItem}) : super(key: key);
+  StatisticsItemForm({super.key, required this.statisticItem});
 
   @override
   State<StatisticsItemForm> createState() => _StatisticsItemFormState();
@@ -73,24 +73,24 @@ class _StatisticsItemFormState extends State<StatisticsItemForm> {
                     Divider(),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 32),
-                  child: SizedBox(
-                    height: 56,
-                    width: 223,
-                    child: FlatButton(
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(40.0),
-                          side: BorderSide(color: HexColor.fromHex('#3FC64F'))),
-                      onPressed: () => {_buttonClick()},
-                      color: HexColor.fromHex('#3FC64F'),
-                      textColor: Colors.white,
-                      child: Text('Показать заказы',
-                          style: TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(bottom: 32),
+                //   child: SizedBox(
+                //     height: 56,
+                //     width: 223,
+                //     child: FlatButton(
+                //       shape: new RoundedRectangleBorder(
+                //           borderRadius: new BorderRadius.circular(40.0),
+                //           side: BorderSide(color: HexColor.fromHex('#3FC64F'))),
+                //       onPressed: () => {_buttonClick()},
+                //       color: HexColor.fromHex('#3FC64F'),
+                //       textColor: Colors.white,
+                //       child: Text('Показать заказы',
+                //           style: TextStyle(
+                //               fontSize: 17, fontWeight: FontWeight.bold)),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           );

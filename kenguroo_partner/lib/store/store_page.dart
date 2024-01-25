@@ -13,11 +13,9 @@ class StorePage extends StatelessWidget {
   final AuthenticationBloc authenticationBloc;
 
   StorePage(
-      {Key key,
-      @required this.userRepository,
-      @required this.authenticationBloc})
-      : assert(userRepository != null),
-        super(key: key);
+      {super.key,
+      required this.userRepository,
+      required this.authenticationBloc});
 
   @override
   Widget build(BuildContext context) {

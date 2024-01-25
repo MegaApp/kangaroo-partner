@@ -6,7 +6,7 @@ class Menu {
     String name;
     String price;
 
-    Menu({this.id, this.price, this.active, this.name});
+    Menu({required this.id, required this.price, required this.active, required this.name});
 
     factory Menu.fromJson(Map<String, dynamic> json) {
         return Menu(
