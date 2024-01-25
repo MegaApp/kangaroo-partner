@@ -1,6 +1,8 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:kenguroo_partner/order/order.dart';
 import 'package:kenguroo_partner/repositories/api_repository.dart';
 import 'package:kenguroo_partner/store/store.dart';
@@ -14,7 +16,7 @@ class StoreForm extends StatefulWidget {
 
 class _StoreFormState extends State<StoreForm> {
   int _selectedIndex = 0;
-  // static AudioCache player = new AudioCache();
+  static AudioPlayer player = AudioPlayer();
 
   @override
   void initState() {
@@ -34,58 +36,47 @@ class _StoreFormState extends State<StoreForm> {
     if (message.containsKey('data')) {
       dynamic data = message['data'];
       if (data['action'] == 'updateFeed') {
-        const alarmAudioPath = "1.mp3";
-        //player.play(alarmAudioPath);
-        //FlutterRingtonePlayer.playNotification();
-        BlocProvider.of<StoreBloc>(context)
-            .add(StoreSegmentedCtrPressed(index: _selectedIndex));
+        player.play(AssetSource('assets/1.mp3'));
+        FlutterRingtonePlayer.playNotification();
+        BlocProvider.of<StoreBloc>(context).add(StoreSegmentedCtrPressed(index: _selectedIndex));
       }
     } else if (message.containsKey('action')) {
       if (message['action'] == 'updateFeed') {
-        const alarmAudioPath = "1.mp3";
-        //player.play(alarmAudioPath);
-        //FlutterRingtonePlayer.playNotification();
-        BlocProvider.of<StoreBloc>(context)
-            .add(StoreSegmentedCtrPressed(index: _selectedIndex));
+        player.play(AssetSource('assets/1.mp3'));
+        FlutterRingtonePlayer.playNotification();
+        BlocProvider.of<StoreBloc>(context).add(StoreSegmentedCtrPressed(index: _selectedIndex));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final children = const <int, Widget>{
+    const children = <int, Widget>{
       0: Text('Новые'),
       1: Text('Готовится'),
       2: Text('Завершен'),
     };
 
-    final iconCorners = [
-      'assets/yellow-corn.png',
-      'assets/green-corn.png',
-      'assets/red-corn.png'
-    ];
+    final iconCorners = ['assets/yellow-corn.png', 'assets/green-corn.png', 'assets/red-corn.png'];
 
-    _onValueChanged(int? newValue) {
+    onValueChanged(int? newValue) {
       _selectedIndex = newValue ?? 0;
-      BlocProvider.of<StoreBloc>(context)
-          .add(StoreSegmentedCtrPressed(index: newValue ?? 0));
+      BlocProvider.of<StoreBloc>(context).add(StoreSegmentedCtrPressed(index: newValue ?? 0));
     }
 
-    Future<void> _onTapItem(BuildContext context, Order order) async {
-      ApiRepository repository =
-          BlocProvider.of<StoreBloc>(context).apiRepository;
+    Future<void> onTapItem(BuildContext context, Order order) async {
+      ApiRepository repository = BlocProvider.of<StoreBloc>(context).apiRepository;
       Map result = await Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => OrderPage(
                 apiRepository: repository,
                 order: order,
               )));
-      if (result != null && result['needUpdate']) {
-        BlocProvider.of<StoreBloc>(context)
-            .add(StoreSegmentedCtrPressed(index: _selectedIndex));
+      if (result['needUpdate']) {
+        BlocProvider.of<StoreBloc>(context).add(StoreSegmentedCtrPressed(index: _selectedIndex));
       }
     }
 
-    _listViewWidget(List<Order> orders) {
+    listViewWidget(List<Order> orders) {
       return ListView.builder(
         shrinkWrap: true,
         itemCount: orders.length,
@@ -96,11 +87,9 @@ class _StoreFormState extends State<StoreForm> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.all(4),
-                    decoration: new BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:
-                            new BorderRadius.all(Radius.circular(18.0))),
+                    margin: const EdgeInsets.all(4),
+                    decoration:
+                        const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(18.0))),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -113,27 +102,20 @@ class _StoreFormState extends State<StoreForm> {
                                 children: <Widget>[
                                   Text(
                                     '№ заказа',
-                                    style: TextStyle(
-                                        color: HexColor.fromHex('#869FB1'),
-                                        fontSize: 13),
+                                    style: TextStyle(color: HexColor.fromHex('#869FB1'), fontSize: 13),
                                   ),
                                   const Padding(padding: EdgeInsets.all(8)),
                                   Text(
                                     '${_order.number}',
                                     style: TextStyle(
-                                        color: HexColor.fromHex('#0C270F'),
-                                        fontSize: 21,
-                                        fontWeight: FontWeight.bold),
+                                        color: HexColor.fromHex('#0C270F'), fontSize: 21, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text('Блюда',
-                                      style: TextStyle(
-                                          color: HexColor.fromHex('#869FB1'),
-                                          fontSize: 13)),
+                                  Text('Блюда', style: TextStyle(color: HexColor.fromHex('#869FB1'), fontSize: 13)),
                                   const Padding(padding: EdgeInsets.all(8)),
                                   Text('${_order.itemsCount}',
                                       style: TextStyle(
@@ -146,9 +128,7 @@ class _StoreFormState extends State<StoreForm> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text('Время выдачи',
-                                      style: TextStyle(
-                                          color: HexColor.fromHex('#869FB1'),
-                                          fontSize: 13)),
+                                      style: TextStyle(color: HexColor.fromHex('#869FB1'), fontSize: 13)),
                                   const Padding(padding: EdgeInsets.all(8)),
                                   Text(_order.orderedAt,
                                       style: TextStyle(
@@ -160,8 +140,7 @@ class _StoreFormState extends State<StoreForm> {
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(
-                                top: 24, right: 16, left: 16),
+                            padding: const EdgeInsets.only(top: 24, right: 16, left: 16),
                             child: Stack(
                               alignment: AlignmentDirectional.centerEnd,
                               children: <Widget>[
@@ -203,29 +182,29 @@ class _StoreFormState extends State<StoreForm> {
                     child: Image(
                         image: AssetImage(_order.status == 'Новый'
                             ? 'assets/yellow-corn.png'
-                            : (_order.status == 'Готовится'
-                                ? 'assets/green-corn.png'
-                                : 'assets/red-corn.png')),
+                            : (_order.status == 'Готовится' ? 'assets/green-corn.png' : 'assets/red-corn.png')),
                         width: 21),
                   ),
                 ],
               ),
-              onTap: () => _onTapItem(context, _order));
+              onTap: () => onTapItem(context, _order));
         },
       );
     }
 
-    _rootWidget(StoreState state) {
-      if (state is StoreLoading)
-        return Center(child: CircularProgressIndicator());
-      if (state is StoreOrderLoaded) if (state.orders.length > 0)
-        return _listViewWidget(state.orders);
-      if (state is StoreInitial) _onValueChanged(_selectedIndex);
+    rootWidget(StoreState state) {
+      if (state is StoreLoading) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (state is StoreOrderLoaded && state.orders.isNotEmpty) {
+        return listViewWidget(state.orders);
+      }
+      if (state is StoreInitial) onValueChanged(_selectedIndex);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image(
+          const Image(
             image: AssetImage('assets/ic-plh.png'),
             width: 120,
           ),
@@ -234,10 +213,7 @@ class _StoreFormState extends State<StoreForm> {
             child: Text(
               'Пока нет результатов',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 21,
-                  color: HexColor.fromHex('#E0E0E0'),
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 21, color: HexColor.fromHex('#E0E0E0'), fontWeight: FontWeight.bold),
             ),
           )
         ],
@@ -249,7 +225,7 @@ class _StoreFormState extends State<StoreForm> {
         if (state is StoreFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('${state.error}'),
+              content: Text(state.error),
               backgroundColor: Colors.red,
             ),
           );
@@ -267,7 +243,7 @@ class _StoreFormState extends State<StoreForm> {
                     child: CupertinoSlidingSegmentedControl<int>(
                       backgroundColor: HexColor.fromHex('#E8F0F9'),
                       children: children,
-                      onValueChanged: _onValueChanged,
+                      onValueChanged: onValueChanged,
                       groupValue: _selectedIndex,
                     ),
                   ),
@@ -276,7 +252,7 @@ class _StoreFormState extends State<StoreForm> {
                   alignment: Alignment.topCenter,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 50),
-                    child: _rootWidget(state),
+                    child: rootWidget(state),
                   ),
                 )
               ],

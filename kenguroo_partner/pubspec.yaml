@@ -40,14 +40,11 @@ dependencies:
   equatable: any
   http: any
   flutter_secure_storage: any
-#  firebase_analytics: any
-#  firebase_messaging: any
-#  firebase_core: any
-  #  flutter_ringtone_player: any
+  flutter_ringtone_player: any
   fl_chart: any
-  #  flutter_cupertino_date_picker: any
+#  flutter_cupertino_date_picker: any
   intl: any
-  #  audioplayers: any
+  audioplayers: any
 
 dev_dependencies:
   flutter_test:
