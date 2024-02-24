@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:http/http.dart' as http;
+import 'package:kenguroo_partner/models/comment.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -239,6 +240,20 @@ class ApiClient {
     }
     return json['data'] != null
         ? (json['data'] as List).map((i) => Question.fromJson(i)).toList()
+        : List.empty();
+  }
+
+  Future<List<Comment>> comments() async {
+    final loginUrl = Uri.parse('$baseUrl/store/profile/comment');
+    final token = await secureStorage.read(key: 'access') ?? '';
+    final response =
+    await httpClient.get(loginUrl, headers: {'Authorization': token});
+    final json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(json['error_info']['message']);
+    }
+    return json['data'] != null
+        ? (json['data'] as List).map((i) => Comment.fromJson(i)).toList()
         : List.empty();
   }
 

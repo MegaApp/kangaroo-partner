@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,14 +23,14 @@ class _StoreFormState extends State<StoreForm> {
 
   @override
   void initState() {
-    // BlocProvider.of<StoreBloc>(context)
-    //     .authenticationBloc
-    //     .firebaseMessaging
-    //     .configure(
-    //       onMessage: messageHandler,
-    //       onResume: messageHandler,
-    //       onLaunch: messageHandler,
-    //     );
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      messageHandler(message.data);
+    });
+    try {
+      Timer.periodic(const Duration(seconds: 30), (timer) {
+        BlocProvider.of<StoreBloc>(context).add(StoreSegmentedCtrPressed(index: _selectedIndex));
+      });
+    } catch (e){}
     super.initState();
   }
 
@@ -36,13 +39,13 @@ class _StoreFormState extends State<StoreForm> {
     if (message.containsKey('data')) {
       dynamic data = message['data'];
       if (data['action'] == 'updateFeed') {
-        player.play(AssetSource('assets/1.mp3'));
+        player.play(AssetSource('1.mp3'));
         FlutterRingtonePlayer.playNotification();
         BlocProvider.of<StoreBloc>(context).add(StoreSegmentedCtrPressed(index: _selectedIndex));
       }
     } else if (message.containsKey('action')) {
       if (message['action'] == 'updateFeed') {
-        player.play(AssetSource('assets/1.mp3'));
+        player.play(AssetSource('1.mp3'));
         FlutterRingtonePlayer.playNotification();
         BlocProvider.of<StoreBloc>(context).add(StoreSegmentedCtrPressed(index: _selectedIndex));
       }
@@ -56,8 +59,6 @@ class _StoreFormState extends State<StoreForm> {
       1: Text('Готовится'),
       2: Text('Завершен'),
     };
-
-    final iconCorners = ['assets/yellow-corn.png', 'assets/green-corn.png', 'assets/red-corn.png'];
 
     onValueChanged(int? newValue) {
       _selectedIndex = newValue ?? 0;

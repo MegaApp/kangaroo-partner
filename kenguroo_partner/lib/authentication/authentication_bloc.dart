@@ -1,23 +1,21 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:kenguroo_partner/repositories/repositories.dart';
 import 'package:kenguroo_partner/authentication/authentication.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:kenguroo_partner/firebase_options.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   final ApiRepository apiRepository;
 
-  //final FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
-  String deviceId = "";
-
   AuthenticationBloc({required this.apiRepository}) : super(AuthenticationUninitialized()) {
     on<AuthenticationEvent>((event, emit) async {
       if (event is AppStarted) {
-        // firebaseMessaging
-        //     .requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
-        // firebaseMessaging.getToken().then((token) {
-        //   deviceId = token;
-        // });
-
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+        await FirebaseMessaging.instance.requestPermission(provisional: true);
         final bool hasToken = await apiRepository.hasToken();
         if (hasToken) {
           emit(AuthenticationLoading());

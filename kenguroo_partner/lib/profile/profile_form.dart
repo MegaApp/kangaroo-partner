@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kenguroo_partner/comments/comments.dart';
 import 'package:kenguroo_partner/extentions.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/profile/profile.dart';
@@ -41,6 +42,12 @@ class _ProfileFormState extends State<ProfileForm> {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (BuildContext context) => SearchPage(userRepository: repository)));
       };
+
+  _navigateToComments() => () {
+    ApiRepository repository = BlocProvider.of<ProfileBloc>(context).apiRepository;
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) => CommentPage(apiRepository: repository)));
+  };
 
   void showMenuChangedDialog() {
     showDialog(
@@ -224,8 +231,8 @@ class _ProfileFormState extends State<ProfileForm> {
                             padding: const EdgeInsets.all(16.0),
                             child: CircleAvatar(
                               radius: 40.0,
-                              backgroundImage:
-                                  NetworkImage((_profile != null) ? _profile!.image : 'https://via.placeholder.com/150'),
+                              backgroundImage: NetworkImage(
+                                  (_profile != null) ? _profile!.image : 'https://via.placeholder.com/150'),
                               backgroundColor: Colors.transparent,
                             ),
                           ),
@@ -233,6 +240,10 @@ class _ProfileFormState extends State<ProfileForm> {
                             (_profile != null) ? _profile!.name : 'Не указан',
                             style: TextStyle(
                                 fontSize: 21, color: HexColor.fromHex('#0C270F'), fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            (_profile != null) ? '★ ${_profile!.rating}' : '★ 0',
+                            style: const TextStyle(fontSize: 21, color: Colors.amber, fontWeight: FontWeight.bold),
                           ),
                           // const Padding(
                           //   padding: const EdgeInsets.only(top: 32.0),
@@ -297,6 +308,36 @@ class _ProfileFormState extends State<ProfileForm> {
                             ),
                             //onTap: _storeActivation()
                           ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 40),
+                            child: Divider(),
+                          ),
+                          GestureDetector(
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Icon(Icons.comment, color: HexColor.fromHex('#e3e3e3'), size: 24),
+                                        Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Text(
+                                            'Комментарии',
+                                            style: TextStyle(fontSize: 16, color: HexColor.fromHex('#0C270F')),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Image(image: AssetImage('assets/arrow_right.png'), width: 32),
+                                  ],
+                                ),
+                              ),
+                              onTap: _navigateToComments()),
                           Padding(
                             padding: const EdgeInsets.only(left: 40),
                             child: Divider(),

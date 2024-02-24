@@ -2,14 +2,16 @@ class Profile {
   String name;
   String image;
   bool active;
+  int rating;
 
-  Profile({required this.name, required this.image, required this.active});
+  Profile({required this.name, required this.image, required this.active, required this.rating});
 
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(
       name: json['name'],
       image: json['logo'],
       active: json['active'],
+      rating: json['rating']
     );
   }
 

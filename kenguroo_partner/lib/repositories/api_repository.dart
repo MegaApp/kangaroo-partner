@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:kenguroo_partner/models/comment.dart';
 import 'package:kenguroo_partner/models/statistic_item.dart';
 import 'package:kenguroo_partner/repositories/repositories.dart';
 import 'package:meta/meta.dart';
@@ -93,6 +94,10 @@ class ApiRepository {
 
   Future<List<Question>> getQuestions() async {
     return await client.questions();
+  }
+
+  Future<List<Comment>> getComments() async {
+    return await client.comments();
   }
 
   Future<bool> createQuestion(String title, String question) async {
