@@ -7,7 +7,8 @@ import 'package:kenguroo_partner/models/models.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiClient {
-  static const baseUrl = 'https://kenguroo.com:8081';
+  static const baseUrl = 'https://test.kenguroo.com';
+  // static const baseUrl = 'https://kenguroo.com:8081';
   final http.Client httpClient;
   final FlutterSecureStorage secureStorage;
 
