@@ -1,0 +1,2 @@
+/Users/izzat/Kenguroo/kangaroo-partner/kenguroo_partner/android/app/.cxx/Debug/3t6w49a3/x86_64/CMakeFiles/edit_cache.dir
+/Users/izzat/Kenguroo/kangaroo-partner/kenguroo_partner/android/app/.cxx/Debug/3t6w49a3/x86_64/CMakeFiles/rebuild_cache.dir

@@ -228,7 +228,6 @@ class _StatisticsFormState extends State<StatisticsForm> {
       barTouchData: BarTouchData(
           touchTooltipData: BarTouchTooltipData(
             tooltipRoundedRadius: 12,
-            tooltipBgColor: HexColor.fromHex('#007FD0'),
             tooltipPadding: const EdgeInsets.only(top: 4, bottom: 0, right: 8, left: 8),
             tooltipMargin: 8,
             getTooltipItem: (

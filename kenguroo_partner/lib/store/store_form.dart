@@ -20,17 +20,13 @@ class StoreForm extends StatefulWidget {
 class _StoreFormState extends State<StoreForm> {
   int _selectedIndex = 0;
   static AudioPlayer player = AudioPlayer();
+  static FlutterRingtonePlayer flutterRingtonePlayer = FlutterRingtonePlayer();
 
   @override
   void initState() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       messageHandler(message.data);
     });
-    try {
-      Timer.periodic(const Duration(seconds: 30), (timer) {
-        BlocProvider.of<StoreBloc>(context).add(StoreSegmentedCtrPressed(index: _selectedIndex));
-      });
-    } catch (e){}
     super.initState();
   }
 
@@ -40,13 +36,13 @@ class _StoreFormState extends State<StoreForm> {
       dynamic data = message['data'];
       if (data['action'] == 'updateFeed') {
         player.play(AssetSource('1.mp3'));
-        FlutterRingtonePlayer.playNotification();
+        flutterRingtonePlayer.playNotification(looping: true, asAlarm: true);
         BlocProvider.of<StoreBloc>(context).add(StoreSegmentedCtrPressed(index: _selectedIndex));
       }
     } else if (message.containsKey('action')) {
       if (message['action'] == 'updateFeed') {
         player.play(AssetSource('1.mp3'));
-        FlutterRingtonePlayer.playNotification();
+        flutterRingtonePlayer.playNotification(looping: true, asAlarm: true);
         BlocProvider.of<StoreBloc>(context).add(StoreSegmentedCtrPressed(index: _selectedIndex));
       }
     }

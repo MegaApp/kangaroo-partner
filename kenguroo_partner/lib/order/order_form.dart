@@ -1,11 +1,18 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/cancel_order/cancel_order.dart';
 import 'package:kenguroo_partner/extentions.dart';
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/order/order.dart';
 import 'package:kenguroo_partner/repositories/repositories.dart';
+import 'package:sunmi_printer_plus/core/styles/sunmi_text_style.dart';
+import 'package:sunmi_printer_plus/core/types/sunmi_column.dart';
+import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
+import 'package:sunmi_printer_plus/core/enums/enums.dart';
 
 class OrderForm extends StatefulWidget {
   final Order order;
@@ -17,28 +24,104 @@ class OrderForm extends StatefulWidget {
 }
 
 class _OrderFormState extends State<OrderForm> {
+  final SunmiPrinterPlus sunmiPrinterPlus = SunmiPrinterPlus();
+  final GlobalKey _printKey = GlobalKey();
+
+  Future<void> _printOrder(Order order) async {
+    try {
+      // Печатаем заголовок
+      await sunmiPrinterPlus.printText(
+          text:
+          "Чек заказа #${order.number}\n",
+          style: SunmiTextStyle(
+            align: SunmiPrintAlign.CENTER,
+            bold: true,
+            fontSize: 20,
+          ),
+      );
+      await sunmiPrinterPlus.printText(text: "Дата: ${order.orderedAt}\n");
+      await sunmiPrinterPlus.printText(text: "Статус: ${order.status}\n");
+      await sunmiPrinterPlus.printText(text: "Курьер: ${order.driver}\n");
+      await sunmiPrinterPlus.printText(text: "--------------------------------\n");
+
+      // Печатаем заголовок таблицы: "Товар" - "Кол" - "Цена"
+      await sunmiPrinterPlus.printRow(
+        cols: [
+          SunmiColumn(
+            text: "Товар",
+            width: 6,
+          ),
+          SunmiColumn(
+            text: "Кол",
+            width: 2,
+            style: SunmiTextStyle(align: SunmiPrintAlign.RIGHT),
+          ),
+          SunmiColumn(
+            text: "Цена",
+            width: 4,
+            style: SunmiTextStyle(align: SunmiPrintAlign.RIGHT),
+          ),
+        ],
+      );
+
+      // Печатаем товары
+      for (final item in order.items) {
+        await sunmiPrinterPlus.printRow(
+          cols: [
+            SunmiColumn(
+              text: item.name,
+              width: 6,
+            ),
+            SunmiColumn(
+              text: "${item.count}",
+              width: 2,
+              style: SunmiTextStyle(align: SunmiPrintAlign.RIGHT),
+            ),
+            SunmiColumn(
+              text: item.price,
+              width: 4,
+              style: SunmiTextStyle(align: SunmiPrintAlign.RIGHT),
+            ),
+          ],
+        );
+      }
+
+      // Итого
+      await sunmiPrinterPlus.printText(text: "--------------------------------\n");
+      await sunmiPrinterPlus.printText(text: "Всего товаров: ${order.itemsCount}\n");
+      await sunmiPrinterPlus.printText(text:
+      "Итого: ${order.price}\n",
+        style: SunmiTextStyle(bold: true),
+      );
+      if (order.comment.isNotEmpty) {
+        await sunmiPrinterPlus.printText(text: order.comment);
+      }
+      await sunmiPrinterPlus.printText(text: "Оплата наличными: ${order.cash ? "Да" : "Нет"}\n");
+
+      await sunmiPrinterPlus.lineWrap(times: 100);
+    } catch (e) {
+      print("Ошибка печати: $e");
+    }
+  }
+
   _acceptBtnClicked() =>
           () {
-        BlocProvider.of<OrderBloc>(context)
-            .add(OrderConfirmBtnPressed(id: widget.order.id));
+            _printOrder(widget.order);
+        //BlocProvider.of<OrderBloc>(context).add(OrderConfirmBtnPressed(id: widget.order.id));
       };
 
   _readyBtnClicked() =>
           () {
-        BlocProvider.of<OrderBloc>(context)
-            .add(OrderFinishBtnPressed(id: widget.order.id));
+        BlocProvider.of<OrderBloc>(context).add(OrderFinishBtnPressed(id: widget.order.id));
       };
 
   _cancelBtnClicked() =>
           () async {
-        ApiRepository repository =
-            BlocProvider
-                .of<OrderBloc>(context)
-                .apiRepository;
+        ApiRepository repository = BlocProvider
+            .of<OrderBloc>(context)
+            .apiRepository;
         Map result = await Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) =>
-                CancelOrderPage(
-                    apiRepository: repository, id: widget.order.id)));
+            builder: (BuildContext context) => CancelOrderPage(apiRepository: repository, id: widget.order.id)));
         if (result != null && result['needUpdate']) {
           Navigator.of(context).pop({'needUpdate': true});
         }
@@ -49,8 +132,7 @@ class _OrderFormState extends State<OrderForm> {
         context: context,
         builder: (BuildContext context) {
           return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
             child: Stack(
               alignment: Alignment.topRight,
               children: <Widget>[
@@ -77,10 +159,8 @@ class _OrderFormState extends State<OrderForm> {
                         padding: const EdgeInsets.only(top: 20),
                         child: Text(
                           'Вы приняли заказ',
-                          style: TextStyle(
-                              color: HexColor.fromHex('#222831'),
-                              fontSize: 21,
-                              fontWeight: FontWeight.bold),
+                          style:
+                          TextStyle(color: HexColor.fromHex('#222831'), fontSize: 21, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Padding(
@@ -88,8 +168,7 @@ class _OrderFormState extends State<OrderForm> {
                         child: Text(
                           'Заказ перемещен во вкладку “готовится”. Отслеживайте заказ!',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: HexColor.fromHex('#CCCCCC'), fontSize: 16),
+                          style: TextStyle(color: HexColor.fromHex('#CCCCCC'), fontSize: 16),
                         ),
                       ),
                       Container(
@@ -99,8 +178,8 @@ class _OrderFormState extends State<OrderForm> {
                             borderRadius: BorderRadius.circular(40.0),
                             border: Border.all(color: HexColor.fromHex('#3FC64F'), width: 2)),
                         child: TextButton(
-                          style: TextButton.styleFrom(foregroundColor: Colors.white, backgroundColor: HexColor.fromHex(
-                              '#3FC64F')),
+                          style: TextButton.styleFrom(
+                              foregroundColor: Colors.white, backgroundColor: HexColor.fromHex('#3FC64F')),
                           onPressed: () {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop({'needUpdate': true});
@@ -148,9 +227,7 @@ class _OrderFormState extends State<OrderForm> {
               padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
               child: Stack(
                 children: <Widget>[
-                  (state is OrderLoading)
-                      ? Center(child: CircularProgressIndicator())
-                      : Container(),
+                  (state is OrderLoading) ? const Center(child: CircularProgressIndicator()) : Container(),
                   Padding(
                     padding: (widget.order.status == 'Завершен')
                         ? const EdgeInsets.all(0)
@@ -159,29 +236,25 @@ class _OrderFormState extends State<OrderForm> {
                       children: <Widget>[
                         const Padding(padding: EdgeInsets.only(top: 16)),
                         Text(
-                          'Блюда (${widget.order.itemsCount})',
-                          style: TextStyle(
-                              color: HexColor.fromHex('#0C270F'),
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold),
+                          'Блюда (${widget.order.items.map((e) => e.count).reduce((a, b) => a + b)} шт)',
+                          style:
+                          TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                         const Padding(padding: EdgeInsets.only(top: 16)),
-                        if (widget.order.items != null)
-                          Container(
+                        if (widget.order.items.isNotEmpty)
+                          SizedBox(
                             height: widget.order.items.length * 73.0,
                             child: ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: widget.order.items.length,
                               itemBuilder: (BuildContext context, int index) {
                                 Item _item = widget.order.items[index];
-                                return Container(
+                                return SizedBox(
                                   height: 73,
                                   child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      const Padding(
-                                          padding: EdgeInsets.only(top: 8)),
+                                      const Padding(padding: EdgeInsets.only(top: 8)),
                                       Text(
                                         _item.name,
                                         style: TextStyle(
@@ -189,8 +262,7 @@ class _OrderFormState extends State<OrderForm> {
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400),
                                       ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(top: 12)),
+                                      const Padding(padding: EdgeInsets.only(top: 12)),
                                       Text(
                                         'Кол-во: ${_item.count} шт.      Стоимость: ${_item.price}',
                                         style: TextStyle(
@@ -202,8 +274,7 @@ class _OrderFormState extends State<OrderForm> {
                                   ),
                                 );
                               },
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
+                              separatorBuilder: (BuildContext context, int index) =>
                               const Divider(
                                 height: 1,
                               ),
@@ -216,11 +287,8 @@ class _OrderFormState extends State<OrderForm> {
                           children: <Widget>[
                             Row(
                               children: <Widget>[
-                                Image(
-                                    image: AssetImage('assets/info.png'),
-                                    width: 20),
-                                const Padding(
-                                    padding: EdgeInsets.only(right: 10)),
+                                Image(image: AssetImage('assets/info.png'), width: 20),
+                                const Padding(padding: EdgeInsets.only(right: 10)),
                                 Text(
                                   'Комментарий к заказу',
                                   style: TextStyle(
@@ -238,14 +306,11 @@ class _OrderFormState extends State<OrderForm> {
                                     width: 1,
                                     color: HexColor.fromHex('#DEE9F5'),
                                   ),
-                                  borderRadius: new BorderRadius.all(
-                                      Radius.circular(12.0))),
+                                  borderRadius: new BorderRadius.all(Radius.circular(12.0))),
                               child: Center(
                                 child: Text(
                                   widget.order.comment,
-                                  style: TextStyle(
-                                      color: HexColor.fromHex('#5E5E5E'),
-                                      fontSize: 15),
+                                  style: TextStyle(color: HexColor.fromHex('#5E5E5E'), fontSize: 15),
                                 ),
                               ),
                             ),
@@ -255,13 +320,11 @@ class _OrderFormState extends State<OrderForm> {
                         const Padding(padding: EdgeInsets.only(top: 40)),
                         Text(
                           'О заказе',
-                          style: TextStyle(
-                              color: HexColor.fromHex('#0C270F'),
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold),
+                          style:
+                          TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                         const Padding(padding: EdgeInsets.only(top: 16)),
-                        Container(
+                        SizedBox(
                           height: 53,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -269,21 +332,17 @@ class _OrderFormState extends State<OrderForm> {
                               Text(
                                 'Номер заказа',
                                 style: TextStyle(
-                                    color: HexColor.fromHex('#0C270F'),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w300),
+                                    color: HexColor.fromHex('#0C270F'), fontSize: 16, fontWeight: FontWeight.w300),
                               ),
                               Text(
                                 '${widget.order.number}',
-                                style: TextStyle(
-                                    color: HexColor.fromHex('#0C270F'),
-                                    fontSize: 16),
+                                style: TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 16),
                               ),
                             ],
                           ),
                         ),
                         const Divider(height: 1),
-                        Container(
+                        SizedBox(
                           height: 53,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -291,15 +350,11 @@ class _OrderFormState extends State<OrderForm> {
                               Text(
                                 'Время выдачи',
                                 style: TextStyle(
-                                    color: HexColor.fromHex('#0C270F'),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w300),
+                                    color: HexColor.fromHex('#0C270F'), fontSize: 16, fontWeight: FontWeight.w300),
                               ),
                               Text(
-                                '${widget.order.orderedAt}',
-                                style: TextStyle(
-                                    color: HexColor.fromHex('#0C270F'),
-                                    fontSize: 16),
+                                widget.order.orderedAt,
+                                style: TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 16),
                               ),
                             ],
                           ),
@@ -313,15 +368,11 @@ class _OrderFormState extends State<OrderForm> {
                               Text(
                                 'Курьер',
                                 style: TextStyle(
-                                    color: HexColor.fromHex('#0C270F'),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w300),
+                                    color: HexColor.fromHex('#0C270F'), fontSize: 16, fontWeight: FontWeight.w300),
                               ),
                               Text(
                                 '${widget.order.driver}',
-                                style: TextStyle(
-                                    color: HexColor.fromHex('#0C270F'),
-                                    fontSize: 16),
+                                style: TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 16),
                               ),
                             ],
                           ),
@@ -335,25 +386,17 @@ class _OrderFormState extends State<OrderForm> {
                               Text(
                                 'Итого',
                                 style: TextStyle(
-                                    color: HexColor.fromHex('#0C270F'),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w300),
+                                    color: HexColor.fromHex('#0C270F'), fontSize: 16, fontWeight: FontWeight.w300),
                               ),
                               Text(
                                 '${widget.order.price}',
-                                style: TextStyle(
-                                    color: HexColor.fromHex('#0C270F'),
-                                    fontSize: 16),
+                                style: TextStyle(color: HexColor.fromHex('#0C270F'), fontSize: 16),
                               ),
                             ],
                           ),
                         ),
-                        !widget.order.cash
-                            ? const Divider(height: 1)
-                            : Container(),
-                        !widget.order.cash
-                            ? const Padding(padding: EdgeInsets.only(top: 16))
-                            : Container(),
+                        !widget.order.cash ? const Divider(height: 1) : Container(),
+                        !widget.order.cash ? const Padding(padding: EdgeInsets.only(top: 16)) : Container(),
                         !widget.order.cash
                             ? Container(
                           height: 53,
@@ -361,9 +404,7 @@ class _OrderFormState extends State<OrderForm> {
                             'Заказ оплачен картой. Итого за заказ оплачено ${widget.order.price}',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: HexColor.fromHex('#3FC64F'),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
+                                color: HexColor.fromHex('#3FC64F'), fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         )
                             : Container(),
@@ -385,47 +426,37 @@ class _OrderFormState extends State<OrderForm> {
                             decoration: BoxDecoration(
                                 color: HexColor.fromHex('#3FC64F'),
                                 borderRadius: BorderRadius.circular(40.0),
-                                border: Border.all(
-                                    color: HexColor.fromHex('#3FC64F'), width: 2)),
-                            padding: EdgeInsets.only(
-                                top: 16, bottom: 16, right: 40, left: 40),
-                            child: Text(
-                                (widget.order.status == 'Готовится')
-                                    ? 'Готово'
-                                    : 'Принять',
+                                border: Border.all(color: HexColor.fromHex('#3FC64F'), width: 2)),
+                            padding: EdgeInsets.only(top: 16, bottom: 16, right: 40, left: 40),
+                            child: Text((widget.order.status == 'Готовится') ? 'Готово' : 'Принять',
                                 style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold, color: Colors.white,)),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                )),
                           ),
-                          onTap: (widget.order.status == 'Готовится')
-                              ? _readyBtnClicked()
-                              : _acceptBtnClicked(),
+                          onTap: (widget.order.status == 'Готовится') ? _readyBtnClicked() : _acceptBtnClicked(),
                         ),
+                        (widget.order.status == 'Готовится') ? Container() : SizedBox(width: 16),
                         (widget.order.status == 'Готовится')
                             ? Container()
-                            : SizedBox(width: 16),
-                        (widget.order.status == 'Готовится')
-                            ? Container()
-                            : InkWell(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                BorderRadius.circular(40.0),
-                                border: Border.all(color: Colors.red, width: 2)),
-                            padding: EdgeInsets.only(
-                                top: 16,
-                                bottom: 16,
-                                right: 40,
-                                left: 40),
-                            child: Text(
-                              'Отменить',
-                              style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold, color: Colors.red),
+                            : Expanded(
+                          child: InkWell(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(40.0),
+                                  border: Border.all(color: Colors.red, width: 2)),
+                              padding: EdgeInsets.only(top: 16, bottom: 16, right: 40, left: 40),
+                              child: Text(
+                                'Отменить',
+                                maxLines: 1,
+                                style:
+                                TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+                              ),
                             ),
+                            onTap: _cancelBtnClicked(),
                           ),
-                          onTap: _cancelBtnClicked(),
                         )
                       ],
                     ),

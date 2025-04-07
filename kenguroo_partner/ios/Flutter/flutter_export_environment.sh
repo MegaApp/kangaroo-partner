@@ -1,6 +1,6 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/izzat/flutter2/flutter"
+export "FLUTTER_ROOT=/Users/izzat/flutter"
 export "FLUTTER_APPLICATION_PATH=/Users/izzat/Kenguroo/kangaroo-partner/kenguroo_partner"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"
