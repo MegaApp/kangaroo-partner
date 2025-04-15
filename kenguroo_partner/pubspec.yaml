@@ -49,7 +49,11 @@ dependencies:
   firebase_messaging: ^14.7.10
   device_info_plus: ^11.3.3
   sunmi_printer_plus: ^4.1.0
-
+  flutter_background_service: ^5.0.5 # Используйте актуальную версию
+  flutter_background_service_android: ^6.3.0
+  flutter_background_service_ios: ^5.0.3
+  shared_preferences: ^2.2.3
+  permission_handler: ^11.3.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

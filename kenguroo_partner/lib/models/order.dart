@@ -53,6 +53,7 @@ class Order {
     if (this.items != null) {
       data['items'] = this.items.map((v) => v.toJson()).toList();
     }
+    data["cash"] = this.cash;
     return data;
   }
 }

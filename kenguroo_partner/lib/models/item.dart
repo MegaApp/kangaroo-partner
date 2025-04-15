@@ -17,6 +17,7 @@ class Item {
         final Map<String, dynamic> data = new Map<String, dynamic>();
         data['count'] = this.count;
         data['name'] = this.name;
+        data['price'] = this.price;
         return data;
     }
 }
