@@ -73,7 +73,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   // Запускаем службу (если еще не запущена)
   void _startService() async {
     try {
-      await Future.delayed(const Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 2000));
       await initializeService();
       log("main: initializeService() завершен.");
     } catch (e) {

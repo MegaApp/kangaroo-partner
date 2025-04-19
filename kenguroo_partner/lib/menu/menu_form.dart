@@ -30,42 +30,40 @@ class _MenuFormState extends State<MenuForm> {
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, position) {
           Menu _menu = orders[position];
-          return GestureDetector(
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          child: Padding(
-                        padding: const EdgeInsets.only(top: 16, bottom: 16),
-                        child: Text(
-                          _menu.name,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 16, color: HexColor.fromHex('#0C270F')),
-                        ),
-                      )),
-                      // Image(
-                      //     image: AssetImage(_menu.active
-                      //         ? 'assets/close.png'
-                      //         : 'assets/open.png'),
-                      //     width: 24),
-                      Checkbox(
-                        value: _menu.active,
-                        onChanged: (value) {
-                          setState(() {
-                            _onTapItem(context, _menu);
-                            _menu.active = value ?? false;
-                          });
-                        },
-                      ),
-                    ],
+          return Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.only(top: 16, bottom: 16),
+                    child: Text(
+                      _menu.name,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: 16, color: HexColor.fromHex('#0C270F')),
+                    ),
+                  )),
+                  // Image(
+                  //     image: AssetImage(_menu.active
+                  //         ? 'assets/close.png'
+                  //         : 'assets/open.png'),
+                  //     width: 24),
+                  Checkbox(
+                    value: _menu.active,
+                    onChanged: (value) {
+                      setState(() {
+                        _onTapItem(context, _menu);
+                        _menu.active = value ?? false;
+                      });
+                    },
                   ),
-                  Divider(),
                 ],
               ),
-              onTap: () => _onTapItem(context, _menu));
+              Divider(),
+            ],
+          );
         },
       );
     }

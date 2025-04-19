@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:kenguroo_partner/models/models.dart';
 import 'package:kenguroo_partner/repositories/api_client.dart';
 import 'package:kenguroo_partner/repositories/api_repository.dart';
+import 'package:pretty_http_logger/pretty_http_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // --- Конфигурация фоновой службы ---
@@ -95,12 +96,15 @@ void onStart(ServiceInstance service) async {
 
   ApiRepository? apiRepository;
   SharedPreferences? preferences;
+  HttpWithMiddleware? client;
   AudioPlayer? player;
   try {
     preferences = await SharedPreferences.getInstance();
     player = AudioPlayer();
-    apiRepository =
-        ApiRepository(client: ApiClient(httpClient: http.Client(), secureStorage: const FlutterSecureStorage()));
+    client = HttpWithMiddleware.build(
+      middlewares: [HttpLogger(logLevel: LogLevel.BODY)],
+    );
+    apiRepository = ApiRepository(client: ApiClient(httpClient: client, secureStorage: const FlutterSecureStorage()));
     // Сбрасываем или инициализируем счетчик при старте
     await preferences.setInt('counter', 0);
     log('Фоновая служба: SharedPreferences инициализированы.');

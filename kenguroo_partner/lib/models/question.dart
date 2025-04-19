@@ -1,10 +1,10 @@
 import 'models.dart';
 
 class Question {
-  String answer;
-  String id;
-  String question;
-  String title;
+  String? answer;
+  String? id;
+  String? question;
+  String? title;
 
   Question({required this.answer, required this.id, required this.question, required this.title});
 

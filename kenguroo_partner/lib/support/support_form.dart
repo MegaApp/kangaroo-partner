@@ -32,13 +32,13 @@ class _SupportFormState extends State<SupportForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  question.title,
+                  question.title ?? '',
                   style: TextStyle(
                       fontSize: 15, color: HexColor.fromHex('#0C270F')),
                 ),
                 const Padding(padding: const EdgeInsets.only(top: 8)),
                 Text(
-                  question.question,
+                  question.question ?? '',
                   style: TextStyle(
                       fontSize: 15, color: HexColor.fromHex('#D7D7D7')),
                 )

@@ -112,7 +112,7 @@ class _OrderFormState extends State<OrderForm> {
   _cancelBtnClicked() => () async {
         ApiRepository repository = BlocProvider.of<OrderBloc>(context).apiRepository;
         Map result = await Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => CancelOrderPage(apiRepository: repository, id: widget.order.id)));
+            builder: (BuildContext context) => CancelOrderPage(apiRepository: repository, order: widget.order)));
         if (result != null && result['needUpdate']) {
           Navigator.of(context).pop({'needUpdate': true});
         }

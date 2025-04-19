@@ -2,6 +2,7 @@ class Item {
     int count;
     String name;
     String price;
+    bool active = false;
 
     Item({required this.count, required this.name, required this.price});
 

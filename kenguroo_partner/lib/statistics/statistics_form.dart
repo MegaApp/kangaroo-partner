@@ -159,8 +159,7 @@ class _StatisticsFormState extends State<StatisticsForm> {
                 Container(
                   decoration: BoxDecoration(
                       color: HexColor.fromHex('#EEEEEE'),
-                      borderRadius:
-                          BorderRadius.only(topRight: Radius.circular(18.0), topLeft: Radius.circular(18.0))),
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(18.0), topLeft: Radius.circular(18.0))),
                   height: 3,
                   width: 56,
                 ),
@@ -237,7 +236,7 @@ class _StatisticsFormState extends State<StatisticsForm> {
               int rodIndex,
             ) {
               return BarTooltipItem(
-                '${rod.fromY.round().toString()} сом',
+                '${rod.toY.round().toString()} сом',
                 const TextStyle(
                   color: Colors.white,
                 ),
@@ -265,13 +264,19 @@ class _StatisticsFormState extends State<StatisticsForm> {
               sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: (double value, TitleMeta meta) {
-              return Text(_statistic?.items[value.toInt()].name.substring(0, 2) ?? "",
-                  style: TextStyle(color: HexColor.fromHex('#E4E4E4'), fontSize: 13));
+              return Text(_statistic?.items[value.toInt()].name.substring(0, 2) ?? "");
             },
           )),
+          rightTitles: AxisTitles(
+            sideTitles: SideTitles(
+                showTitles: false, interval: pow(10, maxY.toString().length).toDouble() / 10, reservedSize: 40),
+          ),
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
-                showTitles: true, interval: pow(10, maxY.toString().length).toDouble() / 10, reservedSize: 40),
+                maxIncluded: false,
+                showTitles: true,
+                interval: pow(5, maxY.toString().length).toDouble() / 10,
+                reservedSize: 40),
           )),
       borderData: FlBorderData(
         show: false,

@@ -54,6 +54,7 @@ dependencies:
   flutter_background_service_ios: ^5.0.3
   shared_preferences: ^2.2.3
   permission_handler: ^11.3.1
+  pretty_http_logger: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

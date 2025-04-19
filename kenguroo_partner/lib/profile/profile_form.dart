@@ -342,54 +342,54 @@ class _ProfileFormState extends State<ProfileForm> {
                             padding: const EdgeInsets.only(left: 40),
                             child: Divider(),
                           ),
-                          GestureDetector(
-                              child: Container(
-                                color: Colors.transparent,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        Icon(Icons.search, color: HexColor.fromHex('#e3e3e3'), size: 24),
-                                        Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Text(
-                                            'Поиск',
-                                            style: TextStyle(fontSize: 16, color: HexColor.fromHex('#0C270F')),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    Image(image: AssetImage('assets/arrow_right.png'), width: 32),
-                                  ],
-                                ),
-                              ),
-                              onTap: _navigateToMenuEditor()),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 40),
-                            child: Divider(),
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Image(image: AssetImage('assets/ic_pin.png'), width: 24),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  'Добавить филиал',
-                                  style: TextStyle(fontSize: 16, color: HexColor.fromHex('#0C270F')),
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 40),
-                            child: Divider(),
-                          ),
+                          // GestureDetector(
+                          //     child: Container(
+                          //       color: Colors.transparent,
+                          //       child: Row(
+                          //         crossAxisAlignment: CrossAxisAlignment.center,
+                          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //         children: <Widget>[
+                          //           Row(
+                          //             crossAxisAlignment: CrossAxisAlignment.center,
+                          //             mainAxisAlignment: MainAxisAlignment.start,
+                          //             children: <Widget>[
+                          //               Icon(Icons.search, color: HexColor.fromHex('#e3e3e3'), size: 24),
+                          //               Padding(
+                          //                 padding: const EdgeInsets.all(16.0),
+                          //                 child: Text(
+                          //                   'Поиск',
+                          //                   style: TextStyle(fontSize: 16, color: HexColor.fromHex('#0C270F')),
+                          //                 ),
+                          //               )
+                          //             ],
+                          //           ),
+                          //           Image(image: AssetImage('assets/arrow_right.png'), width: 32),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //     onTap: _navigateToMenuEditor()),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(left: 40),
+                          //   child: Divider(),
+                          // ),
+                          // Row(
+                          //   crossAxisAlignment: CrossAxisAlignment.center,
+                          //   mainAxisAlignment: MainAxisAlignment.start,
+                          //   children: <Widget>[
+                          //     Image(image: AssetImage('assets/ic_pin.png'), width: 24),
+                          //     Padding(
+                          //       padding: const EdgeInsets.all(16.0),
+                          //       child: Text(
+                          //         'Добавить филиал',
+                          //         style: TextStyle(fontSize: 16, color: HexColor.fromHex('#0C270F')),
+                          //       ),
+                          //     )
+                          //   ],
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(left: 40),
+                          //   child: Divider(),
+                          // ),
                           GestureDetector(
                               child: Container(
                                 color: Colors.transparent,

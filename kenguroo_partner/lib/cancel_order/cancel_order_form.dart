@@ -3,27 +3,78 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kenguroo_partner/extentions.dart';
 import 'package:kenguroo_partner/cancel_order/cancel_order.dart';
+import 'package:kenguroo_partner/models/item.dart';
+
+import '../models/menu.dart';
+import '../models/order.dart';
 
 class CancelOrderForm extends StatefulWidget {
-  final String id;
+  final Order order;
 
-  CancelOrderForm({required this.id});
+  CancelOrderForm({required this.order});
 
   @override
   State<CancelOrderForm> createState() => _CancelOrderFormState();
 }
 
 class _CancelOrderFormState extends State<CancelOrderForm> {
-  List array = ['', '', '', ''];
+  String _message = '';
   final _messageController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  void _requestFocus() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_focusNode);
+    });
+  }
+
+  void _removeFocus() {
+    _focusNode.unfocus(); // убрать фокус
+  }
 
   _cancelBtnClicked() => () {
-        String _message = '';
-        array.forEach((s) {
-          if (s != '') _message += '$s, ';
-        });
+        if (_message.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Выберите причину отмены'),
+            backgroundColor: Colors.red,
+          ));
+          return;
+        }
+
+        if (_message == 'Другое') {
+          if (_messageController.text.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Введите ваш комментарий'),
+              backgroundColor: Colors.red,
+            ));
+            return;
+          } else {
+            _message = _messageController.text;
+          }
+        }
+
+        if (_message == 'Нет в наличии') {
+          if (widget.order.items.where((element) => element.active == true).isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Выберите какой продукты нет в наличии'),
+              backgroundColor: Colors.red,
+            ));
+            return;
+          } else {
+            _message =
+                'Нет в наличии ${widget.order.items.where((element) => element.active == true).map((e) => e.name).toList()}';
+          }
+        }
+
         BlocProvider.of<CancelOrderBloc>(context)
-            .add(CancelOrderBtnPressed(id: widget.id, message: '$_message: ${_messageController.text}'));
+            .add(CancelOrderBtnPressed(id: widget.order.id, message: '$_message: ${_messageController.text}'));
       };
 
   @override
@@ -31,6 +82,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
     return BlocListener<CancelOrderBloc, CancelOrderState>(
       listener: (context, state) {
         if (state is CancelOrderFailure) {
+          _message = '';
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
@@ -40,6 +92,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
         }
 
         if (state is CancelOrderApproved) {
+          _message = '';
           Navigator.of(context).pop({'needUpdate': true});
         }
       },
@@ -73,16 +126,18 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                                 ),
                                 Icon(
                                   Icons.check,
-                                  color: array[0] != '' ? Theme.of(context).hintColor : Colors.transparent,
+                                  color: _message == 'Нет в наличии' ? Theme.of(context).hintColor : Colors.transparent,
                                 ),
                               ],
                             ),
                           ),
                           onTap: () => {
                                 setState(() {
-                                  array[0] == '' ? array[0] = 'Нет в наличии' : array[0] = '';
+                                  _removeFocus();
+                                  _message = 'Нет в наличии';
                                 })
                               }),
+                      if (_message == 'Нет в наличии') _listViewWidget(widget.order.items),
                       const Divider(height: 1),
                       GestureDetector(
                           child: Container(
@@ -98,39 +153,17 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                                 ),
                                 Icon(
                                   Icons.check,
-                                  color: array[1] != '' ? Theme.of(context).hintColor : Colors.transparent,
+                                  color: _message == 'Кухня не успеет выполнить заказ'
+                                      ? Theme.of(context).hintColor
+                                      : Colors.transparent,
                                 ),
                               ],
                             ),
                           ),
                           onTap: () => {
                                 setState(() {
-                                  array[1] == '' ? array[1] = 'Кухня не успеет выполнить заказ' : array[1] = '';
-                                })
-                              }),
-                      const Divider(height: 1),
-                      GestureDetector(
-                          child: Container(
-                            height: 56,
-                            color: Colors.transparent,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  'Нет свободных курьеров',
-                                  style: TextStyle(
-                                      color: HexColor.fromHex('#0C270F'), fontSize: 16, fontWeight: FontWeight.w300),
-                                ),
-                                Icon(
-                                  Icons.check,
-                                  color: array[2] != '' ? Theme.of(context).hintColor : Colors.transparent,
-                                ),
-                              ],
-                            ),
-                          ),
-                          onTap: () => {
-                                setState(() {
-                                  array[2] == '' ? array[2] = 'Нет свободных курьеров' : array[2] = '';
+                                  _removeFocus();
+                                  _message = 'Кухня не успеет выполнить заказ';
                                 })
                               }),
                       const Divider(height: 1),
@@ -148,14 +181,15 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                                 ),
                                 Icon(
                                   Icons.check,
-                                  color: array[3] != '' ? Theme.of(context).hintColor : Colors.transparent,
+                                  color: _message == 'Другое' ? Theme.of(context).hintColor : Colors.transparent,
                                 ),
                               ],
                             ),
                           ),
                           onTap: () => {
                                 setState(() {
-                                  array[3] == '' ? array[3] = 'Другое' : array[3] = '';
+                                  _message = 'Другое';
+                                  _requestFocus();
                                 })
                               }),
                       const Divider(height: 1),
@@ -165,7 +199,9 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                         style: TextStyle(fontSize: 13, color: HexColor.fromHex('#CCCCCC')),
                       ),
                       TextField(
+                        enabled: _message == 'Другое',
                         controller: _messageController,
+                        focusNode: _focusNode,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Введите ваш комментарий...',
@@ -180,9 +216,11 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                           width: double.infinity,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(40.0),
-                              border: Border.all(color: Colors.red, width: 2)),
+                              border: Border.all(color: _message.isNotEmpty ? Colors.red : Colors.grey, width: 2)),
                           child: TextButton(
-                            style: TextButton.styleFrom(foregroundColor: Colors.red, backgroundColor: Colors.white),
+                            style: TextButton.styleFrom(
+                                foregroundColor: _message.isNotEmpty ? Colors.red : Colors.grey,
+                                backgroundColor: Colors.white),
                             onPressed: _cancelBtnClicked(),
                             child: Text(
                               "Отменить",
@@ -199,6 +237,48 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
           );
         },
       ),
+    );
+  }
+
+  _listViewWidget(List<Item> orders) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: orders.length,
+      padding: const EdgeInsets.only(left: 24.0, right: 0, top: 8, bottom: 8),
+      itemBuilder: (context, position) {
+        Item _menu = orders[position];
+        return Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 16),
+                  child: Text(
+                    _menu.name,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 16, color: HexColor.fromHex('#0C270F')),
+                  ),
+                )),
+                // Image(
+                //     image: AssetImage(_menu.active
+                //         ? 'assets/close.png'
+                //         : 'assets/open.png'),
+                //     width: 24),
+                Checkbox(
+                  value: _menu.active,
+                  onChanged: (value) {
+                    setState(() {
+                      _menu.active = value ?? false;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

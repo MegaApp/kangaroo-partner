@@ -6,9 +6,9 @@ import 'package:kenguroo_partner/cancel_order/cancel_order.dart';
 
 class CancelOrderPage extends StatelessWidget {
   final ApiRepository apiRepository;
-  final String id;
+  final Order order;
 
-  CancelOrderPage({super.key, required this.apiRepository, required this.id});
+  CancelOrderPage({super.key, required this.apiRepository, required this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class CancelOrderPage extends StatelessWidget {
             apiRepository: apiRepository,
           );
         },
-        child: CancelOrderForm(id: id),
+        child: CancelOrderForm(order: order),
       ),
     );
   }

@@ -12,10 +12,14 @@ import 'package:kenguroo_partner/home/home.dart';
 import 'package:kenguroo_partner/common/common.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:pretty_http_logger/pretty_http_logger.dart';
 
 void main() {
+  final client = HttpWithMiddleware.build(
+    middlewares: [HttpLogger(logLevel: LogLevel.BODY)],
+  );
   final userRepository =
-      ApiRepository(client: ApiClient(httpClient: http.Client(), secureStorage: const FlutterSecureStorage()));
+      ApiRepository(client: ApiClient(httpClient: client, secureStorage: const FlutterSecureStorage()));
   runApp(
     BlocProvider<AuthenticationBloc>(
       create: (context) {
